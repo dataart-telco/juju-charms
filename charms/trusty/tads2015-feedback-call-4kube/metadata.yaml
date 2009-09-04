@@ -1,0 +1,21 @@
+name: tads2015-feedback-call-4kube
+summary: Drops conference and makes feedback call
+maintainer: gdubina <gdubina@dataart.com>
+description: |
+  Drops conference and makes feedback call
+tags:
+  # Replace "misc" with one or more whitelisted tags from this list:
+  # https://juju.ubuntu.com/docs/authors-charm-metadata.html#charm-metadata
+  - misc
+subordinate: true
+provides:
+  reverseproxy:
+    interface: http
+requires:
+  redis:
+    interface: redis
+  restcomm:
+    interface: http
+  kubernetes-master:
+    interface: kubernetes-api
+    scope: container

@@ -1,0 +1,84 @@
+environment: TADSummit.demo
+machines:
+  "0":
+    agent-state: started
+    agent-version: 1.24.5
+    dns-name: 52.7.128.0
+    instance-id: i-52b8daf9
+    instance-state: running
+    series: trusty
+    hardware: arch=amd64 cpu-cores=1 cpu-power=100 mem=1740M root-disk=8192M availability-zone=us-east-1a
+    state-server-member-status: has-vote
+  "2":
+    agent-state: started
+    agent-version: 1.24.5
+    dns-name: 52.20.106.183
+    instance-id: i-b3481f61
+    instance-state: running
+    life: dying
+    series: trusty
+    hardware: arch=amd64 cpu-cores=1 cpu-power=300 mem=3840M root-disk=8192M availability-zone=us-east-1b
+  "3":
+    agent-state: started
+    agent-version: 1.24.5
+    dns-name: 52.20.188.4
+    instance-id: i-f0762122
+    instance-state: running
+    series: trusty
+    hardware: arch=amd64 cpu-cores=1 cpu-power=300 mem=3840M root-disk=8192M availability-zone=us-east-1b
+services:
+  docker:
+    charm: cs:~kubernetes/trusty/docker-0
+    exposed: false
+    life: dying
+    service-status:
+      current: unknown
+      message: Waiting for agent initialization to finish
+      since: 21 Aug 2015 18:42:01Z
+  etcd:
+    charm: cs:trusty/etcd-0
+    can-upgrade-to: cs:trusty/etcd-1
+    exposed: false
+    service-status:
+      current: unknown
+      since: 21 Aug 2015 18:45:42Z
+    relations:
+      cluster:
+      - etcd
+    units:
+      etcd/0:
+        workload-status:
+          current: unknown
+          since: 21 Aug 2015 18:45:42Z
+        agent-status:
+          current: idle
+          since: 23 Aug 2015 18:31:01Z
+          version: 1.24.5
+        agent-state: started
+        agent-version: 1.24.5
+        machine: "3"
+        open-ports:
+        - 4001/tcp
+        public-address: 52.20.188.4
+  juju-gui:
+    charm: cs:trusty/juju-gui-38
+    exposed: true
+    service-status:
+      current: unknown
+      since: 21 Aug 2015 18:57:32Z
+    units:
+      juju-gui/0:
+        workload-status:
+          current: unknown
+          since: 21 Aug 2015 18:57:32Z
+        agent-status:
+          current: idle
+          since: 23 Aug 2015 17:46:44Z
+          version: 1.24.5
+        agent-state: started
+        agent-version: 1.24.5
+        machine: "0"
+        open-ports:
+        - 80/tcp
+        - 443/tcp
+        public-address: 52.7.128.0

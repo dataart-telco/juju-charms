@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -eux
+
+port=`relation-get port`
+server_address=`relation-get hostname`
+
+if [ -z "$server_address" ]; then
+  juju-log "No data sent yet"
+  exit 0
+fi
+
+mkdir -p /var/run/kubernetes-master
+echo "$server_address:$port" > /var/run/kubernetes-master/restcomm-address
+
+#sed -i 's/52\.0\.167\.47/$server_address/g'
+# If you've gotten this far, you have a $server_address, configure as you see fit

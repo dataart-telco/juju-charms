@@ -1,0 +1,14 @@
+#!/bin/bash
+
+source hooks/common.sh
+
+apt-get install -y git
+
+clone_repo
+
+EXTERNAL_IP=`unit-get private-address`
+
+render_config
+render_init
+
+

@@ -1,0 +1,5 @@
+#!/bin/bash
+mkdir -p /var/run/kubernetes-master
+echo `relation-get hostname` > /var/run/kubernetes-master/haproxy-host
+
+

@@ -1,0 +1,51 @@
+#!/bin/bash
+
+export KUBERNETES_MASTER=`netstat -nap | grep apiserver | grep LISTEN | grep 8080 | awk '{print $4}'`
+
+SERVICES='services=['
+
+nodeServices=`kubectl get services -o template --template='{{range .items}}{{$p := .}}{{range .spec.ports}}{{$p.spec.type}} {{$p.metadata.name}} {{.port}} {{.nodePort}}|{{end}}{{end}}'`
+
+while IFS='|' read -ra KUBE_SERV; do
+      for srv in "${KUBE_SERV[@]}"; do
+
+SERVICES+=$(echo $srv | while read svcType svcName port nodePort; do
+        if [ $svcType == "LoadBalancer" ]; then
+        count=1
+        #handle each service
+
+        SERVICES="{'service_name': '${svcName}_${port}',"
+        SERVICES+=" 'service_host': '0.0.0.0',"
+        SERVICES+=" 'service_port': '${port}',"
+
+        SERVICES+=" 'service_options': ['mode http', 'balance roundrobin', 'option forwardfor'"
+        #SERVICES+=", 'http-request set-header X-Forwarded-Port %[dst_port]'"
+
+        #SERVICES+=", 'cookie SRV_ID prefix'"
+
+        #SERVICES+=" 'service_options': [],"
+
+        SERVICES+="],"
+
+        SERVICES+=" 'servers': ["
+
+        SERVICES+=$(kubectl get node | while read ip labels status ; do
+                if [ $ip != "NAME" ]; then
+                        echo "['${svcName}_${count}', '$ip', '$nodePort', 'check'],"
+                        count=`expr $count + 1`
+                fi
+        done;)
+
+        SERVICES+="]},"
+        echo "$SERVICES"
+        fi
+done;)
+        done
+done <<< $nodeServices
+
+SERVICES+="]"
+
+#echo "relation-set $SERVICES"
+
+relation-set "$SERVICES"
+

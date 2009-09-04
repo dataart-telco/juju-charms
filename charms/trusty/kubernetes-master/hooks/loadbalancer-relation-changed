@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#set -vx
+
+headerCT="Content-Type:application/json-patch+json"
+publicProxy=`relation-get host`
+
+#publicProxy="111.111.111.222"
+
+export KUBERNETES_MASTER=`netstat -nap | grep apiserver | grep LISTEN | grep 8080 | awk '{print $4}'`
+nodeServices=`kubectl get services -o template --template="{{range .items}}{{.spec.type}} {{.metadata.name}} {{range .spec.ports}}{{println .port .nodePort}}{{end}}{{end}}" | grep LoadBalancer | awk '{print $2 " " $3 " " $4}'`
+
+echo $nodeServices | while read svcName port nodePort; do
+
+        echo `curl -XPATCH --data '[{"op": "replace", "path": "/status/loadBalancer/ingress", "value": [{"ip":"'"${publicProxy}"'"}]}]' http://${KUBERNETES_MASTER}/api/v1/namespaces/default/services/${svcName} -H $headerCT`
+done;
+

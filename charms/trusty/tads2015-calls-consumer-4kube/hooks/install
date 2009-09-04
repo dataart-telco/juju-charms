@@ -1,0 +1,17 @@
+#!/bin/bash
+
+source hooks/common.sh
+
+apt-get install -y git
+
+clone_repo
+
+EXTERNAL_IP=`unit-get private-address`
+REDIS_SERVICE_HOST='127.0.0.1'
+REDIS_SERVICE_PORT='6379'
+RESTCOMM_SERVICE='127.0.0.1'
+
+render_config
+render_init
+
+

@@ -1,0 +1,6 @@
+#!/bin/bash
+mkdir -p /var/run/kubernetes-master
+echo `relation-get public-address` > /var/run/kubernetes-master/haproxy-public-address
+echo `relation-get private-address` > /var/run/kubernetes-master/haproxy-private-address
+
+

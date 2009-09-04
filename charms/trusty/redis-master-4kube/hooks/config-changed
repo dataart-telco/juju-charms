@@ -3,7 +3,7 @@
 
 source hooks/common.sh
 
-. ${CONFIG_PATH}
+. ${CONFIG_PATH} 
 
 # TODO get new params and render script
 

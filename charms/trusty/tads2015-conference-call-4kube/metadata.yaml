@@ -1,0 +1,21 @@
+name: tads2015-conference-call-4kube
+summary: Collects incoming numbers from database and add them to conference
+maintainer: gdubina <gdubina@dataart.com>
+description: |
+  Collects incoming numbers from database and add them to conference
+tags:
+  # Replace "misc" with one or more whitelisted tags from this list:
+  # https://juju.ubuntu.com/docs/authors-charm-metadata.html#charm-metadata
+  - misc
+subordinate: true
+provides:
+  reverseproxy:
+    interface: http
+requires:
+  redis:
+    interface: redis
+  restcomm:
+    interface: http
+  kubernetes-master:
+    interface: kubernetes-api
+    scope: container

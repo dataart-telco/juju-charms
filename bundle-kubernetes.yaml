@@ -1,0 +1,55 @@
+kube:
+  services:
+    kubernetes-master:
+#    charm: local:trusty/kubernetes-master
+      charm: cs:~kubernetes/trusty/kubernetes-master-6
+      annotations:
+        "gui-x": "600"
+        "gui-y": "0"
+      expose: true
+      options:
+        version: "v1.0.3"
+    docker:
+#    charm: cs:~kubernetes/trusty/docker-0
+      charm: local:trusty/docker-charm
+      num_units: 1
+      options:
+        latest: true
+        version: "1.6.2"
+        aufs: true
+      annotations:
+      "gui-x": "0"
+      "gui-y": "0"
+    flannel-docker:
+#    charm: cs:~kubernetes/trusty/flannel-docker-2
+      charm: local:trusty/flannel-docker-charm
+      annotations:
+        "gui-x": "0"
+        "gui-y": "300"
+    kubernetes:
+      charm: cs:~kubernetes/trusty/kubernetes-6
+      annotations:
+        "gui-x": "300"
+        "gui-y": "300"
+    etcd:
+      charm: cs:trusty/etcd-0
+      annotations:
+        "gui-x": "300"
+        "gui-y": "0"
+  series: trusty
+  relations:
+  - - flannel-docker:network
+    - docker:network
+  - - flannel-docker:docker-host
+    - docker:juju-info
+  - - flannel-docker:db
+    - etcd:client
+  - - kubernetes:docker-host
+    - docker:juju-info
+  - - etcd:client
+    - kubernetes:etcd
+  - - etcd:client
+    - kubernetes-master:etcd
+  - - kubernetes-master:minions-api
+    - kubernetes:api
+
