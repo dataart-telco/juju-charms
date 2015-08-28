@@ -1,0 +1,29 @@
+#!/bin/bash
+set -x
+
+juju-log  "cscf-relation-changed"
+
+#get cscf-uri
+cscf_uri=`relation-get cscf-uri`
+[ -n "$cscf_uri" ] || exit 0
+
+# Stop Restcomm to configure outbound proxy
+hooks/stop
+
+juju-log  "Cscf relation changed cscf_uri: $cscf_uri"
+
+juju-log "Reconfiguring RestComm to use the $cscf_uri as an outbound Proxy"
+
+RESTCOMM_HOME=/opt/restcomm
+outbound_proxy=$cscf_uri
+restcomm_config="$RESTCOMM_HOME/standalone/deployments/restcomm.war/WEB-INF/conf/restcomm.xml"
+sed -e "s|<outbound-proxy-uri>.*<\/outbound-proxy-uri>|<outbound-proxy-uri>$outbound_proxy<\/outbound-proxy-uri>|" \
+$restcomm_config > $restcomm_config.bak
+mv -f $restcomm_config.bak $restcomm_config
+
+juju-log "Reconfigured RestComm to use the  $cscf_uri Proxy"
+
+hooks/start
+
+juju-log  "cscf-relation-changed completed"
+

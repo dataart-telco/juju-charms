@@ -1,0 +1,32 @@
+# defaults for restcomm
+
+# pulled in from the init script; makes things easier.
+NAME=telscale-restcomm
+
+# location of java
+JAVA=/usr/bin/java
+
+# arguments to pass to java
+#JAVA_ARGS="-Xmx256m"
+JAVA_ARGS=$java_args
+
+# user id to be invoked as (otherwise will run as root; not wise!)
+RESTCOMM_USER=ubuntu
+
+# location of restcomm arch indep files
+RESTCOMM_ROOT=$restcomm_root
+
+# restcomm /run location
+RESTCOMM_RUN=/var/run/restcomm
+
+PIDFILE=\$RESTCOMM_RUN/restcomm.pid
+
+# log location.  this may be a syslog facility.priority
+RESTCOMM_LOG=/var/log/restcomm/restcomm.log
+
+# arguments to pass to restcomm.
+# --javahome=\$JAVA_HOME
+# these were from jenkins
+#RESTCOMM_ARGS="--webroot=\$RESTCOMM_RUN/war --httpPort=\$HTTP_PORT --ajp13Port=\$AJP_PORT --preferredClassLoader=java.net.URLClassLoader"
+RESTCOMM_ARGS=$restcomm_args
+

@@ -1,0 +1,20 @@
+name: telscale-restcomm
+maintainer: Jean Deruelle <jean.deruelle@telestax.com>
+summary: TelScale RestComm
+description: TelScale Restcomm
+categories: 
+  - app-servers
+provides:
+  website:
+    interface: http
+  cscf:
+    interface: 3GPP-ISC
+requires:
+  database:
+    interface: mysql
+  clearwater-ellis:
+    interface: as-register
+    optional: true
+  load-balancer:
+    interface: telscale-load-balancer
+    optional: true

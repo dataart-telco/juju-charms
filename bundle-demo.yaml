@@ -1,0 +1,23 @@
+demo:
+  series: trusty
+  services:
+    tads2015-calls-consumer:
+      charm: local:trusty/tads2015-calls-consumer
+      expose: true
+    redis-master:
+     charm: cs:~mbruzek/trusty/redis-master-0
+    telscale-restcomm:
+      charm: local:trusty/telscale-restcomm
+      expose: true
+      constraints: "mem=2G"
+    haproxy:
+      charm: cs:trusty/haproxy-11
+      expose: true
+  relations:
+  - - tads2015-calls-consumer:redis
+    - redis-master:db
+  - - tads2015-calls-consumer:restcomm
+    - telscale-restcomm:website
+  - - haproxy:reverseproxy
+    - tads2015-calls-consumer:website
+

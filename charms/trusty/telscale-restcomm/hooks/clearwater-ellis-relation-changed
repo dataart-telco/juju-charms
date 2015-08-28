@@ -1,0 +1,35 @@
+#!/bin/bash
+set -x
+
+juju-log  "clearwater-ellis-relation-changed"
+
+#get cscf-uri from clearwater ellis
+#cscf_uri=`relation-get cscf-uri`
+#[ -n "$cscf_uri" ] || exit 0
+
+#setting the Restcomm properties for the relation
+PUBLIC_HOSTNAME=`unit-get public-address`
+STATIC_ADDRESS=`dig +short @8.8.8.8 $PUBLIC_HOSTNAME`
+
+relation-set as-name=RestComm-$STATIC_ADDRESS as-uri=sip:$STATIC_ADDRESS:5080
+
+# Stop Restcomm to configure outbound proxy
+#hooks/stop
+
+#juju-log  "Clearwater Ellis relation changed. Clearwater ellis cscf_uri: $cscf_uri"
+
+#juju-log "Reconfiguring RestComm to use the $cscf_uri Proxy"
+
+#RESTCOMM_HOME=/opt/restcomm
+#outbound_proxy=$cscf_uri
+#restcomm_config="$RESTCOMM_HOME/standalone/deployments/restcomm.war/WEB-INF/conf/restcomm.xml"
+#sed -e "s|<outbound-proxy-uri>.*<\/outbound-proxy-uri>|<outbound-proxy-uri>$outbound_proxy<\/outbound-proxy-uri>|" \
+#$restcomm_config > $restcomm_config.bak
+#mv -f $restcomm_config.bak $restcomm_config
+
+#juju-log "Reconfigured RestComm to use the  $cscf_uri Proxy"
+
+#hooks/start
+
+juju-log  "clearwater-ellis-relation-changed completed"
+

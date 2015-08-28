@@ -1,0 +1,34 @@
+#!/bin/bash
+set -x
+
+if [ -f lib/mobicents/mediaserver-utils.sh ]; then
+    source lib/mobicents/mediaserver-utils.sh
+fi
+
+# this service is now a mediaserver
+
+bind_address=`unit-get private-address`
+
+
+stop_mediaserver
+download_mediaserver
+install_mediaserver
+
+if [ -n "$bind_address" ]; then
+    bind_ip=`dig +short $bind_address`
+    bind_subnet=255.255.255.255
+    configure_mediaserver $bind_ip $bind_ip $bind_subnet
+fi
+
+start mediaserver
+
+# tell the other side
+mediaserver_port="2427"
+relation-set port=$mediaserver_port
+
+public_host=`unit-get public-address`
+# explictly use external DNS
+public_ip=`dig +short @8.8.8.8 $public_host`
+relation-set public_ip=$public_ip
+
+exit 0

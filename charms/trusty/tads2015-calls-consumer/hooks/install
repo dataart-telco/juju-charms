@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#m -rf "vas-demo-docker-repo"
+source hooks/common.sh
+
+apt-get install -y git
+
+git clone https://github.com/taddemo2015/vas-demo-docker-repo.git
+
+mkdir -p $WORK_DIR 
+cp -ar vas-demo-docker-repo/demo-main/* $WORK_DIR
+
+EXTERNAL_IP=`unit-get private-address`
+REDIS_SERVICE_HOST='127.0.0.1'
+REDIS_SERVICE_PORT='6379'
+RESTCOMM_SERVICE='127.0.0.1'
+
+render_config
+render_init
+
+open-port $APP_PORT
+

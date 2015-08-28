@@ -1,0 +1,9 @@
+options:
+    voicerss_key:
+        type: string
+        description: Voice RSS TTS Engine Key. http://www.voicerss.org/
+        default: "d80d266a1a7f46edac6b1a17ad797b63"
+    license_key:
+        type: string
+        description: TelScale Lincese Key. http://www.telestax.com/contactus/
+        default: ""

@@ -1,0 +1,13 @@
+#!/bin/bash
+set -xe
+
+# this service is a restcomm service
+juju-log  "restcomm-relation-joined: running restcomm utils"
+# restcomm should be already built
+if [ -f lib/mobicents/restcomm-utils.sh ]; then
+    source lib/mobicents/restcomm-utils.sh
+#    uninstall_restcomm
+#    download_restcomm
+#    install_restcomm
+fi
+

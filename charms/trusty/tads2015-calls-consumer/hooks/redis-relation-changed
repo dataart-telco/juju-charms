@@ -1,0 +1,14 @@
+#!/bin/bash
+
+source hooks/common.sh
+
+. /etc/default/${APP_NAME}.conf
+
+#REDIS_SERVICE_HOST=`relation-get hostname`
+#REDIS_SERVICE_PORT=`relation-get port`
+REDIS_SERVICE_HOST=`relation-get private-address`
+REDIS_SERVICE_PORT=6379
+
+render_config
+restart_me
+

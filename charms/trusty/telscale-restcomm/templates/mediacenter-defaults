@@ -1,0 +1,32 @@
+# defaults for mediaserver
+
+# pulled in from the init script; makes things easier.
+NAME=mediaserver
+
+# location of java
+JAVA=/usr/bin/java
+
+# arguments to pass to java
+#JAVA_ARGS="-Xmx256m"
+JAVA_ARGS=$java_args
+
+# user id to be invoked as (otherwise will run as root; not wise!)
+MEDIASERVER_USER=ubuntu
+
+# location of mediaserver arch indep files
+MEDIASERVER_ROOT=$mediaserver_root
+
+# mediaserver /run location
+MEDIASERVER_RUN=/var/run/mediaserver
+
+PIDFILE=\$MEDIASERVER_RUN/mediaserver.pid
+
+# log location.  this may be a syslog facility.priority
+MEDIASERVER_LOG=/var/log/mediaserver/mediaserver.log
+
+# arguments to pass to mediaserver.
+# --javahome=\$JAVA_HOME
+# these were from jenkins
+#MEDIASERVER_ARGS="--webroot=\$MEDIASERVER_RUN/war --httpPort=\$HTTP_PORT --ajp13Port=\$AJP_PORT --preferredClassLoader=java.net.URLClassLoader"
+MEDIASERVER_ARGS=$mediaserver_args
+

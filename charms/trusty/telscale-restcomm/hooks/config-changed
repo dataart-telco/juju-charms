@@ -1,0 +1,66 @@
+#!/bin/bash
+set -x
+
+juju-log "Configuring Restcomm"
+
+VOICERSS_KEY=`config-get voicerss_key`
+LICENSE_KEY=`config-get license_key`
+
+RESTCOMM=/opt/restcomm/
+
+if [ $VOICERSS_KEY != "null" ];
+then
+	juju-log "About to configure VOICERSS_KEY == $VOICERSS_KEY to Restcomm at $RESTCOMM"
+
+#	FILE=$RESTCOMM_DEPLOY/WEB-INF/conf/restcomm.xml
+#	sed -e "/<speech-synthesizer class=\"org.mobicents.servlet.restcomm.tts.VoiceRSSSpeechSynthesizer\">/ {
+#		N
+#		N; s|<apikey>.*</apikey>|<apikey>$VOICERSS_KEY</apikey>|
+#	}" $FILE > $FILE.bak
+
+	FILE=$RESTCOMM/bin/restcomm/restcomm.conf
+	
+	sed -e "s|VOICERSS_KEY=.*|VOICERSS_KEY=\'$VOICERSS_KEY\'|" $FILE > $FILE.bak
+	mv -f $FILE.bak $FILE
+	echo 'Configured VoiceRSS Speech Synthesizer'
+
+	juju-log "Stopping services"
+ 
+	hooks/stop
+
+	juju-log "Starting services"
+ 
+	hooks/start
+fi
+
+if [ $LICENSE_KEY != "null" ];
+then
+
+juju-log "About to configure LICENSE KEY == $VOICERSS_KEY for Restcomm"
+
+cd /opt/restcomm/bin/restcomm
+rm -f telestax-license.xml
+cat > telestax-license.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<licenseStorage>
+    <active>true</active>
+    <license>$LICENSE_KEY</license>
+    <product>TelScale-RestComm</product>
+</licenseStorage>
+EOF
+
+cd /var/lib/juju/agents/unit-telscale-restcomm-*/charm
+cp /opt/restcomm/bin/restcomm/telestax-license.xml ./telestax-license.xml
+
+	juju-log "Stopping services"
+ 
+	hooks/stop
+
+	juju-log "Starting services"
+ 
+	hooks/start
+
+fi
+
+exit 0
+

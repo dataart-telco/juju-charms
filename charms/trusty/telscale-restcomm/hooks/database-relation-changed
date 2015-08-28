@@ -1,0 +1,63 @@
+#!/bin/bash
+
+set -x
+
+# Get DB details
+juju-log "Getting database connection details"
+ 
+database=`relation-get database`
+if [ -z "${database}" ]; then
+    exit 0
+fi
+ 
+user=`relation-get user`
+password=`relation-get password`
+host=`relation-get private-address`
+database=`relation-get database`
+
+juju-log "user $user password $password host $host database $database"
+
+juju-log "Checking to see if the DB has been created and populated"
+
+if mysql -u $user -p$password -h $host -e "SELECT * FROM \`telscale-restcomm\`.restcomm_clients;" $database; then
+        # Update config settings
+        juju-log "Database already populated"
+else
+	juju-log "Database not populated, importing schema and updating config file"
+	juju-log "Create RestComm Database"	
+
+	#mysql -u $user -p$password -h $host $database < /var/www/tt-rss/schema/ttrss_schema_mysql.sql
+	juju-log "Configuring RestComm Database MySQL"
+	FILE=/opt/restcomm/standalone/deployments/restcomm.war/WEB-INF/scripts/mariadb/init.sql
+	sed -e "s|CREATE DATABASE IF NOT EXISTS restcomm;|CREATE DATABASE IF NOT EXISTS \`telscale-restcomm\`;|" $FILE > $FILE.bak
+	mv $FILE.bak $FILE
+	sed -e "s|USE restcomm;|USE \`telscale-restcomm\`;|" $FILE > $FILE.bak
+	mv $FILE.bak $FILE		
+	mysql -u $user -p$password -h $host < $FILE
+	mysql -u $user -p$password -h $host --execute='show databases;'
+	mysql -u $user -p$password -h $host --execute='show tables;' $database;
+
+	#juju-log "Create user to be used by Restcomm for restcomm database"
+	#mysql -u $user -p$password -h $host --execute='CREATE USER "telestax"@"%" IDENTIFIED BY "m0b1c3nt5";'
+	#mysql -u $user -p$password -h $host --execute='CREATE USER "telestax"@"localhost" IDENTIFIED BY "m0b1c3nt5";'
+	#mysql -u $user -p$password -h $host --execute='select User, Host from mysql.user;'
+	#mysql -u $user -p$password -h $host --execute='GRANT ALL PRIVILEGES ON restcomm.* To "telestax"@"%" IDENTIFIED BY "m0b1c3nt5";'
+	#mysql -u $user -p$password -h $host --execute='GRANT ALL PRIVILEGES ON restcomm.* To "telestax"@"localhost" IDENTIFIED BY "m0b1c3nt5";'
+	#mysql -u $user -p$password -h $host --execute='show grants for "telestax"@"%";'
+	#juju-log "RestComm Database Created"	
+fi
+
+source lib/mobicents/configuration/create-mysql-datasource.sh
+source lib/mobicents/configuration/config-mysqldb.sh
+configureMySQLDataSource $host $user $password 
+
+
+juju-log "Stopping services"
+ 
+hooks/stop
+ 
+juju-log "Starting services"
+ 
+hooks/start
+
+exit 0

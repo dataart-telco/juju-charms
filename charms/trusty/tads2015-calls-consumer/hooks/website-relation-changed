@@ -1,0 +1,14 @@
+#!/bin/bash
+
+source hooks/common.sh
+
+. /etc/default/${APP_NAME}.conf
+
+relation-set "hostname=$(unit-get private-address)"
+relation-set "port=$APP_PORT"
+
+EXTERNAL_IP=`relation-get public-address`
+
+render_config
+restart_me
+

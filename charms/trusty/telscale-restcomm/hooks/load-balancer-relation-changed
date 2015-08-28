@@ -1,0 +1,37 @@
+#!/bin/bash
+set -x
+
+juju-log  "load-balancer-relation-changed"
+
+# gets mediaserver host/port from remote end
+load_balancer_host=`relation-get host`
+[ -n "$load_balancer_host" ] || exit 0
+
+load_balancer_http_port=`relation-get http_port`
+[ -n "$load_balancer_http_port" ] || exit 0
+
+load_balancer_sip_public_port=`relation-get sip_public_port`
+[ -n "$load_balancer_sip_public_port" ] || exit 0
+
+load_balancer_sip_private_port=`relation-get sip_private_port`
+[ -n "$load_balancer_sip_private_port" ] || exit 0
+
+# this side of the relation makes the service act as a restcomm service
+hooks/stop
+
+juju-log  "load-balancer-relation-joined load balancer config : address=$load_balancer_address http_port=$load_balancer_http_port sip_public_port=$load_balancer_sip_public_port sip_private_port=$load_balancer_sip_private_port"
+
+juju-log "Reconfiguring RestComm to use the TelScale Load Balancer"
+source lib/mobicents/configuration/config-load-balancer.sh
+configStandalone
+configSipStack $load_balancer_host $load_balancer_sip_private_port
+juju-log "Reconfigured RestComm to use the TelScale Load Balancer"
+
+hooks/start
+
+open-port 2000/TCP
+open-port 2000/UDP
+open-port 5065/TCP
+open-port 5065/UDP
+
+juju-log  "load-balancer-relation-changed completed"

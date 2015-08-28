@@ -1,0 +1,12 @@
+#!/bin/bash
+# config-changed occurs everytime a new configuration value is updated (juju set)
+
+source hooks/common.sh
+
+. /etc/default/${APP_NAME}.conf
+
+# TODO get new params and render script
+
+#render_config
+
+

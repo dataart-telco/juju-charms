@@ -1,0 +1,7 @@
+#!/bin/bash
+set -xe
+
+if [ -f lib/restcomm/stop-restcomm.sh ]; then
+    juju-log "Stopping RestComm"
+    source lib/restcomm/stop-restcomm.sh
+fi
