@@ -27,11 +27,11 @@ demo:
       expose: true
     kubernetes-master:
       charm: local:trusty/kubernetes-master
-#      charm: cs:~kubernetes/trusty/kubernetes-master-6
+#      charm: cs:~kubernetes/trusty/kubernetes-master-7
       expose: true
       options:
         version: "v1.0.3"
-#      constraints: "mem=2G"
+      constraints: "mem=2G"
     docker:
 #    charm: cs:~kubernetes/trusty/docker-0
       charm: local:trusty/docker-charm
