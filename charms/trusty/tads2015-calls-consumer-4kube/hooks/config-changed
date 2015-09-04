@@ -3,7 +3,7 @@
 
 source hooks/common.sh
 
-. /etc/default/${APP_NAME}.conf
+. ${CONFIG_PATH}
 
 # TODO get new params and render script
 
