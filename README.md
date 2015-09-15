@@ -1,4 +1,4 @@
-This repo contains a set of charms and scripts
+# This repo contains a set of charms and scripts
 
 deploy-kube.sh - main script to deploy the whole bundle
 
