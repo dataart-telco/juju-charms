@@ -7,111 +7,80 @@ machines:
     instance-id: localhost
     series: trusty
     state-server-member-status: has-vote
-  "1":
-    agent-state: started
-    agent-version: 1.24.5.1
-    dns-name: 192.168.122.150
-    instance-id: android-kernel-kvm-machine-1
-    series: trusty
-    hardware: arch=amd64 cpu-cores=1 mem=1024M root-disk=8192M
   "2":
     agent-state: started
     agent-version: 1.24.5.1
-    dns-name: 192.168.122.147
+    dns-name: 192.168.122.62
     instance-id: android-kernel-kvm-machine-2
     series: trusty
     hardware: arch=amd64 cpu-cores=1 mem=1024M root-disk=8192M
   "3":
     agent-state: started
     agent-version: 1.24.5.1
-    dns-name: 192.168.122.238
+    dns-name: 192.168.122.223
     instance-id: android-kernel-kvm-machine-3
     series: trusty
     hardware: arch=amd64 cpu-cores=1 mem=1024M root-disk=8192M
   "4":
     agent-state: started
     agent-version: 1.24.5.1
-    dns-name: 192.168.122.44
+    dns-name: 192.168.122.123
     instance-id: android-kernel-kvm-machine-4
     series: trusty
     hardware: arch=amd64 cpu-cores=1 mem=1024M root-disk=8192M
-  "5":
-    agent-state: started
-    agent-version: 1.24.5.1
-    dns-name: 192.168.122.70
-    instance-id: android-kernel-kvm-machine-5
-    series: trusty
-    hardware: arch=amd64 cpu-cores=1 mem=2048M root-disk=8192M
   "6":
     agent-state: started
     agent-version: 1.24.5.1
-    dns-name: 192.168.122.53
+    dns-name: 192.168.122.234
     instance-id: android-kernel-kvm-machine-6
     series: trusty
     hardware: arch=amd64 cpu-cores=1 mem=2048M root-disk=8192M
+  "8":
+    agent-state: started
+    agent-version: 1.24.5.1
+    dns-name: 192.168.122.103
+    instance-id: android-kernel-kvm-machine-8
+    series: trusty
+    hardware: arch=amd64 cpu-cores=1 mem=2048M root-disk=8192M
+  "9":
+    agent-state: down
+    agent-state-info: (started)
+    agent-version: 1.24.5.1
+    dns-name: 192.168.122.108
+    instance-id: android-kernel-kvm-machine-9
+    series: trusty
+    hardware: arch=amd64 cpu-cores=1 mem=768M root-disk=8192M
 services:
   docker:
-    charm: local:trusty/docker-0
+    charm: local:trusty/docker-1
     exposed: false
     service-status:
-      current: unknown
-      since: 03 Sep 2015 16:51:27+03:00
-    relations:
-      juju-info:
-      - flannel-docker
-      - kubernetes
-      network:
-      - flannel-docker
+      current: maintenance
+      message: installing charm software
+      since: 05 Sep 2015 00:04:46+03:00
     units:
       docker/0:
         workload-status:
-          current: unknown
-          since: 03 Sep 2015 16:51:27+03:00
+          current: maintenance
+          message: installing charm software
+          since: 05 Sep 2015 00:04:46+03:00
         agent-status:
-          current: idle
-          since: 03 Sep 2015 16:51:30+03:00
+          current: executing
+          message: running install hook
+          since: 05 Sep 2015 00:04:46+03:00
           version: 1.24.5.1
-        agent-state: started
+        agent-state: pending
         agent-version: 1.24.5.1
-        machine: "1"
-        public-address: 192.168.122.150
-        subordinates:
-          flannel-docker/0:
-            workload-status:
-              current: unknown
-              message: Waiting for agent initialization to finish
-              since: 03 Sep 2015 17:08:55+03:00
-            agent-status:
-              current: failed
-              message: install local:trusty/flannel-docker-0
-              since: 03 Sep 2015 17:33:13+03:00
-              version: 1.24.5.1
-            agent-state: started
-            agent-version: 1.24.5.1
-            public-address: 192.168.122.150
-          kubernetes/0:
-            workload-status:
-              current: unknown
-              message: Waiting for agent initialization to finish
-              since: 03 Sep 2015 17:09:01+03:00
-            agent-status:
-              current: failed
-              message: install cs:~kubernetes/trusty/kubernetes-6
-              since: 03 Sep 2015 17:33:12+03:00
-              version: 1.24.5.1
-            agent-state: started
-            agent-version: 1.24.5.1
-            public-address: 192.168.122.150
+        machine: "9"
+        public-address: 192.168.122.108
   etcd:
     charm: cs:trusty/etcd-0
     exposed: false
     service-status:
       current: unknown
-      since: 03 Sep 2015 16:42:41+03:00
+      since: 04 Sep 2015 21:26:34+03:00
     relations:
       client:
-      - flannel-docker
-      - kubernetes
       - kubernetes-master
       cluster:
       - etcd
@@ -119,38 +88,30 @@ services:
       etcd/0:
         workload-status:
           current: unknown
-          since: 03 Sep 2015 16:42:41+03:00
+          since: 04 Sep 2015 21:26:34+03:00
         agent-status:
           current: idle
-          since: 03 Sep 2015 17:09:09+03:00
+          since: 05 Sep 2015 00:02:08+03:00
           version: 1.24.5.1
         agent-state: started
         agent-version: 1.24.5.1
         machine: "2"
         open-ports:
         - 4001/tcp
-        public-address: 192.168.122.147
+        public-address: 192.168.122.62
   flannel-docker:
-    charm: local:trusty/flannel-docker-0
+    charm: local:trusty/flannel-docker-1
     exposed: false
     service-status: {}
     relations:
-      db:
-      - etcd
-      docker-host:
-      - docker
-      network:
-      - docker
       overlay:
       - flannel-docker
-    subordinate-to:
-    - docker
   haproxy:
     charm: cs:trusty/haproxy-11
-    exposed: false
+    exposed: true
     service-status:
       current: unknown
-      since: 03 Sep 2015 16:44:30+03:00
+      since: 04 Sep 2015 21:25:47+03:00
     relations:
       peer:
       - haproxy
@@ -162,29 +123,29 @@ services:
       haproxy/0:
         workload-status:
           current: unknown
-          since: 03 Sep 2015 16:44:30+03:00
+          since: 04 Sep 2015 21:25:47+03:00
         agent-status:
           current: idle
-          since: 03 Sep 2015 17:24:17+03:00
+          since: 04 Sep 2015 23:50:58+03:00
           version: 1.24.5.1
         agent-state: started
         agent-version: 1.24.5.1
         machine: "3"
-        public-address: 192.168.122.238
+        public-address: 192.168.122.223
   juju-gui:
     charm: cs:trusty/juju-gui-34
-    exposed: false
+    exposed: true
     service-status:
       current: unknown
-      since: 03 Sep 2015 16:49:41+03:00
+      since: 04 Sep 2015 21:31:28+03:00
     units:
       juju-gui/0:
         workload-status:
           current: unknown
-          since: 03 Sep 2015 16:49:41+03:00
+          since: 04 Sep 2015 21:31:28+03:00
         agent-status:
           current: idle
-          since: 03 Sep 2015 16:49:44+03:00
+          since: 04 Sep 2015 21:31:31+03:00
           version: 1.24.5.1
         agent-state: started
         agent-version: 1.24.5.1
@@ -192,31 +153,21 @@ services:
         open-ports:
         - 80/tcp
         - 443/tcp
-        public-address: 192.168.122.44
+        public-address: 192.168.122.123
   kubernetes:
     charm: cs:~kubernetes/trusty/kubernetes-6
     exposed: false
     service-status: {}
-    relations:
-      api:
-      - kubernetes-master
-      docker-host:
-      - docker
-      etcd:
-      - etcd
-    subordinate-to:
-    - docker
   kubernetes-master:
-    charm: local:trusty/kubernetes-master-0
-    exposed: false
+    charm: local:trusty/kubernetes-master-1
+    exposed: true
     service-status:
       current: unknown
-      since: 03 Sep 2015 16:54:33+03:00
+      since: 04 Sep 2015 23:16:22+03:00
     relations:
       etcd:
       - etcd
       minions-api:
-      - kubernetes
       - redis-master
       - tads2015-calls-consumer-4kube
       - tads2015-conference-call-4kube
@@ -225,66 +176,66 @@ services:
       kubernetes-master/0:
         workload-status:
           current: unknown
-          since: 03 Sep 2015 16:54:33+03:00
+          since: 04 Sep 2015 23:16:22+03:00
         agent-status:
           current: idle
-          since: 03 Sep 2015 17:33:06+03:00
+          since: 05 Sep 2015 00:02:07+03:00
           version: 1.24.5.1
         agent-state: started
         agent-version: 1.24.5.1
-        machine: "5"
+        machine: "8"
         open-ports:
         - 8080/tcp
-        public-address: 192.168.122.70
+        public-address: 192.168.122.103
         subordinates:
           redis-master/0:
             workload-status:
               current: unknown
-              since: 03 Sep 2015 17:31:49+03:00
+              since: 04 Sep 2015 23:17:37+03:00
             agent-status:
               current: idle
-              since: 03 Sep 2015 17:33:00+03:00
+              since: 04 Sep 2015 23:51:00+03:00
               version: 1.24.5.1
             agent-state: started
             agent-version: 1.24.5.1
             upgrading-from: local:trusty/redis-master-4kube-1
-            public-address: 192.168.122.70
+            public-address: 192.168.122.103
           tads2015-calls-consumer-4kube/0:
             workload-status:
               current: unknown
-              since: 03 Sep 2015 17:23:28+03:00
+              since: 04 Sep 2015 23:50:37+03:00
             agent-status:
               current: idle
-              since: 03 Sep 2015 17:33:03+03:00
+              since: 04 Sep 2015 23:51:05+03:00
               version: 1.24.5.1
             agent-state: started
             agent-version: 1.24.5.1
             upgrading-from: local:trusty/tads2015-calls-consumer-4kube-1
-            public-address: 192.168.122.70
+            public-address: 192.168.122.103
           tads2015-conference-call-4kube/0:
             workload-status:
               current: unknown
-              since: 03 Sep 2015 17:23:51+03:00
+              since: 04 Sep 2015 23:17:16+03:00
             agent-status:
               current: idle
-              since: 03 Sep 2015 17:33:09+03:00
+              since: 04 Sep 2015 23:18:34+03:00
               version: 1.24.5.1
             agent-state: started
             agent-version: 1.24.5.1
             upgrading-from: local:trusty/tads2015-conference-call-4kube-1
-            public-address: 192.168.122.70
+            public-address: 192.168.122.103
           tads2015-feedback-call-4kube/0:
             workload-status:
               current: unknown
-              since: 03 Sep 2015 17:20:32+03:00
+              since: 04 Sep 2015 23:18:13+03:00
             agent-status:
               current: idle
-              since: 03 Sep 2015 17:33:12+03:00
+              since: 04 Sep 2015 23:18:46+03:00
               version: 1.24.5.1
             agent-state: started
             agent-version: 1.24.5.1
             upgrading-from: local:trusty/tads2015-feedback-call-4kube-1
-            public-address: 192.168.122.70
+            public-address: 192.168.122.103
   redis-master:
     charm: local:trusty/redis-master-4kube-1
     exposed: false
@@ -300,7 +251,7 @@ services:
     - kubernetes-master
   tads2015-calls-consumer-4kube:
     charm: local:trusty/tads2015-calls-consumer-4kube-1
-    exposed: false
+    exposed: true
     service-status: {}
     relations:
       kubernetes-master:
@@ -315,7 +266,7 @@ services:
     - kubernetes-master
   tads2015-conference-call-4kube:
     charm: local:trusty/tads2015-conference-call-4kube-1
-    exposed: false
+    exposed: true
     service-status: {}
     relations:
       kubernetes-master:
@@ -330,7 +281,7 @@ services:
     - kubernetes-master
   tads2015-feedback-call-4kube:
     charm: local:trusty/tads2015-feedback-call-4kube-1
-    exposed: false
+    exposed: true
     service-status: {}
     relations:
       kubernetes-master:
@@ -345,10 +296,10 @@ services:
     - kubernetes-master
   telscale-restcomm:
     charm: local:trusty/telscale-restcomm-63
-    exposed: false
+    exposed: true
     service-status:
       current: unknown
-      since: 03 Sep 2015 17:08:25+03:00
+      since: 04 Sep 2015 21:43:51+03:00
     relations:
       website:
       - tads2015-calls-consumer-4kube
@@ -358,10 +309,10 @@ services:
       telscale-restcomm/0:
         workload-status:
           current: unknown
-          since: 03 Sep 2015 17:08:25+03:00
+          since: 04 Sep 2015 21:43:51+03:00
         agent-status:
           current: idle
-          since: 03 Sep 2015 17:24:02+03:00
+          since: 04 Sep 2015 23:50:48+03:00
           version: 1.24.5.1
         agent-state: started
         agent-version: 1.24.5.1
@@ -376,4 +327,4 @@ services:
         - 8080/tcp
         - 5080/udp
         - 64535-65535/udp
-        public-address: 192.168.122.53
+        public-address: 192.168.122.234
