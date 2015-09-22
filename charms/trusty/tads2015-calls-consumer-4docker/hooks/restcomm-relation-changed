@@ -1,0 +1,10 @@
+#!/bin/bash
+source hooks/common.sh
+
+. /etc/default/${APP_NAME}.conf
+
+RESTCOMM_SERVICE=`relation-get hostname`:`relation-get port`
+
+render_config
+restart_me
+

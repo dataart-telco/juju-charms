@@ -1,0 +1,158 @@
+environment: kvm
+machines:
+  "0":
+    agent-state: started
+    agent-version: 1.24.5.1
+    dns-name: localhost
+    instance-id: localhost
+    series: trusty
+    state-server-member-status: has-vote
+  "1":
+    agent-state: started
+    agent-version: 1.24.5.1
+    dns-name: 192.168.122.114
+    instance-id: android-kernel-kvm-machine-1
+    series: trusty
+    hardware: arch=amd64 cpu-cores=1 mem=768M root-disk=8192M
+  "2":
+    agent-state: started
+    agent-version: 1.24.5.1
+    dns-name: 192.168.122.96
+    instance-id: android-kernel-kvm-machine-2
+    series: trusty
+    hardware: arch=amd64 cpu-cores=1 mem=768M root-disk=8192M
+  "3":
+    agent-state: started
+    agent-version: 1.24.5.1
+    dns-name: 192.168.122.179
+    instance-id: android-kernel-kvm-machine-3
+    series: trusty
+    hardware: arch=amd64 cpu-cores=1 mem=768M root-disk=8192M
+  "4":
+    agent-state: started
+    agent-version: 1.24.5.1
+    dns-name: 192.168.122.103
+    instance-id: android-kernel-kvm-machine-4
+    series: trusty
+    hardware: arch=amd64 cpu-cores=1 mem=768M root-disk=8192M
+  "5":
+    agent-state: started
+    agent-version: 1.24.5.1
+    dns-name: 192.168.122.80
+    instance-id: android-kernel-kvm-machine-5
+    series: trusty
+    hardware: arch=amd64 cpu-cores=1 mem=768M root-disk=8192M
+services:
+  docker:
+    charm: local:trusty/docker-0
+    exposed: false
+    service-status:
+      current: unknown
+      since: 22 Sep 2015 22:24:34+03:00
+    units:
+      docker/0:
+        workload-status:
+          current: unknown
+          since: 22 Sep 2015 22:24:34+03:00
+        agent-status:
+          current: idle
+          since: 22 Sep 2015 22:24:37+03:00
+          version: 1.24.5.1
+        agent-state: started
+        agent-version: 1.24.5.1
+        machine: "5"
+        public-address: 192.168.122.80
+  haproxy:
+    charm: cs:trusty/haproxy-11
+    exposed: true
+    service-status:
+      current: unknown
+      since: 22 Sep 2015 21:10:56+03:00
+    relations:
+      peer:
+      - haproxy
+    units:
+      haproxy/0:
+        workload-status:
+          current: unknown
+          since: 22 Sep 2015 21:10:56+03:00
+        agent-status:
+          current: idle
+          since: 22 Sep 2015 22:31:40+03:00
+          version: 1.24.5.1
+        agent-state: started
+        agent-version: 1.24.5.1
+        machine: "1"
+        open-ports:
+        - 80/tcp
+        - 30790/tcp
+        public-address: 192.168.122.114
+  juju-gui:
+    charm: cs:trusty/juju-gui-34
+    exposed: true
+    service-status:
+      current: unknown
+      since: 22 Sep 2015 21:13:26+03:00
+    units:
+      juju-gui/0:
+        workload-status:
+          current: unknown
+          since: 22 Sep 2015 21:13:26+03:00
+        agent-status:
+          current: idle
+          since: 22 Sep 2015 21:13:28+03:00
+          version: 1.24.5.1
+        agent-state: started
+        agent-version: 1.24.5.1
+        machine: "2"
+        open-ports:
+        - 80/tcp
+        - 443/tcp
+        public-address: 192.168.122.96
+  redis-master:
+    charm: cs:~mbruzek/trusty/redis-master-0
+    exposed: false
+    service-status:
+      current: unknown
+      since: 22 Sep 2015 21:10:38+03:00
+    units:
+      redis-master/0:
+        workload-status:
+          current: unknown
+          since: 22 Sep 2015 21:10:38+03:00
+        agent-status:
+          current: idle
+          since: 22 Sep 2015 22:31:37+03:00
+          version: 1.24.5.1
+        agent-state: started
+        agent-version: 1.24.5.1
+        machine: "3"
+        open-ports:
+        - 6379/tcp
+        public-address: 192.168.122.179
+  tads2015-calls-consumer:
+    charm: local:trusty/tads2015-calls-consumer-1
+    exposed: true
+    life: dying
+    service-status:
+      current: error
+      message: 'hook failed: "stop"'
+      since: 22 Sep 2015 22:31:41+03:00
+    units:
+      tads2015-calls-consumer/0:
+        workload-status:
+          current: error
+          message: 'hook failed: "stop"'
+          since: 22 Sep 2015 22:31:41+03:00
+        agent-status:
+          current: idle
+          since: 22 Sep 2015 22:31:41+03:00
+          version: 1.24.5.1
+        agent-state: error
+        agent-state-info: 'hook failed: "stop"'
+        agent-version: 1.24.5.1
+        life: dying
+        machine: "4"
+        open-ports:
+        - 30790/tcp
+        public-address: 192.168.122.103

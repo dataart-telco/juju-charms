@@ -28,16 +28,36 @@ normal exit 0
 limit nofile 20000 20000
 
 script
-  . /etc/default/tads2015-call-consumer.conf
-  cd '$WORK_DIR'
-  exec ./demo-main-server -host=$EXTERNAL_IP -redis=$REDIS_SERVICE_HOST:$REDIS_SERVICE_PORT -restcomm=$RESTCOMM_SERVICE
+#  . /etc/default/tads2015-call-consumer.conf
+  docker pull tads2015da/demo-main:0.0.9
+  exec docker run -d -P --env-file='${CONFIG_FILE}' --name='${APP_NAME}' tads2015da/demo-main:0.0.9 
+
 end script
 ' > /etc/init/${APP_NAME}.conf
 
 }
 
+setup(){
+  docker pull tads2015da/demo-main:0.0.9
+  docker create -P --env-file=${CONFIG_FILE} --name=${APP_NAME} tads2015da/demo-main:0.0.9
+}
+
+recreate(){
+  docker rm ${APP_NAME}
+  docker create -P --env-file=${CONFIG_FILE} --name=${APP_NAME} tads2015da/demo-main:0.0.9
+}
+
+start_me(){
+  docker start ${APP_NAME}
+}
+
+stop_me(){
+  docker stop ${APP_NAME} 
+}
+
 restart_me(){
-   stop $APP_NAME
-   start $APP_NAME
+  stop_me
+  recreate
+  start_me
 }
 
