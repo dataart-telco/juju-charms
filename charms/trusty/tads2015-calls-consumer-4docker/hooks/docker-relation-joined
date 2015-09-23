@@ -4,6 +4,9 @@ source hooks/common.sh
 
 . ${CONFIG_PATH} 
  
-render_config
-setup
+# start hook will be called before
+
+
+#render_config
+#setup
 

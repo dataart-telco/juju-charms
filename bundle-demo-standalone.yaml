@@ -11,7 +11,7 @@ demo:
       num_units: 1
       options:
         latest: true
-        version: "1.6.2"
+#        version: "1.6.2"
         aufs: true
     redis-master:
       charm: cs:~mbruzek/trusty/redis-master-0

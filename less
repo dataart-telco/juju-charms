@@ -1,0 +1,111 @@
+environment: TADSummit.demo
+machines:
+  "0":
+    agent-state: started
+    agent-version: 1.24.5
+    dns-name: 52.23.232.66
+    instance-id: i-fe326a5d
+    instance-state: running
+    series: trusty
+    hardware: arch=amd64 cpu-cores=1 cpu-power=100 mem=1740M root-disk=8192M availability-zone=us-east-1a
+    state-server-member-status: has-vote
+  "1":
+    agent-state-info: no instance types in us-east-1 matching constraints "cpu-power=100
+      instance-type=t2.micro"
+    instance-id: pending
+    series: trusty
+  "2":
+    agent-state-info: no instance types in us-east-1 matching constraints "cpu-power=100
+      instance-type=t2.micro"
+    instance-id: pending
+    series: trusty
+  "3":
+    agent-state-info: no instance types in us-east-1 matching constraints "cpu-power=100
+      instance-type=t2.micro"
+    instance-id: pending
+    series: trusty
+  "4":
+    agent-state-info: no instance types in us-east-1 matching constraints "cpu-power=100
+      instance-type=t2.micro"
+    instance-id: pending
+    series: trusty
+services:
+  docker:
+    charm: local:trusty/docker-0
+    exposed: false
+    service-status:
+      current: unknown
+      message: Waiting for agent initialization to finish
+      since: 23 Sep 2015 07:46:51Z
+    units:
+      docker/0:
+        workload-status:
+          current: unknown
+          message: Waiting for agent initialization to finish
+          since: 23 Sep 2015 07:46:51Z
+        agent-status:
+          current: allocating
+          since: 23 Sep 2015 07:46:51Z
+        agent-state: pending
+        machine: "1"
+  haproxy:
+    charm: cs:trusty/haproxy-11
+    exposed: false
+    service-status:
+      current: unknown
+      message: Waiting for agent initialization to finish
+      since: 23 Sep 2015 07:47:08Z
+    relations:
+      peer:
+      - haproxy
+    units:
+      haproxy/0:
+        workload-status:
+          current: unknown
+          message: Waiting for agent initialization to finish
+          since: 23 Sep 2015 07:47:08Z
+        agent-status:
+          current: allocating
+          since: 23 Sep 2015 07:47:08Z
+        agent-state: pending
+        machine: "2"
+  juju-gui:
+    charm: cs:trusty/juju-gui-34
+    exposed: false
+    service-status:
+      current: unknown
+      message: Waiting for agent initialization to finish
+      since: 23 Sep 2015 07:47:29Z
+    units:
+      juju-gui/0:
+        workload-status:
+          current: unknown
+          message: Waiting for agent initialization to finish
+          since: 23 Sep 2015 07:47:29Z
+        agent-status:
+          current: allocating
+          since: 23 Sep 2015 07:47:29Z
+        agent-state: pending
+        machine: "3"
+  redis-master:
+    charm: cs:~mbruzek/trusty/redis-master-0
+    exposed: false
+    service-status:
+      current: unknown
+      message: Waiting for agent initialization to finish
+      since: 23 Sep 2015 07:47:45Z
+    units:
+      redis-master/0:
+        workload-status:
+          current: unknown
+          message: Waiting for agent initialization to finish
+          since: 23 Sep 2015 07:47:45Z
+        agent-status:
+          current: allocating
+          since: 23 Sep 2015 07:47:45Z
+        agent-state: pending
+        machine: "4"
+  tads2015-calls-consumer-4docker:
+    charm: local:trusty/tads2015-calls-consumer-4docker-1
+    exposed: false
+    service-status: {}

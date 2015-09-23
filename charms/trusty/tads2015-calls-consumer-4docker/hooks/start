@@ -5,4 +5,4 @@
 
 . hooks/common.sh
 
-start_me
+restart_me
