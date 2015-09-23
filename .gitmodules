@@ -1,0 +1,6 @@
+[submodule "charms/trusty/flannel-docker-charm"]
+	path = charms/trusty/flannel-docker-charm
+	url = https://github.com/chuckbutler/flannel-docker-charm
+[submodule "charms/trusty/docker-charm"]
+	path = charms/trusty/docker-charm
+	url = https://github.com/chuckbutler/docker-charm
