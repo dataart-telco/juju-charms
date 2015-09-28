@@ -1,0 +1,18 @@
+name: simple-monitor-server
+summary: custom simple monitor server
+maintainer: gdubina <gdubina@dataart.com>
+description: |
+  custom simple server
+tags:
+  # Replace "misc" with one or more whitelisted tags from this list:
+  # https://juju.ubuntu.com/docs/authors-charm-metadata.html#charm-metadata
+  - misc
+subordinate: false
+requires:
+  api-server:
+    interface: http
+  redis:
+    interface: redis
+provides:
+  monitor-server:
+    interface: monitor-server

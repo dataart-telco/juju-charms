@@ -1,0 +1,10 @@
+options:
+  JUJU_API_HOST:
+    type: string
+    default: "127.0.0.1"
+    description: "Juju api host"
+  JUJU_API_PASSWORD:
+    type: string
+    default: "pswd"
+    description: "Admin password to api"
+

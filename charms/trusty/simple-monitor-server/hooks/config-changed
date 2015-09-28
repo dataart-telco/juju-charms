@@ -1,0 +1,15 @@
+#!/bin/bash
+# config-changed occurs everytime a new configuration value is updated (juju set)
+
+. hooks/common.sh
+. $CONFIG_PATH
+
+JUJU_API_PASSWORD=`config-get JUJU_API_PASSWORD`
+CHECK_PERIOD=`config-get CHECK_PERIOD`
+PORT=`config-get PORT`
+DEPLOY_DELAY=`config-get DEPLOY_DELAY`
+
+render_config
+render_juju_tool_config
+
+restart_me

@@ -8,30 +8,94 @@ demo:
     docker:
 #    charm: cs:~kubernetes/trusty/docker-0
       charm: local:trusty/docker-charm
-      num_units: 1
+      num_units: 1 
       options:
         latest: true
-#        version: "1.6.2"
         aufs: true
+#      to:
+#        - "7"
+#        - "8"
     redis-master:
       charm: cs:~mbruzek/trusty/redis-master-0
-#   telscale-restcomm:
+#    telscale-restcomm:
 #      charm: local:trusty/telscale-restcomm
 #      expose: true
-#      constraints: "mem=2G"
+#      constraints: "mem=1536M"
     haproxy:
       charm: cs:trusty/haproxy-11
       expose: true
     juju-gui:
-      charm: cs:trusty/juju-gui-34
+      charm: cs:trusty/juju-gui-39
       expose: true
-  relations:
-  - - tads2015-calls-consumer-4docker:redis
-    - redis-master:db
-  - - tads2015-calls-consumer-4docker:docker
-    - docker:docker-containers
-#  - - tads2015-calls-consumer:restcomm
-#    - telscale-restcomm:website
-  - - haproxy:reverseproxy
-    - tads2015-calls-consumer-4docker:website
+#    mysql: 
+#      charm: "cs:trusty/mysql-28"
+#      num_units: 1
+#      constraints: "mem=768M"
+    simple-monitor-agent:
+      charm: local:trusty/simple-monitor-agent
+    simple-monitor-server:
+      charm: local:trusty/simple-monitor-server
 
+#    zabbix-frontend: 
+#      charm: "cs:trusty/zabbix-frontend-0"
+#      num_units: 1
+#      expose: true
+#      to:
+#        - "3"
+#    zabbix-server: 
+#      charm: "cs:trusty/zabbix-server-1"
+#      num_units: 1
+#      to:
+#        - "3"
+#    zabbix-agent: 
+#      charm: "cs:trusty/zabbix-agent-1"
+#      num_units: 2
+#      to: 
+#        - "7"
+#        - "8"
+#    zabbix-jujucli:
+#      charm: local:trusty/zabbix-jujucli   
+  relations:
+    - - tads2015-calls-consumer-4docker:redis
+      - redis-master:db
+    - - tads2015-calls-consumer-4docker:docker
+      - docker:docker-containers
+#    - - tads2015-calls-consumer-4docker:restcomm
+#      - telscale-restcomm:website
+    - - haproxy:reverseproxy
+      - tads2015-calls-consumer-4docker:website
+    - - simple-monitor-server:redis
+      - redis-master:redis-master
+    - - simple-monitor-server:api-server
+      - juju-gui:web
+#    - - simple-monitor-agents:monitor-server
+#        simple-monitor-server:monitor-server
+# zabbix start
+#    - - zabbix-frontend:frontend
+#      - zabbix-server:frontend
+#    - - zabbix-server:database-mysql
+#      - mysql:shared-db
+#    - - zabbix-server:agent-passive
+#      - zabbix-agent:agent-passive
+#    - - zabbix-frontend:database-mysql
+#      - mysql:shared-db
+# zabbix end
+#    - - zabbix-jujucli
+#      - zabbix-server
+#  machines: 
+#    "1": 
+#      series: trusty
+#      constraints: "mem=512"
+#    "2": 
+#      series: trusty
+#      constraints: "mem=512"
+#    "3":
+#      series: trusty
+#      constraints: "mem=1536"
+#    "7":
+#      series: trusty
+#      constraints: "mem=768"
+#    "8":
+#      series: trusty
+#      constraints: "mem=768"
+     

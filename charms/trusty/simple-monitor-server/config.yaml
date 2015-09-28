@@ -1,0 +1,17 @@
+options:
+  CHECK_PERIOD:
+    type: int
+    default: "5"
+    description: "Avg period in minutes"
+  PORT:
+    type: int
+    default: 8090
+    description: "Web server port"
+  JUJU_API_PASSWORD:
+    type: string
+    default: "pswd"
+    description: "Admin password to api"
+  DEPLOY_DELAY:
+    type: int
+    default: 10
+    description: "Service deploy delay"

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. hooks/common.sh
+. $CONFIG_PATH
+
+PRIVATE_ADDRESS=$(unit-get private-address)
+
+relation-set "hostname=${PRIVATE_ADDRESS}"
+relation-set "port=$PORT"
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+# config-changed occurs everytime a new configuration value is updated (juju set)
+
+source hooks/common.sh
+
+JUJU_API_HOST=`config-get JUJU_API_HOST`
+JUJU_API_PASSWORD=`config-get JUJU_API_PASSWORD`
+
+render_config
+
+
