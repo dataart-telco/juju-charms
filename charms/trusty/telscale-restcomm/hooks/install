@@ -24,6 +24,21 @@ unzip TelScale-Restcomm-JBoss-AS7-7.1.5.GA.zip
 rm -f TelScale-Restcomm-JBoss-AS7-7.1.5.GA.zip
 mv TelScale-Restcomm-JBoss-AS7-7.1.5.GA restcomm
 
+# chnange admin password
+SQL_FILE=/opt/restcomm/standalone/deployments/restcomm.war/WEB-INF/scripts/mariadb/init.sql
+sed -i "s/uninitialized/active/g" $SQL_FILE
+sed -i "s/77f8c12cc7b8f8423e5c38b035249166/42d8aa7cde9c78c4757862d84620c335/g" $SQL_FILE
+sed -i "s/2012-04-24 00:00:00.000000000/2015-09-29 11:00:00.575000000/" $SQL_FILE
+sed -i "s/2012-04-24 00:00:00.000000000/2015-09-29 11:04:00.575000000/" $SQL_FILE
+
+SQL_FILE=/opt/restcomm/standalone/deployments/restcomm.war/WEB-INF/data/hsql/restcomm.script
+sed -i "s/uninitialized/active/g" $SQL_FILE
+sed -i "s/77f8c12cc7b8f8423e5c38b035249166/42d8aa7cde9c78c4757862d84620c335/g" $SQL_FILE
+sed -i "s/2012-04-24 00:00:00.000000000/2015-09-29 11:00:00.575000000/" $SQL_FILE
+sed -i "s/2012-04-24 00:00:00.000000000/2015-09-29 11:04:00.575000000/" $SQL_FILE
+
+# end 
+
 cd /opt/restcomm/bin/restcomm
 rm -f telestax-license.xml
 cat > telestax-license.xml << 'EOF'

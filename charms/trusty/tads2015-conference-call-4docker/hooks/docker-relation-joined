@@ -1,0 +1,12 @@
+#!/bin/bash
+
+source hooks/common.sh
+
+. ${CONFIG_PATH} 
+ 
+# start hook will be called before
+
+
+#render_config
+#setup
+

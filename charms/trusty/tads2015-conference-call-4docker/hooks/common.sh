@@ -1,10 +1,10 @@
 #!/bin/bash
 
-WORK_DIR="/var/lib/tads2015-call-consumer"
-APP_NAME="tads2015-call-consumer"
-APP_PORT=30790
+WORK_DIR="/var/lib/tads2015-conference-call"
+APP_NAME="tads2015-conference-call"
+APP_PORT=30791
 CONFIG_PATH=/etc/default/${APP_NAME}.conf
-DOCKER_IMAGE=tads2015da/demo-main:0.0.9
+DOCKER_IMAGE=tads2015da/demo-conference:0.0.9
 
 render_config(){
  

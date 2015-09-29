@@ -13,4 +13,4 @@ echo 'juju current env: '$JUJU_CUR_ENV
 JUJU_PASS=$(grep password ~/.juju/environments/$JUJU_CUR_ENV.jenv | sed 's/.*: //g')
 
 echo 'juju admin password: '$JUJU_PASS
-juju set simple-monitor-server JUJU_API_PASSWORD=$JUJU_PASS
+juju set monitor-server JUJU_API_PASSWORD=$JUJU_PASS
