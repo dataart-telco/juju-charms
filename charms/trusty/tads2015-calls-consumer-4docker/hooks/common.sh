@@ -30,7 +30,7 @@ limit nofile 20000 20000
 script
 #  . /etc/default/tads2015-call-consumer.conf
   docker pull tads2015da/demo-main:0.0.9
-  exec docker run -d -P --env-file='${CONFIG_PATH}' --name='${APP_NAME}' tads2015da/demo-main:0.0.9
+  exec docker run -d -p '${APP_PORT}':'${APP_PORT}' --env-file='${CONFIG_PATH}' --name='${APP_NAME}' tads2015da/demo-main:0.0.9
 
 end script
 ' > /etc/init/${APP_NAME}.conf

@@ -17,10 +17,10 @@ demo:
 #        - "8"
     redis-master:
       charm: cs:~mbruzek/trusty/redis-master-0
-#    telscale-restcomm:
-#      charm: local:trusty/telscale-restcomm
-#      expose: true
-#      constraints: "mem=1536M"
+    telscale-restcomm:
+      charm: local:trusty/telscale-restcomm
+      expose: true
+      constraints: "mem=1536M"
     haproxy:
       charm: cs:trusty/haproxy-11
       expose: true
@@ -60,16 +60,18 @@ demo:
       - redis-master:db
     - - tads2015-calls-consumer-4docker:docker
       - docker:docker-containers
-#    - - tads2015-calls-consumer-4docker:restcomm
-#      - telscale-restcomm:website
+    - - tads2015-calls-consumer-4docker:restcomm
+      - telscale-restcomm:website
     - - haproxy:reverseproxy
       - tads2015-calls-consumer-4docker:website
     - - simple-monitor-server:redis
       - redis-master:redis-master
     - - simple-monitor-server:api-server
       - juju-gui:web
-#    - - simple-monitor-agents:monitor-server
-#        simple-monitor-server:monitor-server
+    - - simple-monitor-agent:monitor-server
+      - simple-monitor-server:monitor-server
+    - - simple-monitor-agent
+      - docker
 # zabbix start
 #    - - zabbix-frontend:frontend
 #      - zabbix-server:frontend
