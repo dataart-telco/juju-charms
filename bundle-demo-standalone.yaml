@@ -6,14 +6,14 @@ demo:
       charm: local:trusty/tads2015-calls-consumer-4docker
       expose: true
       annotations: 
-        "gui-x": "327"
-        "gui-y": "218"
+        "gui-x": "570"
+        "gui-y": "380"
     conference-call-4docker:
       charm: local:trusty/tads2015-conference-call-4docker
       expose: true
       annotations:
-        "gui-x": "545"
-        "gui-y": "218"
+        "gui-x": "950"
+        "gui-y": "380"
     docker-consumer:
 #    charm: cs:~kubernetes/trusty/docker-0
       charm: local:trusty/docker-charm
@@ -32,42 +32,42 @@ demo:
         latest: true
         aufs: true
       annotations:
-        "gui-x": "218"
+        "gui-x": "380"
         "gui-y": "0"
     redis-master:
       charm: cs:~mbruzek/trusty/redis-master-0
       annotations:
-        "gui-x": "436"
-        "gui-y": "436"
+        "gui-x": "760"
+        "gui-y": "760"
     telscale-restcomm:
       charm: local:trusty/telscale-restcomm
       expose: true
       constraints: "mem=1536M"
       annotations:
-        "gui-x": "654"
+        "gui-x": "1140"
         "gui-y": "0"
     haproxy:
       charm: cs:trusty/haproxy-11
       expose: true
       annotations:
-        "gui-x": "436"
+        "gui-x": "760"
         "gui-y": "0"
     juju-gui:
       charm: cs:trusty/juju-gui-39
       expose: true
       annotations:
         "gui-x": "0"
-        "gui-y": "436"
+        "gui-y": "760"
     monitor-agent:
       charm: local:trusty/monitor-agent
       annotations:
-        "gui-x": "109"
-        "gui-y": "218"
+        "gui-x": "190"
+        "gui-y": "380"
     monitor-server:
       charm: local:trusty/monitor-server
       annotations:
-        "gui-x": "218"
-        "gui-y": "436"
+        "gui-x": "380"
+        "gui-y": "760"
   relations:
 # call consumer
     - - calls-consumer-4docker:redis
