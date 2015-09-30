@@ -36,4 +36,4 @@ Repo contains a few apps which are wrapped to different charms with different in
 
 #### deploy-standalone.sh
 
-![juju-gui screenshot](https://www.dropbox.com/s/wcb3kj5770z0d38/juju-standalone-scale.png)
+![juju-gui screenshot](https://dl.dropboxusercontent.com/u/8604560/juju-standalone-scale.png)
