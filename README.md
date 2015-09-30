@@ -2,7 +2,7 @@
 
 #### Deploy scripts
 
-1. **deploy-standalone.sh** - deploy system with autoscale functionality - [result here](#deploy-standalone.sh)
+1. **deploy-standalone.sh** - deploy system with autoscale functionality - [result here](#deploy-standalonesh)
 2. **deploy-kube.sh** - deploy apps with kubernetes 
 
 #### Apps
