@@ -5,6 +5,10 @@
 1. **deploy-standalone.sh** - deploy system with autoscale functionality - [result here](#deploy-standalonesh)
 2. **deploy-kube.sh** - deploy apps with kubernetes 
 
+#### Local intallation with kvm
+
+if you use nginx to expose installed apps you can use *update-nginx* script from *misc* folder to add juju_proxy config nginx instance
+
 #### Apps
 Repo contains a few apps which are wrapped to different charms with different installation ways
 
