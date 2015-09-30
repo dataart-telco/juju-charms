@@ -1,0 +1,316 @@
+#!/bin/bash
+# config-changed occurs everytime a new configuration value is updated (juju set)
+
+set -ex
+
+status-set maintenance "Config changed"
+
+patt='([[:digit:]]+)'
+
+[[ $JUJU_UNIT_NAME =~ $patt ]] && unit_no=${BASH_REMATCH[1]}
+let unit_no+=1
+
+# Config Zookeeper
+sudo sh -c "echo $unit_no > /etc/zookeeper/conf/myid"
+
+# Config mesos-master
+sudo sh -c "echo `config-get work_dir` > /etc/mesos-master/work_dir"
+
+if [ -n "`config-get allocation_interval`" ]
+then
+	sudo sh -c "echo `config-get allocation_interval` > /etc/mesos-master/authenticate"
+else
+	sudo rm -f /etc/mesos-master/authenticate
+fi
+
+if [ -n "`config-get allocator`" ]
+then
+	sudo sh -c "echo `config-get allocator` > /etc/mesos-master/allocator"
+else
+	sudo rm -f /etc/mesos-master/allocator
+fi
+
+if [ `config-get authenticate` = "True" ]
+then
+	sudo sh -c "touch /etc/mesos-slave/?authenticate"
+else
+	sudo rm -f "/etc/mesos-master/?authenticate"
+fi
+
+if [ `config-get authenticate_slaves` = "True" ]
+then
+	sudo sh -c "touch /etc/mesos-slave/?authenticate_slaves"
+else
+	sudo rm -f "/etc/mesos-master/?authenticate_slaves"
+fi
+
+if [ -n "`config-get cluster`" ]
+then
+	sudo sh -c "echo `config-get cluster` > /etc/mesos-master/cluster"
+else
+	sudo rm -f /etc/mesos-master/cluster
+fi
+
+if [ -n "`config-get credentials`" ]
+then
+	sudo sh -c "echo `config-get credentials` > /etc/mesos-master/credentials"
+else
+	sudo rm -f /etc/mesos-master/credentials
+fi
+
+if [ -n "`config-get framework_sorter`" ]
+then
+	sudo sh -c "echo `config-get framework_sorter` > /etc/mesos-master/framework_sorter"
+else
+	sudo rm -f /etc/mesos-master/framework_sorter
+fi
+
+if [ -n "`config-get hooks`" ]
+then
+	sudo sh -c "echo `config-get hooks` > /etc/mesos-master/hooks"
+else
+	sudo rm -f /etc/mesos-master/hooks
+fi
+
+if [ -n "`config-get hostname`" ]
+then
+	sudo sh -c "echo `config-get hostname` > /etc/mesos-master/hostname"
+else
+	sudo sh -c "echo $JUJU_UNIT_NAME > /etc/mesos-master/hostname"
+fi
+
+if [ -n "`config-get log_dir`" ]
+then
+	sudo sh -c "echo `config-get log_dir` > /etc/mesos-master/log_dir"
+else
+	sudo rm -f /etc/mesos-master/log_dir
+fi
+
+if [ -n "`config-get logbufsecs`" ]
+then
+	sudo sh -c "echo `config-get logbufsecs` > /etc/mesos-master/logbufsecs"
+else
+	sudo rm -f /etc/mesos-master/logbufsecs
+fi
+
+if [ -n "`config-get logging_level`" ]
+then
+	sudo sh -c "echo `config-get logging_level` > /etc/mesos-master/logging_level"
+else
+	sudo rm -f /etc/mesos-master/logging_level
+fi
+
+if [ `config-get quiet` = "True" ]
+then
+	sudo sh -c "touch /etc/mesos-slave/?quiet"
+else
+	sudo rm -f "/etc/mesos-master/?quiet"
+fi
+
+if [ -n "`config-get recovery_slave_removal_limit`" ]
+then
+	sudo sh -c "echo `config-get recovery_slave_removal_limit` > /etc/mesos-master/recovery_slave_removal_limit"
+else
+	sudo rm -f /etc/mesos-master/recovery_slave_removal_limit
+fi
+
+if [ -n "`config-get registry`" ]
+then
+	sudo sh -c "echo `config-get registry` > /etc/mesos-master/registry"
+else
+	sudo rm -f /etc/mesos-master/registry
+fi
+
+if [ -n "`config-get registry_fetch_timeout`" ]
+then
+	sudo sh -c "echo `config-get registry_fetch_timeout` > /etc/mesos-master/registry_fetch_timeout"
+else
+	sudo rm -f /etc/mesos-master/registry_fetch_timeout
+fi
+
+if [ -n "`config-get resource_monitoring_interval`" ]
+then
+	sudo sh -c "echo `config-get resource_monitoring_interval` > /etc/mesos-master/resource_monitoring_interval"
+else
+	sudo rm -f /etc/mesos-master/resource_monitoring_interval
+fi
+
+if [ -n "`config-get registry_store_timeout`" ]
+then
+	sudo sh -c "echo `config-get registry_store_timeout` > /etc/mesos-master/registry_store_timeout"
+else
+	sudo rm -f /etc/mesos-master/registry_store_timeout
+fi
+
+if [ -n "`config-get roles`" ]
+then
+	sudo sh -c "echo `config-get roles` > /etc/mesos-master/roles"
+else
+	sudo rm -f /etc/mesos-master/roles
+fi
+
+if [ `config-get root_submissions` = "False" ]
+then
+	sudo sh -c "echo 'false' > /etc/mesos-master/root_submissions"
+else
+	sudo rm -f /etc/mesos-master/root_submissions
+fi
+
+if [ -n "`config-get slave_reregister_timeout`" ]
+then
+	sudo sh -c "echo `config-get slave_reregister_timeout` > /etc/mesos-master/slave_reregister_timeout"
+else
+	sudo rm -f /etc/mesos-master/slave_reregister_timeout
+fi
+
+if [ -n "`config-get user_sorter`" ]
+then
+	sudo sh -c "echo `config-get user_sorter` > /etc/mesos-master/user_sorter"
+else
+	sudo rm -f /etc/mesos-master/user_sorter
+fi
+
+if [ -n "`config-get weights`" ]
+then
+	sudo sh -c "echo `config-get weights` > /etc/mesos-master/weights"
+else
+	sudo rm -f /etc/mesos-master/weights
+fi
+
+if [ -n "`config-get zk_session_timeout`" ]
+then
+	sudo sh -c "echo `config-get zk_session_timeout` > /etc/mesos-master/zk_session_timeout"
+else
+	sudo rm -f /etc/mesos-master/zk_session_timeout
+fi
+
+open-port `config-get port`
+open-port `config-get marathon_port`
+
+# Config mesos-slave
+if [ `config-get mesos-slave` = "True" ]
+then
+	juju-log "Configuring mesos'slave: `config-get mesos-slave`"
+	sudo rm -f /etc/init/mesos-slave.override
+
+	if [ -n "`config-get slave_hostname`" ]
+	then
+		sudo sh -c "echo `config-get slave_hostname` > /etc/mesos-slave/hostname"
+	else
+		sudo sh -c "echo $JUJU_UNIT_NAME > /etc/mesos-slave/hostname"
+	fi
+
+	sudo sh -c "echo `config-get slave_containerizers` > /etc/mesos-slave/containerizers"
+	sudo sh -c "echo `config-get slave_executor_registration_timeout` > /etc/mesos-slave/executor_registration_timeout"
+
+	if [ -n "`config-get slave_attributes`" ]
+	then
+		sudo sh -c "echo `config-get slave_attributes` > /etc/mesos-slave/attributes"
+	else
+		sudo rm -f /etc/mesos-slave/attributes
+	fi
+
+	if [ -n "`config-get slave_credential`" ]
+	then
+		sudo sh -c "echo `config-get slave_credential` > /etc/mesos-slave/credential"
+	else
+		sudo rm -f /etc/mesos-slave/credential
+	fi
+
+	if [ -n "`config-get slave_default_role`" ]
+	then
+		sudo sh -c "echo `config-get slave_default_role` > /etc/mesos-slave/default_role"
+	else
+		sudo rm -f /etc/mesos-slave/default_role
+	fi
+
+	if [ -n "`config-get slave_isolation`" ]
+	then
+		sudo sh -c "echo `config-get slave_isolation` > /etc/mesos-slave/isolation"
+	else
+		sudo rm -f /etc/mesos-slave/isolation
+	fi
+
+	if [ -n "`config-get slave_logging_level`" ]
+	then
+		sudo sh -c "echo `config-get slave_logging_level` > /etc/mesos-slave/logging_level"
+	else
+		sudo rm -f /etc/mesos-slave/logging_level
+	fi
+
+	if [ -n "`config-get slave_resource_monitoring_interval`" ]
+	then
+		sudo sh -c "echo `config-get slave_resource_monitoring_interval` > /etc/mesos-slave/resource_monitoring_interval"
+	else
+		sudo rm -f /etc/mesos-slave/resource_monitoring_interval
+	fi
+
+	if [ -n "`config-get slave_resources`" ]
+	then
+		sudo sh -c "echo `config-get slave_resources` > /etc/mesos-slave/resources"
+	else
+		sudo rm -f /etc/mesos-slave/resources
+	fi
+else
+	if $(service mesos-slave status|grep 'mesos-slave start/running' | wc -l)
+	then
+		sudo service mesos-slave stop
+	fi
+
+	if $(service docker status|grep 'docker start/running' | wc -l)
+	then
+		sudo service docker stop
+	fi
+
+	sudo sh -c "echo manual > /etc/init/mesos-slave.override"
+fi
+
+# Config mesos-dns
+if [ `config-get mesos-dns` = "True" ]
+then
+	file="/etc/mesos/zk"
+	zookeeper=$(cat "$file") 
+	httpon=`config-get dns_httpon`
+	dsnon=`config-get dns_dsnon`
+	externalon=`config-get dns_externalon`
+	
+	sudo sh -c "echo '{' > /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"zk\": \"${zookeeper}\",' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"refreshSeconds\": `config-get dns_refreshSeconds`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"ttl\": `config-get dns_ttl`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"domain\": \"`config-get dns_domain`\",' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"port\": `config-get dns_port`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"resolvers\": [\"`unit-get private-address`\", \"8.8.8.8\"],' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"timeout\": `config-get dns_timeout`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"httpon\": ${httpon,,},' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"dsnon\": ${dsnon,,},' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"httpport\": `config-get dns_httpport`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"externalon\": ${externalon,,},' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"listener\": \"`config-get dns_listener`\",' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"SOAMname\": \"`config-get dns_SOAMname`\",' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"SOARname\": \"`config-get dns_SOARname`\",' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"SOARefresh\": `config-get dns_SOARefresh`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"SOARetry\": `config-get dns_SOARetry`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"SOAExpire\": `config-get dns_SOAExpire`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"SOAMinttl\": `config-get dns_SOAMinttl`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"email\": \"root.mesos-dns.mesos\"' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '}' >> /usr/local/mesos-dns/config.json"
+fi
+
+# Restart services
+sudo service zookeeper restart
+sudo service mesos-master restart
+sudo service marathon restart
+
+if [ `config-get mesos-slave` = "True" ]
+then
+	sudo service mesos-slave restart
+	sudo service docker restart
+fi
+
+if [ `config-get mesos-dns` = "True" ]
+then
+	sudo service mesos-dns restart
+fi
+
+status-set active

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -ex
+
+relation-set port=`config-get port` zookeeper_port=`config-get zookeeper_port` mesos-dns=`config-get mesos-dns`

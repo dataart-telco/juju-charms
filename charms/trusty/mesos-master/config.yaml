@@ -1,0 +1,253 @@
+options:
+  mesos-dns:
+    type: boolean
+    default: true
+    description: "Should mesos-dns be installed?"
+  mesos-slave:
+    type: boolean
+    default: true
+    description: "Should mesos-slave run along side master?"
+  install_docker:
+    type: boolean
+    default: true
+    description: "Should Docker be installed?"
+  zookeeper:
+    type: string
+    default: "zk://localhost:2181/mesos"
+    description: "ZooKeeper URL (used for leader election amongst masters)"
+  quorum:
+    type: int
+    default: 1
+    description: "The size of the quorum of replicas when using 'replicated_log' based registry. It is imperative to set this value to be a majority of masters i.e., quorum > (number of masters)/2. ex. --quorum=2 This number represents the minumim number of master that agree with what is written next in the replicate_log."
+  work_dir:
+    type: string
+    default: "/var/lib/mesos"
+    description: "Path to write framework work directories and replication logs."
+  allocation_interval:
+    type: string
+    default: ""
+    description: "Amount of time to wait between performing batch allocations (e.g., 500ms, 1sec, etc). (default: 1secs)"
+  allocator:
+    type: string
+    default: ""
+    description: "The allocator to use for resource allocation to frameworks. Use the default HierarchicalDRF allocator, or load an alternate allocator module using --modules. (default: HierarchicalDRF)"
+  authenticate:
+    type: boolean
+    default: false
+    description: "The options are --authenticate or --no-authenticate. If --authenticate is 'true' only authenticated frameworks are allowed to register. If --no-authenticate is present unauthenticated frameworks are also allowed to register. (default: --no-authenticate) If --authenticate is true, it is necessary for the master to also be configured with the --credential flag (details below)."
+  authenticate_slaves:
+    type: boolean
+    default: false
+    description: "The options are --authenticate_slaves or --no-authenticate_slaves. If --authenticate_slaves is 'true' only authenticated slaves are allowed to register. If --no-authenticate_slaves unauthenticated slaves are also allowed to register. (default: --no-authenticate_slaves) If --authenticate_slaves is true, it is necessary for the master to also be configured with the --credential flag (details below)."
+  cluster:
+    type: string
+    default: ""
+    description: "Human readable name for the cluster, displayed in the webui."
+  credentials:
+    type: string
+    default: ""
+    description: "The credentials are the username and password that must be provided by frameworks and/or slaves in order to access a secured mesos master. A single line with the 'principal' and 'secret' separated by whitespace. For example: 'mesos rocks'"
+  framework_sorter:
+    type: string
+    default: ""
+    description: "Policy to use for allocating resources between a given user's frameworks. Options are the same as for user_allocator. (default: drf)"
+  hooks:
+    type: string
+    default: ""
+    description: "A comma separated list of hook modules to be installed inside master."
+  hostname:
+    type: string
+    default: ""
+    description: "The hostname the slave should report. If left unset, system hostname will be used (recommended)."
+  log_dir:
+    type: string
+    default: ""
+    description: "Path to write log files. There is no default. When there is no setting (default), nothing is written to disk."
+  logbufsecs:
+    type: string
+    default: ""
+    description: "How many seconds to buffer log messages for (default: 0)"
+  logging_level:
+    type: string
+    default: ""
+    description: "Log message at or above this level; possible values: 'INFO', 'WARNING', 'ERROR'. (default: INFO)"
+  quiet:
+    type: boolean
+    default: false
+    description: "The options are --quiet or --no-quiet. Quiet disables logging to stderr. (default: false or --no-quiet)."
+  recovery_slave_removal_limit:
+    type: string
+    default: ""
+    description: "For fail-overs, limit on the percentage of slaves that can be removed from the registry *and* shutdown after the re-registration timeout elapses. If the limit is exceeded, the master will fail over rather than remove the slaves. This can be used to provide safety guarantees for production environments. Production environments may expect that across Master fail-overs, at most a certain percentage of slaves will fail permanently (e.g. due to rack-level failures). Setting this limit would ensure that a human needs to get involved if an unexpected widespread failure of slaves occurs in the cluster. Values: [0%-100%] (default: 100%)"
+  registry:
+    type: string
+    default: ""
+    description: "Persistence strategy for the registry. Available options are 'replicated_log', 'in_memory'. (default: replicated_log)."
+  registry_fetch_timeout:
+    type: string
+    default: ""
+    description: "Duration of time to wait in order to fetch data from the registry after which the operation is considered a failure. (default: 1mins)"
+  resource_monitoring_interval:
+    type: string
+    default: ""
+    description: "Periodic time interval for monitoring executor resource usage (e.g., 10secs, 1min, etc) (default: 1secs)"
+  registry_store_timeout:
+    type: string
+    default: ""
+    description: "Duration of time to wait in order to store data in the registry after which the operation is considered a failure. (default: 5secs)"
+  roles:
+    type: string
+    default: ""
+    description: "A comma separated list of the allocation roles that frameworks in this cluster may belong to. ex. 'prod,stage'"
+  root_submissions:
+    type: boolean
+    default: true
+    description: "The options are --root_submissions or --no-root_submissions. --root_submissions means that root can submit frameworks. (default: --root_submissions)"
+  slave_reregister_timeout:
+    type: string
+    default: ""
+    description: "The timeout within which all slaves are expected to re-register when a new master is elected as the leader. Slaves that do not re-register within the timeout will be removed from the registry and will be shut down if they attempt to communicate with master. NOTE: This value has to be at least 10mins. (default: 10mins)"
+  user_sorter:
+    type: string
+    default: ""
+    description: "Policy to use for allocating resources between users. May be one of: dominant_resource_fairness (drf) (default: drf)"
+  weights:
+    type: string
+    default: ""
+    description: "A comma separated list of role/weight pairs of the form 'role=weight,role=weight'. Weights are used to indicate forms of priority. ex. --weights=etl=2 All specified roles must be valid meaning they are configured through --roles Weights, which do not need to be integers, are used to indicate forms of priority in the allocator. When weights are specified, a client's DRF share will be divided by the weight. For example, a role that has a weight of 2 will be offered twice as many resources as a role with weight 1. So, when a new resource becomes available, the master allocator first checks all the roles to see which role is furthest below its weighted fair share. Then, within that role, it selects the framework that is furthest below its fair share and offers the resource to it. ex 'etl=2,analytics=1'"
+  zk_session_timeout:
+    type: string
+    default: ""
+    description: "ZooKeeper session timeout. (default: 10secs)"
+  port:
+    type: int
+    default: 5050
+    description: "The port the slave will listen on. (default: 5051)"
+  marathon_port:
+    type: int
+    default: 8080
+    description: "The port Marathon will listen for requests."
+  zookeeper_port:
+    type: int
+    default: 2181
+    description: "The port to listen for client connections; that is, the port that clients attempt to connect to."
+  zookeeper_tickTime:
+    type: int
+    default: 2000
+    description: "The length of a single tick, which is the basic time unit used by ZooKeeper, as measured in milliseconds. It is used to regulate heartbeats, and timeouts. For example, the minimum session timeout will be two ticks."
+  zookeeper_initLimit:
+    type: int
+    default: 10
+    description: "Amount of time, in ticks (see tickTime), to allow followers to connect and sync to a leader. Increased this value as needed, if the amount of data managed by ZooKeeper is large."
+  zookeeper_syncLimit:
+    type: int
+    default: 5
+    description: "Amount of time, in ticks (see tickTime), to allow followers to sync with ZooKeeper. If followers fall too far behind a leader, they will be dropped."
+  zookeeper_dataDir:
+    type: string
+    default: "/var/lib/zookeeper"
+    description: "The location where ZooKeeper will store the in-memory database snapshots and, unless specified otherwise, the transaction log of updates to the database."
+  slave_hostname:
+    type: string
+    default: ""
+    description: "The hostname the slave should report. If left unset, system hostname will be used."
+  slave_attributes:
+    type: string
+    default: ""
+    description: "'rack:2;U:1'. This would be a way of indicating that this node is in rack 2 and is U 1. The attributes are arbitrary and can be thought of as ways of tagging a node. By default there are no attributes."
+  slave_containerizers:
+    type: string
+    default: "docker,mesos"
+    description: "Comma separated list of containerizer implementations to compose in order to provide containerization. Available options are 'mesos', 'external', and 'docker' (on Linux). The order the containerizers are specified is the order they are tried (--containerizers=mesos). (default: mesos)"
+  slave_executor_registration_timeout:
+    type: string
+    default: "5mins"
+    description: "Amount of time to wait for an executor to register with the slave before considering it hung and shutting it down."
+  slave_credential:
+    type: string
+    default: ""
+    description: "The credentials are the username and password used to access a secured Mesos master. A single line with the 'principal' and 'secret' separated by whitespace. For example: 'mesos rocks'"
+  slave_default_role:
+    type: string
+    default: ""
+    description: "Resources, for example, CPU, can be constrained by roles. The --resources flag allows control over resources (for example: cpu(prod):3, which reserves 3 CPU for the prod role). If a resource is detected but is **not** specified in the resources flag, then it will be assigned this default_role. The default value allows all roles to have access to this resource. "
+  slave_isolation:
+    type: string
+    default: ""
+    description: "There are a number of types of isolators for each type of resource which can be different from platform to platform. A linux platform has cgroups which can provide CPU and memory isolation. This flag always for the configuration of a set of isolations the slave will use. (default: posix/cpu,posix/mem)."
+  slave_logging_level:
+    type: string
+    default: ""
+    description: "Log message at or above this level; possible values: 'INFO', 'WARNING', 'ERROR'. (default: INFO)."
+  slave_resource_monitoring_interval:
+    type: string
+    default: ""
+    description: "Periodic time interval for monitoring executor resource usage (e.g., 10secs, 1min, etc) (default: 1secs)"
+  slave_resources:
+    type: string
+    default: ""
+    description: "Total consumable resources per slave, in the form 'name(role):value;name(role):value...'. This value can be set to limit resources per role, or to overstate the number of resources that are available to the slave."
+  dns_refreshSeconds:
+    type: int
+    default: 60
+    description: "The frequency at which Mesos-DNS updates DNS records based on information retrieved from the Mesos master. The default value is 60 seconds."
+  dns_ttl:
+    type: int
+    default: 60
+    description: "The time to live value for DNS records served by Mesos-DNS, in seconds. It allows caching of the DNS record for a period of time in order to reduce DNS request rate. ttl should be equal or larger than refreshSeconds. The default value is 60 seconds."
+  dns_domain:
+    type: string
+    default: "mesos"
+    description: "The domain name for the Mesos cluster. The domain name can use characters [a-z, A-Z, 0-9], - if it is not the first or last character of a domain portion, and . as a separator of the textual portions of the domain name. We recommend you avoid valid top-level domain names. The default value is mesos."
+  dns_port:
+    type: int
+    default: 53
+    description: "The port number that Mesos-DNS monitors for incoming DNS requests. Requests can be sent over TCP or UDP. We recommend you use port 53 as several applications assume that the DNS server listens to this port. The default value is 53."
+  dns_timeout:
+    type: int
+    default: 5
+    description: "The timeout threshold, in seconds, for connections and requests to external DNS requests. The default value is 5 seconds."
+  dns_httpon:
+    type: boolean
+    default: true
+    description: "A boolean field that controls whether Mesos-DNS listens for HTTP requests or not. The default value is true."
+  dns_dsnon:
+    type: boolean
+    default: true
+    description: "A boolean field that controls whether Mesos-DNS listens for DNS requests or not. The default value is true."
+  dns_httpport: 
+    type: int
+    default: 8123
+    description: "The port number that Mesos-DNS monitors for incoming HTTP requests. The default value is 8123."
+  dns_externalon:
+    type: boolean
+    default: true
+    description: "A boolean field that controls whether Mesos-DNS serves requests outside of the Mesos domain. The default value is true."
+  dns_listener:
+    type: string
+    default: "0.0.0.0"
+    description: "The IP address of Mesos-DNS. In SOA replies, Mesos-DNS identifies hostname mesos-dns.domain as the primary nameserver for the domain. It uses this IP address in an A record for mesos-dns.domain. The default value is '0.0.0.0', which instructs Mesos-DNS to create an A record for every IP address associated with a network interface on the server that runs the Mesos-DNS process."
+  dns_SOAMname:
+    type: string
+    default: "root.ns1.mesos"
+    description: "The MNAME field in the SOA record for the Mesos domain. The format is mailbox.domain, using a . instead of @. For example, if the email address is root@ns1.mesos, the email field should be root.mesos-dns.mesos. For details, see the RFC-1035. The default value is root.ns1.mesos."
+  dns_SOARname:
+    type: string
+    default: "ns1.mesos"
+    description: "TODO"
+  dns_SOARefresh:
+    type: int
+    default: 60
+    description: "The REFRESH field in the SOA record for the Mesos domain. For details, see the RFC-1035. The default value is 60."
+  dns_SOARetry:
+    type: int
+    default: 600
+    description: "The RETRY field in the SOA record for the Mesos domain. For details, see the RFC-1035. The default value is 600."
+  dns_SOAExpire:
+    type: int
+    default: 86400
+    description: "The EXPIRE field in the SOA record for the Mesos domain. For details, see the RFC-1035. The default value is 86400."
+  dns_SOAMinttl:
+    type: int
+    default: 60
+    description: "The minimum TTL field in the SOA record for the Mesos domain. For details, see the RFC-2308. The default value is 60."

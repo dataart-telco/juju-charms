@@ -1,0 +1,140 @@
+#!/bin/bash
+# This must be renamed to the name of the relation. The goal here is to
+# affect any change needed by relationships being formed, modified, or broken
+# This script should be idempotent.
+set -ex
+
+status-set maintenance "relations changed"
+
+patt='([[:digit:]]+)'
+[[ $JUJU_UNIT_NAME =~ $patt ]] && unit_no=${BASH_REMATCH[1]}
+let unit_no+=1
+
+sudo rm -f /etc/resolv.conf
+sudo cp /etc/resolv.conf.backup /etc/resolv.conf
+
+# Config Zookeeper
+sudo sh -c "echo 'tickTime=`config-get zookeeper_tickTime`' > /etc/zookeeper/conf/zoo.cfg"
+sudo sh -c "echo 'initLimit=`config-get zookeeper_initLimit`' >> /etc/zookeeper/conf/zoo.cfg"
+sudo sh -c "echo 'syncLimit=`config-get zookeeper_syncLimit`' >> /etc/zookeeper/conf/zoo.cfg"
+sudo sh -c "echo 'dataDir=`config-get zookeeper_dataDir`' >> /etc/zookeeper/conf/zoo.cfg"
+sudo sh -c "echo 'clientPort=`config-get zookeeper_port`' >> /etc/zookeeper/conf/zoo.cfg"
+
+if [ -z `relation-ids` ]
+then
+	juju-log "Running mesos-master in standalone mode"
+
+	# Config mesos-master
+	sudo sh -c "echo `config-get zookeeper` > /etc/mesos/zk"
+	sudo sh -c "echo `config-get quorum` > /etc/mesos-master/quorum"
+else
+	# Config Zookeeper
+	server_arr[0]="server.${unit_no}=`unit-get private-address`:2888:3888"
+
+	for member in `relation-ids`
+    do  
+        juju-log "Adding $member to zokeeper quorum"
+        [[ ${member} =~ $patt ]] && member_id=${BASH_REMATCH[1]}
+        let member_id+=1
+        member_hostname=`relation-get -r ${member} private-address`
+		server_arr=("${server_arr[@]}" "server.${member_id}=${member_hostname}:2888:3888")
+    done
+
+    for server_line in "${server_arr[@]}"
+    do
+    	sudo sh -c "echo ${server_line} >> /etc/zookeeper/conf/zoo.cfg"
+    done
+
+    # Config mesos-master
+	sudo sh -c "echo $JUJU_UNIT_NAME > /etc/mesos-master/hostname"
+	sudo sh -c "echo `unit-get private-address` > /etc/mesos-master/ip"
+    zookeeper="zk://localhost:2181"
+	quorum=1
+	for member in `relation-ids`
+    do  
+        juju-log "Adding $member to mesos-master quorum"
+		zookeeper="$zookeeper,`relation-get -r ${member} private-address`:2181"
+		((quorum++))
+    done
+
+	zookeeper="$zookeeper/mesos"
+	let quorum=($quorum+2-1)/2
+	sudo sh -c "echo ${quorum} > /etc/mesos-master/quorum"
+	sudo sh -c "echo $zookeeper > /etc/mesos/zk"
+
+	# Config resolve.conf
+	if [ `config-get mesos-dns` = "True" ]
+	then
+		for member in `relation-ids`
+		do
+			if ![ -z `relation-get mesos-dns ${member}` ]
+			then
+				sudo sed -i "1s/^/nameserver `relation-get -r ${member} private-address`\n /" /etc/resolv.conf
+			fi
+		done
+	fi
+fi
+
+sudo sh -c "echo $zookeeper > /etc/mesos/zk"
+
+# Config mesos-dns
+sudo rm -f /etc/resolv.conf
+sudo cp /etc/resolv.conf.backup /etc/resolv.conf
+
+if [ `config-get mesos-dns` = "True" ]
+then
+	httpon=`config-get dns_httpon`
+	dsnon=`config-get dns_dsnon`
+	externalon=`config-get dns_externalon`
+	
+	sudo sh -c "echo '{' > /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"zk\": \"${zookeeper}\",' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"refreshSeconds\": `config-get dns_refreshSeconds`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"ttl\": `config-get dns_ttl`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"domain\": \"`config-get dns_domain`\",' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"port\": `config-get dns_port`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"resolvers\": [\"`unit-get private-address`\", \"8.8.8.8\"],' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"timeout\": `config-get dns_timeout`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"httpon\": ${httpon,,},' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"dsnon\": ${dsnon,,},' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"httpport\": `config-get dns_httpport`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"externalon\": ${externalon,,},' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"listener\": \"`config-get dns_listener`\",' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"SOAMname\": \"`config-get dns_SOAMname`\",' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"SOARname\": \"`config-get dns_SOARname`\",' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"SOARefresh\": `config-get dns_SOARefresh`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"SOARetry\": `config-get dns_SOARetry`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"SOAExpire\": `config-get dns_SOAExpire`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"SOAMinttl\": `config-get dns_SOAMinttl`,' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '  \"email\": \"root.mesos-dns.mesos\"' >> /usr/local/mesos-dns/config.json"
+	sudo sh -c "echo '}' >> /usr/local/mesos-dns/config.json"
+
+	for member in `relation-ids`
+	do
+		if ![ -z `relation-get -r ${member} mesos-dns` ]
+		then
+			sudo sed -i "1s/^/nameserver `relation-get private-address ${member}`\n /" /etc/resolv.conf
+		fi
+	done
+
+	# Config resolve.conf
+	sudo sed -i "1s/^/nameserver `unit-get private-address`\n /" /etc/resolv.conf
+fi
+
+# Restart services
+sudo service zookeeper restart
+sudo service mesos-master restart
+sudo service marathon restart
+
+if [ `config-get mesos-slave` = "True" ]
+then
+	sudo service mesos-slave restart
+	sudo service docker restart
+fi
+
+if [ `config-get mesos-dns` = "True" ]
+then
+	sudo service mesos-dns restart
+fi
+
+status-set active

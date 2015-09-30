@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -ex
+
+sudo service zookeeper restart
+sudo service mesos-master restart
+sudo service marathon restart
+
+if [ `config-get mesos-slave` = "True" ]
+then
+	sudo service mesos-slave restart
+	sudo service docker restart
+fi
+
+if [ `config-get mesos-dns` = "True" ]
+then
+	sudo service mesos-dns restart
+fi
+
+status-set active
