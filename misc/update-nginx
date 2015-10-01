@@ -4,11 +4,13 @@ JUJU_GUI_HOST=`juju status juju-gui | grep public-address | sed 's/.*: //g'`
 MONITOR_SERVER_HOST=`juju status monitor-server | grep public-address | sed 's/.*: //g'`
 RESTCOMM_HOST=`juju status telscale-restcomm | grep public-address | sed 's/.*: //g'`
 HAPROXY_HOST=`juju status haproxy | grep public-address | sed 's/.*: //g'`
+MESOS_HOST=`juju status mesos-master | grep public-address | sed 's/.*: //g'`
 
-sed "s/JUJU_GUI_HOST/"${JUJU_GUI_HOST}"/g" tmpl.cfg > juju_proxy
+sed "s/JUJU_GUI_HOST/"${JUJU_GUI_HOST}"/g" $1 > juju_proxy
 sed -i "s/MONITOR_SERVER_HOST/"${MONITOR_SERVER_HOST}"/g"  juju_proxy
 sed -i "s/RESTCOMM_HOST/"${RESTCOMM_HOST}"/g"  juju_proxy
 sed -i "s/HAPROXY_HOST/"${HAPROXY_HOST}"/g"  juju_proxy
+sed -i "s/MESOS_HOST/"${MESOS_HOST}"/g"  juju_proxy
 
 cp juju_proxy /etc/nginx/sites-available/juju_proxy
 ln -s /etc/nginx/sites-available/juju_proxy /etc/nginx/sites-enabled/juju_proxy

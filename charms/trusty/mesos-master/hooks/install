@@ -14,7 +14,7 @@ CODENAME=$(lsb_release -cs)
 # Add the repository
 echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main" | sudo tee /etc/apt/sources.list.d/mesosphere.list
 sudo apt-get -y update
-sudo apt-get -y install mesos marathon wget git-core make
+sudo apt-get -y install mesos marathon=0.10.1-1.0.416.ubuntu1404 wget git-core make
 
 # Install docker
 wget -qO- https://get.docker.com/ | sh
@@ -32,6 +32,24 @@ export PATH=$PATH:$GOROOT/bin
 export GOPATH=/home/ubuntu/go
 go get github.com/tools/godep
 export PATH=$PATH:$GOPATH/bin
+
+go get github.com/gogo/protobuf/protothub.com/gogo/protobuf/proto
+
+mkdir -p $GOPATH/src/github.com/mesos
+cd $GOPATH/src/github.com/mesos
+rm -rf $GOPATH/src/github.com/mesos/mesos-go
+
+git clone https://github.com/mesos/mesos-go
+cd $GOPATH/src/github.com/mesos/mesos-go
+#stable version
+git checkout  b164c06f346af1e93aecb6502f83d31dbacdbb91
+go build github.com/mesos/mesos-go/mesosproto
+
+mkdir -p $GOPATH/src/github.com/mesosphere
+cd $GOPATH/src/github.com/mesosphere
+git clone https://github.com/mesosphere/mesos-dns
+cd $GOPATH/src/github.com/mesosphere/mesos-dns
+git checkout tags/v0.3.0
 
 go get github.com/mesosphere/mesos-dns
 cd $GOPATH/src/github.com/mesosphere/mesos-dns
