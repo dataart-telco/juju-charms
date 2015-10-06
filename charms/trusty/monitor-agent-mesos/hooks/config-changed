@@ -1,0 +1,11 @@
+#!/bin/bash
+# config-changed occurs everytime a new configuration value is updated (juju set)
+
+. hooks/common.sh
+. $CONFIG_PATH
+
+UPDATE_PERIOD=`config-get UPDATE_PERIOD`
+
+render_config
+
+restart_me

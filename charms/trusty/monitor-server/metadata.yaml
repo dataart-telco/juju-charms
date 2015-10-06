@@ -13,6 +13,8 @@ requires:
     interface: http
   redis:
     interface: redis
+  mesos-master:
+    interface: juju-info
 provides:
   monitor-server:
     interface: monitor-server

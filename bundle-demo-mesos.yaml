@@ -37,16 +37,23 @@ demo:
       annotations:
         "gui-x": "0"
         "gui-y": "760"
-    monitor-agent:
-      charm: local:trusty/monitor-agent
+    monitor-agent-mesos:
+      charm: local:trusty/monitor-agent-mesos
       annotations:
         "gui-x": "190"
+        "gui-y": "380"
+    monitor-agent-mesos-master:
+      charm: local:trusty/monitor-agent-mesos-master
+      annotations:
+        "gui-x": "-190"
         "gui-y": "380"
     monitor-server:
       charm: local:trusty/monitor-server
       annotations:
         "gui-x": "380"
         "gui-y": "760"
+      options:
+        CHECK_PERIOD: 1
     mesos-master:
       charm: local:trusty/mesos-master
       constraints: "mem=1G"
@@ -86,10 +93,13 @@ demo:
       - juju-gui:web
     - - mesos-master
       - mesos-slave
-#    - - monitor-agent:monitor-server
-#      - monitor-server:monitor-server
-#    - - monitor-agent
-#      - docker-consumer
-#    - - monitor-agent
-#      - docker-conference
-    
+    - - monitor-agent-mesos:monitor-server
+      - monitor-server:monitor-server
+    - - monitor-agent-mesos
+      - mesos-master
+    - - monitor-agent-mesos
+      - mesos-slave  
+    - - monitor-agent-mesos-master:monitor-server
+      - monitor-server:monitor-server
+    - - monitor-agent-mesos-master
+      - mesos-master  

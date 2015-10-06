@@ -4,8 +4,8 @@ WORK_DIR="/var/lib/tads2015-conference-call"
 APP_NAME="tads2015-conference-call"
 APP_PORT=30791
 DOCKER_IMAGE=tads2015da/demo-conference:0.0.9
-CPUS=0.3
-MEM=400
+CPUS=0.5
+MEM=256
 
 CONFIG_PATH=${WORK_DIR}/${APP_NAME}.conf
 FILE_CREATE=$WORK_DIR/create.json
@@ -52,10 +52,12 @@ render_create(){
         { "key": "env", "value": "EXTERNAL_IP='$EXTERNAL_IP'" },
         { "key": "env", "value": "REDIS_SERVICE_HOST='$REDIS_SERVICE_HOST'" },
         { "key": "env", "value": "REDIS_SERVICE_PORT='$REDIS_SERVICE_PORT'" },
-        { "key": "env", "value": "RESTCOMM_SERVICE='$RESTCOMM_SERVICE'" }
+        { "key": "env", "value": "RESTCOMM_SERVICE='$RESTCOMM_SERVICE'" },
+        { "key": "env", "value": "COLLECTD_DOCKER_APP='$APP_NAME'" },
+        { "key": "env", "value": "COLLECTD_DOCKER_TASK_ENV=MESOS_TASK_ID" }
       ],
       "portMappings": [
-        { "containerPort": '$APP_PORT', "hostPort": 0, "servicePort": '$APP_PORT', "protocol": "tcp" }
+        { "containerPort": '$APP_PORT', "hostPort": 0, "servicePort": 0, "protocol": "tcp" }
       ]
     }
   },

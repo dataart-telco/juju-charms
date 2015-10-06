@@ -33,7 +33,7 @@ export GOPATH=/home/ubuntu/go
 go get github.com/tools/godep
 export PATH=$PATH:$GOPATH/bin
 
-go get github.com/gogo/protobuf/protothub.com/gogo/protobuf/proto
+go get github.com/gogo/protobuf/proto
 
 mkdir -p $GOPATH/src/github.com/mesos
 cd $GOPATH/src/github.com/mesos

@@ -1,0 +1,17 @@
+name: monitor-agent-mesos-master
+summary: custom simple monitor agent
+maintainer: gdubina <gdubina@dataart.com>
+description: |
+  custom simple active agent
+tags:
+  # Replace "misc" with one or more whitelisted tags from this list:
+  # https://juju.ubuntu.com/docs/authors-charm-metadata.html#charm-metadata
+  - misc
+subordinate: true
+requires:
+  juju-info:
+    interface: juju-info
+    scope: container
+  monitor-server:
+    interface: monitor-server
+
