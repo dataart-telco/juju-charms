@@ -2,8 +2,9 @@
 
 #### Deploy scripts
 
-1. **deploy-standalone.sh** - deploy system with autoscale functionality - [result here](#deploy-standalonesh)
-2. **deploy-kube.sh** - deploy apps with kubernetes 
+1. **deploy-mesos.sh** - deploy mesos cluster to implement autoscale functionality - [result here](#deploy-mesossh)
+2. **deploy-standalone.sh** - deploy system with autoscale functionality - [result here](#deploy-standalonesh)
+3. **deploy-kube.sh** - deploy apps with kubernetes 
 
 #### Local installation with kvm
 
@@ -41,3 +42,7 @@ Repo contains a few apps which are wrapped to different charms with different in
 #### deploy-standalone.sh
 
 ![juju-gui screenshot](https://dl.dropboxusercontent.com/u/8604560/juju-standalone-scale.png)
+
+#### deploy-mesos.sh
+
+![juju-gui screenshot](https://dl.dropboxusercontent.com/u/8604560/mesos.png)
