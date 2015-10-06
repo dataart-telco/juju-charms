@@ -39,10 +39,10 @@ Repo contains a few apps which are wrapped to different charms with different in
 
 9. telscale-restcomm/ - telscale restcomm charm with fixes in sql init files
 
-#### deploy-standalone.sh
-
-![juju-gui screenshot](https://dl.dropboxusercontent.com/u/8604560/juju-standalone-scale.png)
-
 #### deploy-mesos.sh
 
 ![juju-gui screenshot](https://dl.dropboxusercontent.com/u/8604560/mesos.png)
+
+#### deploy-standalone.sh
+
+![juju-gui screenshot](https://dl.dropboxusercontent.com/u/8604560/juju-standalone-scale.png)
