@@ -49,6 +49,7 @@ demo:
         "gui-y": "380"
     monitor-server:
       charm: local:trusty/monitor-server
+      constraints: "mem=512M"
       annotations:
         "gui-x": "380"
         "gui-y": "760"
@@ -61,7 +62,7 @@ demo:
         "gui-x": "380"
         "gui-y": "0"
     mesos-slave: 
-      charm: "cs:~jonnybgod/trusty/mesos-slave-1"
+      charm: local:trusty/mesos-slave
       constraints: "mem=1G"
       annotations: 
         "gui-x": "0"
@@ -70,22 +71,22 @@ demo:
 # callc consumer
     - - calls-consumer:redis
       - redis-master:db
-    - - calls-consumer
-      - mesos-master
     - - calls-consumer:restcomm
       - telscale-restcomm:website
     - - haproxy:reverseproxy
-      - calls-consumer:website
+      - calls-consumer:haproxy
+    - - calls-consumer
+      - mesos-master
 # end 
 # conference
     - - conference-call:redis
       - redis-master:db
-    - - conference-call
-      - mesos-master
     - - conference-call:restcomm
       - telscale-restcomm:website
     - - haproxy:reverseproxy
-      - conference-call:website
+      - conference-call:haproxy
+    - - conference-call
+      - mesos-master
 # end
     - - monitor-server:redis
       - redis-master:redis-master
@@ -103,3 +104,5 @@ demo:
       - monitor-server:monitor-server
     - - monitor-agent-mesos-master
       - mesos-master  
+    - - monitor-server
+      - mesos-master

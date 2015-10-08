@@ -1,0 +1,49 @@
+#!/bin/bash
+# This must be renamed to the name of the relation. The goal here is to
+# affect any change needed by relationships being formed, modified, or broken
+# This script should be idempotent.
+set -ex
+
+status-set maintenance "relations changed"
+
+if [ -z `relation-list` ]
+then
+	juju-log "No mesos-master information sent yet. Silently exiting"
+	if $(service mesos-slave status|grep 'mesos-slave start/running' | wc -l)
+	then
+		sudo service mesos-slave stop
+	fi
+	status-set waiting "Waiting for active mesos-master connection"
+	exit 0
+fi
+
+zookeeper="zk://"
+i=1
+
+sudo rm -f /etc/resolv.conf
+sudo cp /etc/resolv.conf.backup /etc/resolv.conf
+
+for member in `relation-list`
+do  
+    juju-log "Adding $member to mesos-master quorum"
+    if [$i == 1]
+    then
+		zookeeper="$zookeeper`relation-get private-address ${member}`:`relation-get zookeeper_port ${member}`"
+	else
+		zookeeper="$zookeeper,`relation-get private-address ${member}`:`relation-get zookeeper_port ${member}`"
+	fi
+	((i++))
+
+	if ![ -z `relation-get mesos-dns ${member}` ]
+	then
+		sudo sed -i "1s/^/nameserver `relation-get private-address ${member}`\n /" /etc/resolv.conf
+	fi
+done
+
+zookeeper="$zookeeper/mesos"
+sudo sh -c "echo $zookeeper > /etc/mesos/zk"
+
+# Restart services
+sudo service mesos-slave restart
+
+status-set active

@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set -ex
+
+# Install is guaranteed to run once per rootfs
+
+juju-log "Installing mesos-slave on $JUJU_UNIT_NAME"
+status-set maintenance "Fetching and installing Mesos"
+
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
+DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
+CODENAME=$(lsb_release -cs)
+
+# Add the repository
+echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main" | sudo tee /etc/apt/sources.list.d/mesosphere.list
+sudo apt-get -y update
+sudo apt-get -y install mesos wget
+
+if [ `config-get install_docker` = "True" ]
+then
+	# Install docker
+	wget -qO- https://get.docker.com/ | sh
+	sudo usermod -aG docker ubuntu
+fi
+
+sudo cp /etc/resolv.conf /etc/resolv.conf.backup
+
+# Stop zookeeper and mesos-master
+
+if $(service zookeeper status|grep 'zookeeper start/running' | wc -l)
+then
+	sudo service zookeeper stop
+fi
+sudo sh -c "echo manual > /etc/init/zookeeper.override"
+
+if $(service mesos-master status|grep 'mesos-master start/running' | wc -l)
+then
+	sudo service mesos-master stop
+fi
+sudo sh -c "echo manual > /etc/init/mesos-master.override"
+
+status-set waiting "Waiting for active mesos-master connection"

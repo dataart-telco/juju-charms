@@ -1,0 +1,45 @@
+options:
+  install_docker:
+    type: boolean
+    default: true
+    description: "Should Docker be installed?"
+  hostname:
+    type: string
+    default: ""
+    description: "The hostname the slave should report. If left unset, system hostname will be used."
+  attributes:
+    type: string
+    default: ""
+    description: "'rack:2,U:1'. This would be a way of indicating that this node is in rack 2 and is U 1. The attributes are arbitrary and can be thought of as ways of tagging a node. By default there are no attributes."
+  containerizers:
+    type: string
+    default: "docker,mesos"
+    description: "Comma separated list of containerizer implementations to compose in order to provide containerization. Available options are 'mesos', 'external', and 'docker' (on Linux). The order the containerizers are specified is the order they are tried (--containerizers=mesos). (default: mesos)"
+  executor_registration_timeout:
+    type: string
+    default: "5mins"
+    description: "Amount of time to wait for an executor to register with the slave before considering it hung and shutting it down."
+  credential:
+    type: string
+    default: ""
+    description: "The credentials are the username and password used to access a secured Mesos master. A single line with the 'principal' and 'secret' separated by whitespace. For example: 'mesos rocks'"
+  default_role:
+    type: string
+    default: ""
+    description: "Resources, for example, CPU, can be constrained by roles. The --resources flag allows control over resources (for example: cpu(prod):3, which reserves 3 CPU for the prod role). If a resource is detected but is **not** specified in the resources flag, then it will be assigned this default_role. The default value allows all roles to have access to this resource. "
+  isolation:
+    type: string
+    default: ""
+    description: "There are a number of types of isolators for each type of resource which can be different from platform to platform. A linux platform has cgroups which can provide CPU and memory isolation. This flag always for the configuration of a set of isolations the slave will use. (default: posix/cpu,posix/mem)."
+  logging_level:
+    type: string
+    default: ""
+    description: "Log message at or above this level; possible values: 'INFO', 'WARNING', 'ERROR'. (default: INFO)."
+  resource_monitoring_interval:
+    type: string
+    default: ""
+    description: "Periodic time interval for monitoring executor resource usage (e.g., 10secs, 1min, etc) (default: 1secs)"
+  resources:
+    type: string
+    default: ""
+    description: "Total consumable resources per slave, in the form 'name(role):value;name(role):value...'. This value can be set to limit resources per role, or to overstate the number of resources that are available to the slave."

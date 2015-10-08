@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -ex
+
+if $(service mesos-slave status|grep 'mesos-slave start/running' | wc -l)
+then
+	sudo service mesos-slave stop
+fi
+
+if [ `config-get install_docker` = "True" ]
+then
+	if $(service docker status|grep 'docker start/running' | wc -l)
+	then
+		sudo service docker stop
+	fi
+fi
+
+if $(service mesos-master status|grep 'mesos-master start/running' | wc -l)
+then
+	sudo service mesos-master stop
+fi
+
+if $(service zookeeper status|grep 'zookeeper start/running' | wc -l)
+then
+	sudo service zookeeper stop
+fi
+
+status-set maintenance "service stopped"

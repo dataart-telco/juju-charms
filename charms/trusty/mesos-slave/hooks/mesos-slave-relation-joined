@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -ex
+
+$HOST_NAME=`cat /etc/mesos-slave/hostname`
+relation-set hostname=$HOST_NAME ip=`unit-get private-address`

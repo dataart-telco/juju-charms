@@ -30,7 +30,7 @@ server{
 server {
 	listen 8090;
 	location /{
-		proxy_pass http://192.168.122.53:8090;
+		proxy_pass http://192.168.122.13:8090;
 		proxy_set_header Host $host;
 		proxy_set_header X-Real-IP $remote_addr;
 	}
@@ -66,7 +66,7 @@ server {
 server {
 	listen 8080;
 	location /{
-		proxy_pass http://192.168.122.20:8080;
+		proxy_pass http://192.168.122.196:8080;
 		proxy_set_header Host $host;
 		proxy_set_header X-Real-IP $remote_addr;
 	}
@@ -75,7 +75,7 @@ server {
 server {
 	listen 5050;
 	location /{
-		proxy_pass http://192.168.122.20:5050;
+		proxy_pass http://192.168.122.196:5050;
 		proxy_set_header Host $host;
 		proxy_set_header X-Real-IP $remote_addr;
 	}

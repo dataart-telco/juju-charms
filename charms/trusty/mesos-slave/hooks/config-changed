@@ -1,0 +1,81 @@
+#!/bin/bash
+# config-changed occurs everytime a new configuration value is updated (juju set)
+
+set -ex
+
+status-set maintenance "Config changed"
+
+# Config mesos-slave
+sudo sh -c "echo `unit-get private-address` > /etc/mesos-slave/ip"
+
+if [ -n "`config-get hostname`" ]
+then
+	sudo sh -c "echo `config-get hostname` > /etc/mesos-slave/hostname"
+else
+	sudo sh -c "hostname > /etc/mesos-slave/hostname"
+fi
+
+sudo sh -c "echo `config-get containerizers` > /etc/mesos-slave/containerizers"
+sudo sh -c "echo `config-get executor_registration_timeout` > /etc/mesos-slave/executor_registration_timeout"
+
+if [ -n "`config-get attributes`" ]
+then
+	sudo sh -c "echo `config-get attributes` > /etc/mesos-slave/attributes"
+else
+	sudo rm -f /etc/mesos-slave/attributes
+fi
+
+if [ -n "`config-get credential`" ]
+then
+	sudo sh -c "echo `config-get credential` > /etc/mesos-slave/credential"
+else
+	sudo rm -f /etc/mesos-slave/credential
+fi
+
+if [ -n "`config-get default_role`" ]
+then
+	sudo sh -c "echo `config-get default_role` > /etc/mesos-slave/default_role"
+else
+	sudo rm -f /etc/mesos-slave/default_role
+fi
+
+if [ -n "`config-get isolation`" ]
+then
+	sudo sh -c "echo `config-get isolation` > /etc/mesos-slave/isolation"
+else
+	sudo rm -f /etc/mesos-slave/isolation
+fi
+
+if [ -n "`config-get logging_level`" ]
+then
+	sudo sh -c "echo `config-get logging_level` > /etc/mesos-slave/logging_level"
+else
+	sudo rm -f /etc/mesos-slave/logging_level
+fi
+
+if [ -n "`config-get resource_monitoring_interval`" ]
+then
+	sudo sh -c "echo `config-get resource_monitoring_interval` > /etc/mesos-slave/resource_monitoring_interval"
+else
+	sudo rm -f /etc/mesos-slave/resource_monitoring_interval
+fi
+
+if [ -n "`config-get resources`" ]
+then
+	sudo sh -c "echo `config-get resources` > /etc/mesos-slave/resources"
+else
+	sudo rm -f /etc/mesos-slave/resources
+fi
+
+# Restart services
+if [ -z `relation-list` ]
+then
+	juju-log "No mesos-master information sent yet. Silently exiting"
+	if $(service mesos-slave status|grep 'mesos-slave start/running' | wc -l)
+	then
+		sudo service mesos-slave stop
+	fi
+	status-set waiting "Waiting for active mesos-master connection"
+else
+	sudo service mesos-slave restart
+fi

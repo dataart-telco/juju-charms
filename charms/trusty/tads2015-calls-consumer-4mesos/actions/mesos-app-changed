@@ -1,0 +1,7 @@
+#!/bin/bash
+. hooks/common.sh
+
+RELATION_ID=`relation-ids haproxy`
+
+SERVICES=`get_ha_service`
+relation-set -r $RELATION_ID "$SERVICES"

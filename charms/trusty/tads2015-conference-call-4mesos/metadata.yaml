@@ -9,7 +9,7 @@ tags:
   - misc
 subordinate: true
 provides:
-  website:
+  haproxy:
     interface: http
 requires:
   redis:

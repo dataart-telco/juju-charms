@@ -76,7 +76,7 @@ if [ -n "`config-get hostname`" ]
 then
 	sudo sh -c "echo `config-get hostname` > /etc/mesos-master/hostname"
 else
-	sudo sh -c "echo $JUJU_UNIT_NAME > /etc/mesos-master/hostname"
+	sudo sh -c "hostname > /etc/mesos-master/hostname"
 fi
 
 if [ -n "`config-get log_dir`" ]
@@ -197,7 +197,7 @@ then
 	then
 		sudo sh -c "echo `config-get slave_hostname` > /etc/mesos-slave/hostname"
 	else
-		sudo sh -c "echo $JUJU_UNIT_NAME > /etc/mesos-slave/hostname"
+		sudo sh -c "hostname > /etc/mesos-slave/hostname"
 	fi
 
 	sudo sh -c "echo `config-get slave_containerizers` > /etc/mesos-slave/containerizers"

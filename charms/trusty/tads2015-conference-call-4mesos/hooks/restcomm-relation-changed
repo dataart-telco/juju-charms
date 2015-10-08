@@ -3,8 +3,11 @@ source hooks/common.sh
 
 . $CONFIG_PATH 
 
-RESTCOMM_SERVICE=`relation-get hostname`:`relation-get port`
+RESTCOMM_SERVICE_NEW=`relation-get hostname`:`relation-get port`
 
-render_config
-restart_me
+if [ $RESTCOMM_SERVICE != $RESTCOMM_SERVICE_NEW ]; then
+    RESTCOMM_SERVICE=$RESTCOMM_SERVICE_NEW
+    render_config
+    restart_me
+fi
 

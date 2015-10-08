@@ -1,4 +1,6 @@
-ELATION_ID=`relation-ids haproxy`
+#!/bin/bash
+
+RELATION_ID=`relation-ids haproxy`
 export KUBERNETES_MASTER=`netstat -nap | grep apiserver | grep LISTEN | grep 8080 | awk '{print $4}'`
 
 SERVICES='services=['
