@@ -2,8 +2,9 @@
 
 #### Deploy scripts
 
-1. **deploy-standalone.sh** - deploy system with autoscale functionality - [result here](#deploy-standalonesh)
-2. **deploy-kube.sh** - deploy apps with kubernetes 
+1. **deploy-mesos.sh** - deploy mesos cluster to implement autoscale functionality - [result here](#deploy-mesossh)
+2. **deploy-standalone.sh** - deploy system with autoscale functionality - [result here](#deploy-standalonesh)
+3. **deploy-kube.sh** - deploy apps with kubernetes 
 
 #### Local installation with kvm
 
@@ -37,6 +38,10 @@ Repo contains a few apps which are wrapped to different charms with different in
 8. tads2015-feedback-call-4kube/ - wrapper for **feedback-call** docker container. contains pod and service for kubernetes
 
 9. telscale-restcomm/ - telscale restcomm charm with fixes in sql init files
+
+#### deploy-mesos.sh
+
+![juju-gui screenshot](https://dl.dropboxusercontent.com/u/8604560/mesos.png)
 
 #### deploy-standalone.sh
 
