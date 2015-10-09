@@ -1,4 +1,4 @@
-# This repo contains a set of charms and scripts
+# JUJU deployement bundle: mesos + value-add-services + telscale-restcomm
 
 In the root of repo you can find all charms and scripts to deploy autoscale environment with **mesos** cluster, telscale-restcomm and set of value-add-services
 
@@ -10,7 +10,7 @@ In the root of repo you can find all charms and scripts to deploy autoscale envi
 
 if you use nginx to expose installed apps you can use *update-nginx* script from *misc* folder to add juju_proxy config to nginx instance
 
-```bash
+```shell
 sudo ./update-nginx tmpl_mesos.cfg
 ```
 
@@ -43,18 +43,21 @@ Repo contains a few apps which are wrapped to different charms with different in
 Our monitoring system collects state of each deployed mesos application and stet of mesos cluster.
 Currently system uses cpu and memory usage only. 
 
-One applicaiton can has a lot of instances. Statistics will be grouped. 
+Each applicaiton can has a lot of instances. Statistics will be grouped. 
 
-It allows to manage:
+**It allows to manage**:
+
 1. count of applicaitons instances 
 2. count of mesos slave machines 
 
-We use the foolowing rules:
+**We use the foolowing rules**:
 
 1. if avg cpu usage of application(of all instances) is more than 70% system adds one more instance of this app.
 2. if avg cpu usage of applicaiton(of all instances) is less than 10% system removes one instance of this app.
 3. if mesos cluster cpu usage is more than 70% system adds mesos-slave node to environment
 4. if mesos cluster cpu usage is less that 10% system removes mesos-slave node
+
+## Attachments 
 
 #### deploy-mesos.sh
 
