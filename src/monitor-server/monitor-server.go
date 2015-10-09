@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"log"
+	"io"
+	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 	//	"os/exec"
 	//	"strconv"
@@ -41,7 +43,7 @@ var handlers []MetricsHandler
 func handleGet(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	log.Println("\thandleGet")
+	Trace.Println("\thandleGet")
 
 	h := handlers[0]
 	stats, metrics := h.avgStat()
@@ -69,7 +71,7 @@ func initHandlers() {
 }
 
 func httpHandlerPlay(w http.ResponseWriter, r *http.Request) {
-	log.Println("\t<- http request -", r.URL.Path)
+	Trace.Println("\t<- http request -", r.URL.Path)
 
 	f := pages[r.URL.Path]
 	if f != nil {
@@ -80,7 +82,7 @@ func httpHandlerPlay(w http.ResponseWriter, r *http.Request) {
 }
 
 func start(port int) {
-	log.Println("Start web server")
+	Info.Println("Start web server")
 	initHandlers()
 	http.HandleFunc("/", httpHandlerPlay)
 	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
@@ -96,12 +98,25 @@ func main() {
 	cli := flag.String("cli-dir", "/var/lib/simple-monitor-service", "cli directory command")
 	d := flag.Int("d", 10, "delay scale actions ")
 	m := flag.String("m", "127.0.0.1:8080", "Marathon host")
+	l := flag.String("l", "INFO", "Log level: TRACE, INFO")
 
 	flag.Parse()
 
-	log.Println("Start server with port =", *port, "| check period =", *t, "min(s) | redisHost =", *host, "| cli dir =", *cli,
+	var traceHandle io.Writer
+	if *l == "TRACE" {
+		traceHandle = os.Stdout
+	} else {
+		traceHandle = ioutil.Discard
+	}
+	InitLog(traceHandle, os.Stdout, os.Stdout, os.Stderr)
+
+	Info.Println("Start server with port =", *port,
+		"| check period =", *t, "min(s)",
+		"| redisHost =", *host,
+		"| cli dir =", *cli,
 		"| scale delay =", *d,
-		"| marathon host =", *m)
+		"| marathon host =", *m,
+		"| log level =", *l)
 
 	ipRedis = *host
 	scaleDelay = *d

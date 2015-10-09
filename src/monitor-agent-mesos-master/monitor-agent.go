@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -44,10 +44,10 @@ func sendData(host string, appId string, cpuLoad1 int, cpuLoad5 int, mem int) {
 			"appId":     {appId},
 			"machineId": {pcName}})
 	if err != nil {
-		log.Println("Error: ", err)
+		Error.Println("Error: ", err)
 		return
 	}
-	log.Println("Send resp code:", resp.StatusCode)
+	Trace.Println("Send resp code:", resp.StatusCode)
 }
 
 func getMesosMetrics() (int, int, error) {
@@ -68,19 +68,28 @@ func getMesosMetrics() (int, int, error) {
 func main() {
 	host := flag.String("url", "127.0.0.1", "Monitor server")
 	appId := flag.String("appId", "", "App id")
+	l := flag.String("l", "INFO", "Log level: TRACE, INFO")
 
 	flag.Parse()
 
-	log.Println("Start agent with host =", *host, " and appId =", *appId)
+	var traceHandle io.Writer
+	if *l == "TRACE" {
+		traceHandle = os.Stdout
+	} else {
+		traceHandle = ioutil.Discard
+	}
+	InitLog(traceHandle, os.Stdout, os.Stdout, os.Stderr)
+
+	Info.Println("Start agent with host =", *host, " and appId =", *appId)
 
 	do := func() {
 		cpu, mem, err := getMesosMetrics()
 		if err != nil {
-			log.Println("Load metrics error", err)
+			Error.Println("Load metrics error", err)
 			return
 		}
-		log.Println("CPU: ", cpu)
-		log.Println("Memory:", mem)
+		Trace.Println("CPU: ", cpu)
+		Trace.Println("Memory:", mem)
 
 		sendData(*host, *appId, cpu, cpu, mem)
 	}

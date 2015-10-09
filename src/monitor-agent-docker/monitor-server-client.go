@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/fsouza/go-dockerclient"
-	"log"
 	"monitor-agent-docker/collector"
 	"net/http"
 	"net/url"
@@ -21,7 +20,7 @@ func NewMonitorServerClient(host string) MonitorServerClient {
 }
 
 func (c MonitorServerClient) Write(s collector.Stats) error {
-	log.Println("Try to sent data to server")
+	Trace.Println("Try to sent data to server")
 
 	var v *docker.Stats
 	v = &s.Stats
@@ -37,7 +36,7 @@ func (c MonitorServerClient) Write(s collector.Stats) error {
 
 	cpuPercent = getCPUPercent(v)
 
-	log.Println("cpu =", cpuPercent, "mem = ", memPercent)
+	Trace.Println("cpu =", cpuPercent, "mem = ", memPercent)
 
 	c.sendData(s.App, s.Task, int(cpuPercent), int(memPercent))
 
@@ -55,10 +54,10 @@ func (c MonitorServerClient) sendData(appId string, taskId string, cpuLoad int, 
 			"taskId": {taskId}})
 
 	if err != nil {
-		log.Println("Error: ", err)
+		Error.Println("Error: ", err)
 		return
 	}
-	log.Println("Send resp code:", resp.StatusCode)
+	Trace.Println("Send resp code:", resp.StatusCode)
 }
 
 func getCPUPercent(s *docker.Stats) float64 {

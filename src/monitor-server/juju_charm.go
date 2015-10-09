@@ -8,7 +8,6 @@ import (
 
 	"encoding/json"
 	"fmt"
-	"log"
 )
 
 type Metrics struct {
@@ -41,7 +40,7 @@ func (h *JujuCharmHandler) handleMetrics(w http.ResponseWriter, r *http.Request)
 	db := NewDbClient(ipRedis)
 	key := "metric:" + m.AppId + ":" + m.MachineId // + ":" + strconv.FormatUint(m.Date, 10);
 
-	log.Println("Add stat for", key)
+	Trace.Println("Add stat for", key)
 
 	db.Set(key, value, 5*time.Minute)
 
@@ -49,7 +48,7 @@ func (h *JujuCharmHandler) handleMetrics(w http.ResponseWriter, r *http.Request)
 }
 
 func (h *JujuCharmHandler) checkState() {
-	log.Println("checkState")
+	Trace.Println("checkState")
 
 	stats, _ := h.avgStat()
 
@@ -59,12 +58,12 @@ func (h *JujuCharmHandler) checkState() {
 			cpuLoad = v.CpuLoad5Avg
 		}
 
-		log.Println("stateChecker: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
+		Trace.Println("stateChecker: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
 		if cpuLoad > 70 {
-			log.Println("\tscaleUp: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
+			Info.Println("\tscaleUp: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
 			h.scaleUp(k)
 		} else if cpuLoad < 10 {
-			log.Println("\tscaleDown: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
+			Info.Println("\tscaleDown: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
 			h.scaleDown(k)
 		}
 	}
@@ -81,13 +80,13 @@ func (h *JujuCharmHandler) scaleDown(service string) {
 func (h *JujuCharmHandler) scaleJuju(action string, service string) {
 	delayKey := action + ":" + service
 	if isKey(delayKey) {
-		log.Println("ignore service scale")
+		Info.Println("ignore service scale, delay reason")
 		return
 	}
 
-	log.Println("scaleJuju -> ", service, " -> action =", action)
+	Trace.Println("scaleJuju -> ", service, " -> action =", action)
 	out, _ := exec.Command(h.CliDir+"/jujuapicli", "-c", h.CliDir+"/.jujuapi.yaml", action, service).Output()
-	log.Println("<-", string(out))
+	Trace.Println("<-", string(out))
 
 	removeKeys(service + ":*")
 	setBoolKey(delayKey, scaleDelay)

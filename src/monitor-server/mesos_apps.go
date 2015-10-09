@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -26,7 +25,7 @@ type MesosAppsHandler struct {
 }
 
 func (h *MesosAppsHandler) handleMetrics(w http.ResponseWriter, r *http.Request) {
-	log.Println("Mesos app handler")
+	Trace.Println("Mesos app handler")
 	m := MesosAppMetrics{}
 	m.Date, _ = strconv.ParseUint(r.FormValue("date"), 10, 64)
 
@@ -41,7 +40,7 @@ func (h *MesosAppsHandler) handleMetrics(w http.ResponseWriter, r *http.Request)
 	db := NewDbClient(ipRedis)
 	key := "mesos:" + m.AppId + ":" + m.TaskId + ":" + strconv.FormatUint(m.Date, 10)
 
-	log.Println("Add stat for mesos:", key)
+	Trace.Println("Add stat for mesos:", key)
 
 	db.Set(key, value, h.Period)
 
@@ -84,19 +83,19 @@ func (h *MesosAppsHandler) avgStat() (map[string]*Stat, []interface{}) {
 }
 
 func (h *MesosAppsHandler) checkState() {
-	log.Println("checkState")
+	Trace.Println("checkState")
 
 	stats, _ := h.avgStat()
 
 	for k, v := range stats {
 		cpuLoad := v.CpuLoad1Avg
 
-		log.Println("stateChecker: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
+		Trace.Println("stateChecker: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
 		if cpuLoad > 70 {
-			log.Println("\tscaleUp: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
+			Info.Println("\tscaleUp: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
 			h.scaleUp(k)
 		} else if cpuLoad < 10 {
-			log.Println("\tscaleDown: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
+			Info.Println("\tscaleDown: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
 			h.scaleDown(k)
 		}
 	}
@@ -111,11 +110,11 @@ func (h *MesosAppsHandler) scaleDown(appId string) {
 }
 
 func (h *MesosAppsHandler) scaleMesos(action string, appId string) {
-	log.Println("Scale mesos app:", appId, " action = ", action)
+	Trace.Println("Scale mesos app:", appId, " action = ", action)
 
 	delayKey := action + ":" + appId
 	if isKey(delayKey) {
-		log.Println("ignore service scale")
+		Info.Println("ignore service scale, delay reason")
 		return
 	}
 
@@ -129,7 +128,7 @@ func (h *MesosAppsHandler) scaleMesos(action string, appId string) {
 
 	if "scale-down" == action {
 		if instances == 1 {
-			log.Println("Ignore scale down! instances count =", instances)
+			Trace.Println("Ignore scale down! instances count =", instances)
 			return
 		}
 		instances--
@@ -143,17 +142,17 @@ func (h *MesosAppsHandler) scaleMesos(action string, appId string) {
 func (h *MesosAppsHandler) getAppInstances(appId string) (int, error) {
 	url := "http://" + h.Host + "/v2/apps/" + appId
 
-	log.Println("Get app state:", url)
+	Trace.Println("Get app state:", url)
 
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Println("can't load info for", appId)
+		Warning.Println("can't load info for", appId)
 		return 0, errors.New("load info for " + appId)
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println("Read body error", err)
+		Warning.Println("Read body error", err)
 		return 0, errors.New("read response body")
 	}
 	app := make(map[string]interface{})
@@ -163,10 +162,10 @@ func (h *MesosAppsHandler) getAppInstances(appId string) (int, error) {
 }
 
 func (h *MesosAppsHandler) scaleApp(instances int, appId string) {
-	log.Println("ScaleApp: ", appId, " to", instances)
+	Info.Println("ScaleApp: ", appId, " to", instances)
 
 	url := "http://" + h.Host + "/v2/apps/" + appId
-	log.Println("scale app", appId, " to", instances, " url =", url)
+	Trace.Println("scale app", appId, " to", instances, " url =", url)
 	jsonStr := fmt.Sprintf("{\"instances\": %d}", instances)
 
 	req, err := http.NewRequest("PUT", url, bytes.NewBufferString(jsonStr))
@@ -176,14 +175,14 @@ func (h *MesosAppsHandler) scaleApp(instances int, appId string) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Println("Send request error", err)
+		Warning.Println("Send request error", err)
 		return
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println("Read body error", err)
+		Warning.Println("Read body error", err)
 		return
 	}
-	log.Println("Update response", string(body))
+	Trace.Println("Update response", string(body))
 }
