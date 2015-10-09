@@ -1,6 +1,11 @@
 # JUJU deployement bundle: mesos + value-add-services + telscale-restcomm
 
-In the root of repo you can find all charms and scripts to deploy autoscale environment with **mesos** cluster, telscale-restcomm and set of value-add-services
+In the root of repo you can find all charms and scripts to deploy autoscale environment with **mesos cluster**, **telscale-restcomm** and set of **value-add-services**
+
+### Source codes
+
+1. **monitoring system** - [src folder](https://github.com/taddemo2015/vas-charms-dev/tree/master/src)
+2. **value-add-services** - https://github.com/taddemo2015/vas-demo 
 
 #### Deploy scripts
 
