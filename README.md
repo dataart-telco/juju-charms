@@ -69,7 +69,7 @@ Each applicaiton can has a lot of instances. Statistics will be grouped.
 1. if avg cpu usage of application(of all instances) is more than 70% system adds one more instance of this app.
 2. if avg cpu usage of applicaiton(of all instances) is less than 10% system removes one instance of this app.
 3. if mesos cluster cpu usage is more than 70% system adds mesos-slave node to environment
-4. if mesos cluster cpu usage is less that 10% system removes mesos-slave node
+4. if mesos cluster cpu usage is less than 10% system removes mesos-slave node
 
 ## Attachments 
 
