@@ -2,16 +2,16 @@
 
 In the root of repo you can find all charms and scripts to deploy autoscale environment with **mesos cluster**, **telscale-restcomm** and set of **value-add-services**
 
-### Source codes
+# Source codes
 
 1. **monitoring system** - [src folder](https://github.com/taddemo2015/vas-charms-dev/tree/master/src)
 2. **value-add-services** - https://github.com/taddemo2015/vas-demo 
 
-#### Deploy scripts
+## Deploy scripts
 
 1. **deploy-mesos.sh** - deploy mesos cluster to implement autoscale functionality - [result here](#deploy-mesossh)
 
-#### Local installation with kvm
+## Local installation with kvm
 
 if you use nginx to expose installed apps you can use *update-nginx* script from *misc* folder to add juju_proxy config to nginx instance
 
@@ -19,7 +19,7 @@ if you use nginx to expose installed apps you can use *update-nginx* script from
 sudo ./update-nginx tmpl_mesos.cfg
 ```
 
-#### Apps
+## Apps
 Repo contains a few apps which are wrapped to different charms with different installation ways
 
 1. **tads2015-calls-consumer** - handles incomming call/sms and add it to datastorage
@@ -31,7 +31,7 @@ Repo contains a few apps which are wrapped to different charms with different in
 7. **monitor-agent-mesos** - agent collects state of docker containers. It uses docker remote api to get statistics. This agent should be connected to all nodes of cluster
 8. **monitor-agent-mesos-master** - agent collects state of mesos cluster. It uses marathon rest api to get statistics. This agent should be connected to master only.
 
-#### Local charms
+## Local charms
 
 1. **tads2015-calls-consumer-4mesos** - wrapper for **calls-consumer** docker container to deploy to mesos cluster
 2. **tads2015-conference-call-4mesos** - wrapper for **conference-call** docker container to deploy to mesos cluster
