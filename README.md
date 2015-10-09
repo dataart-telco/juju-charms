@@ -2,6 +2,15 @@
 
 In the root of repo you can find all charms and scripts to deploy autoscale environment with **mesos cluster**, **telscale-restcomm** and set of **value-add-services**
 
+####Contents:
+
+1. [Source codes](#source-codes)
+2. [Deploy scripts]()
+3. [Applications](#apps)
+4. [Local charms](#local-charms)
+5. [Autoscale](#autoscale)
+6. [Attachments](#attachments)
+
 # Source codes
 
 1. **monitoring system** - [src folder](https://github.com/taddemo2015/vas-charms-dev/tree/master/src)
@@ -11,7 +20,7 @@ In the root of repo you can find all charms and scripts to deploy autoscale envi
 
 1. **deploy-mesos.sh** - deploy mesos cluster to implement autoscale functionality - [result here](#deploy-mesossh)
 
-## Local installation with kvm
+### Local installation with kvm
 
 if you use nginx to expose installed apps you can use *update-nginx* script from *misc* folder to add juju_proxy config to nginx instance
 
