@@ -15,3 +15,11 @@ options:
     type: int
     default: 10
     description: "Service deploy delay"
+  SCALE_UP:
+    type: int
+    default: 70
+    description: "Scale up limit"
+  SCALE_DOWN:
+    type: int
+    default: 30
+    description: "Scale down limit"

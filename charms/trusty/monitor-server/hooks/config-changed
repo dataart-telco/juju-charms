@@ -8,6 +8,8 @@ JUJU_API_PASSWORD=`config-get JUJU_API_PASSWORD`
 CHECK_PERIOD=`config-get CHECK_PERIOD`
 PORT=`config-get PORT`
 DEPLOY_DELAY=`config-get DEPLOY_DELAY`
+SCALE_UP=`config-get SCALE_UP`
+SCALE_DOWN=`config-get SCALE_DOWN`
 
 render_config
 render_juju_tool_config

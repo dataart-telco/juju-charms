@@ -1,0 +1,10 @@
+#!/bin/bash
+
+HAPROXY_HOST=`juju status haproxy | grep public-address | sed 's/.*: //g'`
+
+for (( c=1; c<=$1; c++ ))
+do
+    echo "Iteration #$c"
+
+    ab -n 1000000 -c 1000 http://$HAPROXY_HOST:$2/ &
+done
