@@ -11,10 +11,14 @@ options:
     type: string
     default: "pswd"
     description: "Admin password to api"
-  DEPLOY_DELAY:
+  JUJU_DEPLOY_DELAY:
     type: int
     default: 10
-    description: "Service deploy delay"
+    description: "Juju deploy delay"
+  MESOS_DEPLOY_DELAY:
+    type: int
+    default: 1
+    description: "Mesos service deploy delay"
   SCALE_UP:
     type: int
     default: 70

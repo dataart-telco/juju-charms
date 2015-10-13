@@ -20,8 +20,11 @@ type Metrics struct {
 }
 
 type JujuCharmHandler struct {
-	Period int
-	CliDir string
+	ScaleDelay int
+	ScaleUp    int
+	ScaleDown  int
+	Period     int
+	CliDir     string
 }
 
 func (h *JujuCharmHandler) handleMetrics(w http.ResponseWriter, r *http.Request) {
@@ -59,10 +62,10 @@ func (h *JujuCharmHandler) checkState() {
 		}
 
 		Trace.Println("stateChecker: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
-		if cpuLoad > 70 {
+		if cpuLoad > h.ScaleUp {
 			Info.Println("\tscaleUp: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
 			h.scaleUp(k)
-		} else if cpuLoad < 10 {
+		} else if cpuLoad < h.ScaleDown {
 			Info.Println("\tscaleDown: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
 			h.scaleDown(k)
 		}
@@ -89,7 +92,7 @@ func (h *JujuCharmHandler) scaleJuju(action string, service string) {
 	Trace.Println("<-", string(out))
 
 	removeKeys(service + ":*")
-	setBoolKey(delayKey, scaleDelay)
+	setBoolKey(delayKey, h.ScaleDelay)
 }
 
 func (h *JujuCharmHandler) avgStat() (map[string]*Stat, []interface{}) {

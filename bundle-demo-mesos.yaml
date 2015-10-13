@@ -55,6 +55,7 @@ demo:
         "gui-y": "760"
       options:
         CHECK_PERIOD: 1
+        SCALE_DOWN: 35
     mesos-master:
       charm: local:trusty/mesos-master
       constraints: "mem=1G"

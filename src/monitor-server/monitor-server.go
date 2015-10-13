@@ -36,7 +36,6 @@ type MetricsHandler interface {
 var pages map[string]HttpHandler
 
 var ipRedis string
-var scaleDelay int
 
 var handlers []MetricsHandler
 
@@ -96,9 +95,13 @@ func main() {
 	t := flag.Int("t", 5, "Avg period in minutes")
 	port := flag.Int("p", 8080, "Bind port")
 	cli := flag.String("cli-dir", "/var/lib/simple-monitor-service", "cli directory command")
-	d := flag.Int("d", 10, "delay scale actions ")
+	jd := flag.Int("jd", 10, "juju delay scale actions")
+	md := flag.Int("md", 3, "mesos delay scale actions")
 	m := flag.String("m", "127.0.0.1:8080", "Marathon host")
 	l := flag.String("l", "INFO", "Log level: TRACE, INFO")
+
+	up := flag.Int("up", 70, "Scale up limit")
+	down := flag.Int("down", 30, "Scale down limit")
 
 	flag.Parse()
 
@@ -114,16 +117,18 @@ func main() {
 		"| check period =", *t, "min(s)",
 		"| redisHost =", *host,
 		"| cli dir =", *cli,
-		"| scale delay =", *d,
+		"| juju scale delay =", *jd,
+		"| meoso scale delay =", *md,
 		"| marathon host =", *m,
-		"| log level =", *l)
+		"| log level =", *l,
+		"| upLimit =", *up,
+		"| downLimit =", *down)
 
 	ipRedis = *host
-	scaleDelay = *d
 
 	handlers = make([]MetricsHandler, 2)
-	handlers[0] = &JujuCharmHandler{Period: *t, CliDir: *cli}
-	handlers[1] = &MesosAppsHandler{Period: time.Duration(*t) * time.Minute, Host: *m}
+	handlers[0] = &JujuCharmHandler{Period: *t, CliDir: *cli, ScaleUp: *up, ScaleDown: *down, ScaleDelay: *jd}
+	handlers[1] = &MesosAppsHandler{Period: time.Duration(*t) * time.Minute, Host: *m, ScaleUp: *up, ScaleDown: *down, ScaleDelay: *md}
 
 	resetDb()
 

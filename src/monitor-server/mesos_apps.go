@@ -20,8 +20,11 @@ type MesosAppMetrics struct {
 }
 
 type MesosAppsHandler struct {
-	Host   string
-	Period time.Duration
+	ScaleUp    int
+	ScaleDown  int
+	Host       string
+	Period     time.Duration
+	ScaleDelay int
 }
 
 func (h *MesosAppsHandler) handleMetrics(w http.ResponseWriter, r *http.Request) {
@@ -91,10 +94,10 @@ func (h *MesosAppsHandler) checkState() {
 		cpuLoad := v.CpuLoad1Avg
 
 		Trace.Println("stateChecker: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
-		if cpuLoad > 70 {
+		if cpuLoad > h.ScaleUp {
 			Info.Println("\tscaleUp: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
 			h.scaleUp(k)
-		} else if cpuLoad < 10 {
+		} else if cpuLoad < h.ScaleDown {
 			Info.Println("\tscaleDown: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
 			h.scaleDown(k)
 		}
@@ -124,7 +127,6 @@ func (h *MesosAppsHandler) scaleMesos(action string, appId string) {
 	}
 
 	defer removeKeys(appId + ":")
-	defer setBoolKey(delayKey, scaleDelay)
 
 	if "scale-down" == action {
 		if instances == 1 {
@@ -137,6 +139,7 @@ func (h *MesosAppsHandler) scaleMesos(action string, appId string) {
 		instances++
 	}
 	h.scaleApp(instances, appId)
+	setBoolKey(delayKey, h.ScaleDelay)
 }
 
 func (h *MesosAppsHandler) getAppInstances(appId string) (int, error) {
