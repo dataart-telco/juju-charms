@@ -126,7 +126,7 @@ get_ha_service(){
 api_create(){
   juju-log 'API_CREATE'
 
-  curl -H "Content-Type: application/json" -X POST -d @$FILE_CREATE $APP_MANAGER_API
+  curl -H "Content-Type: application/json" -X POST -d @$FILE_CREATE $APP_MANAGER_API?force=true
 }
 
 api_delete(){
