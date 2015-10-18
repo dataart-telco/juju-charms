@@ -7,7 +7,6 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="96"
@@ -15,19 +14,9 @@
    id="svg6517"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="monitor-agent.svg">
+   sodipodi:docname="juju-monitor-agent-mesos.svg">
   <defs
      id="defs6519">
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#Background"
-       id="linearGradient6461"
-       gradientUnits="userSpaceOnUse"
-       x1="0"
-       y1="970.29498"
-       x2="144"
-       y2="970.29498"
-       gradientTransform="matrix(0,-0.66666669,0.6660448,0,-866.25992,731.29077)" />
     <linearGradient
        id="Background">
       <stop
@@ -136,9 +125,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.0745362"
-     inkscape:cx="18.514671"
-     inkscape:cy="49.018169"
+     inkscape:zoom="5.7622644"
+     inkscape:cx="-15.470581"
+     inkscape:cy="19.554083"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -148,7 +137,7 @@
      fit-margin-bottom="0"
      inkscape:window-width="1858"
      inkscape:window-height="1057"
-     inkscape:window-x="-8"
+     inkscape:window-x="1912"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      showborder="true"
@@ -194,59 +183,79 @@
      transform="translate(268,-635.29076)"
      style="display:inline">
     <path
-       style="fill:url(#linearGradient6461);fill-opacity:1;stroke:none;display:inline;filter:url(#filter1121)"
+       style="fill:#334b6f;fill-opacity:1;stroke:none;display:inline;filter:url(#filter1121)"
        d="m -268,700.15563 0,-33.72973 c 0,-27.24324 3.88785,-31.13513 31.10302,-31.13513 l 33.79408,0 c 27.21507,0 31.1029,3.89189 31.1029,31.13513 l 0,33.72973 c 0,27.24325 -3.88783,31.13514 -31.1029,31.13514 l -33.79408,0 C -264.11215,731.29077 -268,727.39888 -268,700.15563 Z"
        id="path6455"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssssssss" />
     <g
        id="g3528"
-       transform="matrix(0.24816916,0,0,0.24816916,-256.35066,647.05498)">
+       transform="matrix(0.24816916,0,0,0.24816916,-256.35066,647.05498)"
+       style="fill:#ffffff;fill-opacity:1">
       <g
-         id="g3484">
+         id="g3484"
+         style="fill:#ffffff;fill-opacity:1">
         <path
            id="path3486"
            d="M 117.144,39.499 C 124.305,33.817 136.398,30 147.235,30 c 10.937,0 23.119,3.888 30.313,9.674 2.771,2.229 6.092,3.312 9.391,3.312 4.387,0 8.736,-1.916 11.699,-5.601 5.191,-6.456 4.166,-15.898 -2.289,-21.09 C 183.85,6.244 165.031,0 147.235,0 129.609,0 110.934,6.13 98.498,15.999 c -6.49,5.148 -7.576,14.584 -2.427,21.073 5.149,6.491 14.585,7.577 21.073,2.427 z"
-           inkscape:connector-curvature="0" />
+           inkscape:connector-curvature="0"
+           style="fill:#ffffff;fill-opacity:1" />
         <path
            id="path3488"
            d="m 182.184,55.67 c -10.358,-8.333 -25.27,-11.29 -34.892,-11.29 -9.532,0 -24.321,2.902 -34.628,11.081 -6.49,5.149 -7.576,14.584 -2.427,21.073 5.148,6.49 14.586,7.577 21.073,2.427 2.789,-2.212 9.876,-4.581 15.981,-4.581 6.154,0 13.286,2.412 16.087,4.665 2.771,2.229 6.093,3.313 9.393,3.313 4.386,0 8.734,-1.915 11.697,-5.599 5.194,-6.453 4.171,-15.896 -2.284,-21.089 z"
-           inkscape:connector-curvature="0" />
+           inkscape:connector-curvature="0"
+           style="fill:#ffffff;fill-opacity:1" />
         <path
            id="path3490"
            d="m 235.016,95.103 -175.263,0 c -13.785,0 -25.702,11.11 -25.702,24.896 l 0,111.894 c 0,13.785 11.917,25.211 25.702,25.211 l 59.976,0 c -0.026,0 -0.678,0.382 -0.678,0.685 l 0,6.315 -10.001,0 c -8.284,0 -15,6.716 -15,15 0,8.284 6.716,15 15,15 l 76.669,0 c 8.284,0 15,-6.716 15,-15 0,-8.284 -6.716,-15 -15,-15 l -10.668,0 0,-6.315 c 0,-0.302 0.014,-0.685 -0.012,-0.685 l 59.977,0 c 13.785,0 25.035,-11.426 25.035,-25.211 l 0,-111.895 c 0,-13.785 -11.25,-24.895 -25.035,-24.895 z m -4.965,132 -166,0 0,-102 166,0 0,102 z"
-           inkscape:connector-curvature="0" />
+           inkscape:connector-curvature="0"
+           style="fill:#ffffff;fill-opacity:1" />
       </g>
       <g
-         id="g3492" />
+         id="g3492"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3494" />
+         id="g3494"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3496" />
+         id="g3496"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3498" />
+         id="g3498"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3500" />
+         id="g3500"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3502" />
+         id="g3502"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3504" />
+         id="g3504"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3506" />
+         id="g3506"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3508" />
+         id="g3508"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3510" />
+         id="g3510"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3512" />
+         id="g3512"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3514" />
+         id="g3514"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3516" />
+         id="g3516"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3518" />
+         id="g3518"
+         style="fill:#ffffff;fill-opacity:1" />
       <g
-         id="g3520" />
+         id="g3520"
+         style="fill:#ffffff;fill-opacity:1" />
     </g>
   </g>
   <g
@@ -254,6 +263,117 @@
      id="layer3"
      inkscape:label="PLACE YOUR PICTOGRAM HERE"
      style="display:inline" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="subicon">
+    <g
+       transform="matrix(0.39516715,0,0,0.39516715,134.75612,-214.65072)"
+       id="g4818">
+      <g
+         id="g4820">
+        <polygon
+           style="fill:#ffffff"
+           points="-221.625,683.277 -233.67,676.304 -233.67,690.275 "
+           id="polygon4822" />
+        <polygon
+           style="fill:#ffffff"
+           points="-220.825,684.646 -232.891,691.635 -220.825,698.612 "
+           id="polygon4824" />
+        <polygon
+           style="fill:#ffffff"
+           points="-207.18,691.635 -219.258,684.646 -219.258,698.612 "
+           id="polygon4826" />
+        <polygon
+           style="fill:#ffffff"
+           points="-206.413,676.304 -218.478,683.277 -206.413,690.275 "
+           id="polygon4828" />
+        <polygon
+           style="fill:#ffffff"
+           points="-221.625,699.951 -233.67,692.987 -233.67,706.967 "
+           id="polygon4830" />
+        <polygon
+           style="fill:#ffffff"
+           points="-220.825,701.323 -232.891,708.314 -220.825,715.291 "
+           id="polygon4832" />
+        <polygon
+           style="fill:#ffffff"
+           points="-207.18,708.314 -219.258,701.323 -219.258,715.291 "
+           id="polygon4834" />
+        <polygon
+           style="fill:#ffffff"
+           points="-206.413,692.987 -218.478,699.951 -206.413,706.967 "
+           id="polygon4836" />
+        <polygon
+           style="fill:#ffffff"
+           points="-220.825,651.291 -232.891,658.282 -220.825,665.257 "
+           id="polygon4838" />
+        <polygon
+           style="fill:#ffffff"
+           points="-207.18,658.282 -219.258,651.291 -219.258,665.257 "
+           id="polygon4840" />
+      </g>
+      <g
+         id="g4842">
+        <polygon
+           style="fill:#26a9e0"
+           points="-236.052,674.962 -248.108,667.969 -248.108,681.934 "
+           id="polygon4844" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-235.237,676.304 -247.325,683.277 -235.237,690.275 "
+           id="polygon4846" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-192.692,683.277 -204.844,676.304 -204.844,690.297 "
+           id="polygon4848" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-191.892,667.969 -204.065,674.962 -191.892,681.934 "
+           id="polygon4850" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-236.052,691.635 -248.108,684.646 -248.108,698.612 "
+           id="polygon4852" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-235.237,692.987 -247.325,699.951 -235.237,706.967 "
+           id="polygon4854" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-192.692,699.951 -204.844,692.987 -204.844,706.967 "
+           id="polygon4856" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-235.237,659.628 -247.325,666.622 -235.237,673.618 "
+           id="polygon4858" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-221.625,666.622 -233.67,659.628 -233.67,673.618 "
+           id="polygon4860" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-220.825,667.969 -232.891,674.962 -220.825,681.934 "
+           id="polygon4862" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-207.18,674.962 -219.258,667.969 -219.258,681.934 "
+           id="polygon4864" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-206.413,659.628 -218.478,666.622 -206.413,673.618 "
+           id="polygon4866" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-192.692,666.622 -204.844,659.628 -204.844,673.618 "
+           id="polygon4868" />
+        <polygon
+           style="fill:#26a9e0"
+           points="-191.892,684.646 -204.065,691.635 -191.892,698.612 "
+           id="polygon4870" />
+      </g>
+    </g>
+  </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"

@@ -3,7 +3,7 @@
 WORK_DIR="/var/lib/tads2015-calls-consumer"
 APP_NAME="tads2015-calls-consumer"
 APP_PORT=30790
-DOCKER_IMAGE=tads2015da/demo-main:0.0.9
+DOCKER_IMAGE=tads2015da/calls-consumer:0.0.10
 CPUS=0.5
 MEM=200
 

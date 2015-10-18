@@ -11,6 +11,11 @@ demo:
       annotations:
         "gui-x": "570"
         "gui-y": "380"
+    sms-feedback:
+      charm: local:trusty/tads2015-sms-feedback-4mesos
+      annotations:
+        "gui-x": 1330
+        "gui-y": 380
     redis-master:
       charm: cs:~mbruzek/trusty/redis-master-0
       expose: true
@@ -89,6 +94,16 @@ demo:
     - - haproxy:reverseproxy
       - conference-call:haproxy
     - - conference-call
+      - mesos-master
+# end
+# conference
+    - - sms-feedback:redis
+      - redis-master:db
+    - - sms-feedback:restcomm
+      - telscale-restcomm:website
+    - - haproxy:reverseproxy
+      - sms-feedback:haproxy
+    - - sms-feedback
       - mesos-master
 # end
     - - monitor-server:redis

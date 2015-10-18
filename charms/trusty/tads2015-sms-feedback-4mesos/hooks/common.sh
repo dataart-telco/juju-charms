@@ -1,9 +1,9 @@
 #!/bin/bash
 
-WORK_DIR="/var/lib/tads2015-conference-call"
-APP_NAME="tads2015-conference-call"
-APP_PORT=30791
-DOCKER_IMAGE=tads2015da/conference-call:0.0.10
+WORK_DIR="/var/lib/tads2015-sms-feedback"
+APP_NAME="tads2015-sms-feedback"
+APP_PORT=30794
+DOCKER_IMAGE=tads2015da/sms-feedback:0.0.10
 CPUS=0.5
 MEM=200
 
