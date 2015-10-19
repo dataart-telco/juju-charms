@@ -11,7 +11,7 @@ CONFIG_PATH=${WORK_DIR}/${APP_NAME}.conf
 FILE_CREATE=$WORK_DIR/create.json
 
 CRON_CMD_FILE=$WORK_DIR/update_ha_service.sh
-CRON_JOB='*/5 * * * * /bin/bash '$CRON_CMD_FILE' >> /var/log/'$APP_NAME'_cron.log 2>&1'
+CRON_JOB='* * * * * /bin/bash '$CRON_CMD_FILE' >> /var/log/'$APP_NAME'_cron.log 2>&1'
 
 APP_MANAGER_API=http://127.0.0.1:8080/v2/apps
 
