@@ -1,0 +1,98 @@
+#!/bin/bash
+set -xe
+#apt-get install software-properties-common
+#apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+#add-apt-repository 'deb http://ftp.heanet.ie/mirrors/mariadb/repo/10.0/ubuntu trusty main'
+#apt-add-repository ppa:awstools-dev/awstools
+
+apt-get update
+apt-get install -y zip unzip ipcalc software-properties-common openjdk-7-jdk maven python-cheetah python-lxml python-requests wireshark screen mysql-client-core-5.5
+
+name=Mobicents-Restcomm-JBoss-AS7
+version=7.3.1.675
+dl="https://github.com/Mobicents/RestComm/releases/download/731ga/Mobicents-Restcomm-JBoss-AS7-7.3.1.675.zip"
+
+# Grab RestComm
+juju-log "Fetching $dl"
+
+cd /opt
+wget -q --auth-no-challenge $dl
+
+# Extract to a known location
+#mv Mobicents-Restcomm-JBoss-AS7-7.3.1.675.zip $name-$version.zip
+juju-log "Extracting RestComm"
+unzip $name-$version.zip
+rm -f $name-$version.zip
+mv $name-$version restcomm
+
+#cd /opt/restcomm/bin/restcomm
+#rm -f telestax-license.xml
+#cat > telestax-license.xml << 'EOF'
+#<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+#<licenseStorage>
+#    <notification>
+#        <hostname></hostname>
+#        <smtpPort></smtpPort>
+#        <user></user>
+#        <password></password>
+#        <notifyEmail></notifyEmail>
+#        <useSSL></useSSL>
+#    </notification>
+#    <license>
+#        <product>Mobicents-RestComm</product>
+#        <licenseKey></licenseKey>
+#        <active>true</active>
+#    </license>
+#</licenseStorage>
+#EOF
+ 
+#rm -f autoconfig.d/config-load-balancer.sh
+cd $CHARM_DIR
+cp /opt/restcomm/bin/restcomm/telestax-license.xml ./telestax-license.xml
+
+juju-log ls /opt/restcomm
+juju-log "Files extracted, installing RestComm"
+
+export restcomm_root=/opt/restcomm
+export java_args="-Xms512m -Xmx1g -Xmn256m -XX:+CMSIncrementalPacing -XX:CMSIncrementalDutyCycle=100 -XX:CMSIncrementalDutyCycleMin=100 -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:MaxPermSize=256m"
+export restcomm_args=""
+
+FILE=/opt/restcomm/bin/standalone.conf
+RESTCOMM_OPTS="-Xms512m -Xmx1g -Xmn256m -XX:+CMSIncrementalPacing -XX:CMSIncrementalDutyCycle=100 -XX:CMSIncrementalDutyCycleMin=100 -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:MaxPermSize=256m"
+sed -e "/if \[ \"x\$JAVA_OPTS\" = \"x\" \]; then/ {
+		N; s|JAVA_OPTS=.*|JAVA_OPTS=\"$RESTCOMM_OPTS\"|
+	}" $FILE > $FILE.bak
+mv $FILE.bak $FILE
+
+echo "Configured JVM for RestComm: $RESTCOMM_OPTS"
+
+#ch_template_file 0644 \
+#                 root:root \
+#                 templates/restcomm-defaults \
+#                 /etc/default/restcomm \
+#                 "java_args restcomm_root restcomm_args"
+#install --mode=644 --owner=root --group=root files/restcomm.conf /etc/init/
+
+juju-log "Configuring RestComm Management User for Monitoring purposes"
+sh /opt/restcomm/bin/add-user.sh admin "1 love restc0mm" -s
+juju-log "Configured RestComm Management User Admin for Monitoring purposes"
+
+juju-log "RestComm installed"
+
+juju-log "Open ports"
+
+#TODO do we need this
+open-port 22/tcp
+open-port 80/tcp
+open-port 443/tcp
+
+open-port 5080/udp
+open-port 64535-65535/udp
+
+open-port 8080/TCP
+open-port 5080/TCP
+open-port 5082/TCP
+open-port 5080/UDP
+open-port 2000/TCP 
+
+juju-log "Done!"

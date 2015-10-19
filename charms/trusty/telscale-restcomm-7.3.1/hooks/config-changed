@@ -1,0 +1,101 @@
+#!/bin/bash
+set -x
+
+juju-log "Configuring Restcomm"
+
+VOICERSS_KEY=`config-get voicerss_key`
+LICENSE_KEY=`config-get license_key`
+INIT_PASSWORD=`config-get init_password`
+
+RESTCOMM=/opt/restcomm/
+
+if [ -n "$INIT_PASSWORD" ]; then
+    juju-log "Update init password"
+    # chnange admin password
+    SQL_FILE=/opt/restcomm/standalone/deployments/restcomm.war/WEB-INF/scripts/mariadb/init.sql
+    sed -i "s/uninitialized/active/g" $SQL_FILE
+    sed -i "s/77f8c12cc7b8f8423e5c38b035249166/$INIT_PASSWORD/g" $SQL_FILE
+    sed -i "s/2012-04-24 00:00:00.000000000/2015-09-29 11:00:00.575000000/" $SQL_FILE
+    sed -i "s/2012-04-24 00:00:00.000000000/2015-09-29 11:04:00.575000000/" $SQL_FILE
+
+    SQL_FILE=/opt/restcomm/standalone/deployments/restcomm.war/WEB-INF/data/hsql/restcomm.script
+    sed -i "s/uninitialized/active/g" $SQL_FILE
+    sed -i "s/77f8c12cc7b8f8423e5c38b035249166/$INIT_PASSWORD/g" $SQL_FILE
+    sed -i "s/2012-04-24 00:00:00.000000000/2015-09-29 11:00:00.575000000/" $SQL_FILE
+    sed -i "s/2012-04-24 00:00:00.000000000/2015-09-29 11:04:00.575000000/" $SQL_FILE
+
+    # end 
+else
+    juju-log "Init password is empty"
+fi
+
+if [ -z "$VOICERSS_KEY" ]
+then
+	juju-log "VOICERSS_KEY is null"
+else
+	juju-log "About to configure VOICERSS_KEY == $VOICERSS_KEY to Restcomm at $RESTCOMM"
+
+#	FILE=$RESTCOMM_DEPLOY/WEB-INF/conf/restcomm.xml
+#	sed -e "/<speech-synthesizer class=\"org.mobicents.servlet.restcomm.tts.VoiceRSSSpeechSynthesizer\">/ {
+#		N
+#		N; s|<apikey>.*</apikey>|<apikey>$VOICERSS_KEY</apikey>|
+#	}" $FILE > $FILE.bak
+
+	FILE=$RESTCOMM/bin/restcomm/restcomm.conf
+	
+	sed -e "s|VOICERSS_KEY=.*|VOICERSS_KEY=\'$VOICERSS_KEY\'|" $FILE > $FILE.bak
+	mv -f $FILE.bak $FILE
+	echo 'Configured VoiceRSS Speech Synthesizer'
+
+	juju-log "Stopping services"
+ 
+	hooks/stop
+
+	juju-log "Starting services"
+ 
+	hooks/start
+fi
+
+if [ -z "$LICENSE_KEY" ]
+then
+	juju-log "LICENSE_KEY is null"
+else
+
+juju-log "About to configure LICENSE_KEY == $LICENSE_KEY for Restcomm"
+
+cd /opt/restcomm/bin/restcomm
+rm -f telestax-license.xml
+cat > telestax-license.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<licenseStorage>
+    <notification>
+        <hostname></hostname>
+        <smtpPort></smtpPort>
+        <user></user>
+        <password></password>
+        <notifyEmail></notifyEmail>
+        <useSSL></useSSL>
+    </notification>
+    <license>
+        <product>Mobicents-RestComm</product>
+        <licenseKey>$LICENSE_KEY</licenseKey>
+        <active>true</active>
+    </license>
+</licenseStorage>
+EOF
+
+cd $CHARM_DIR
+cp /opt/restcomm/bin/restcomm/telestax-license.xml ./telestax-license.xml
+
+	juju-log "Stopping services"
+ 
+	hooks/stop
+
+	juju-log "Starting services"
+ 
+	hooks/start
+
+fi
+
+exit 0
+

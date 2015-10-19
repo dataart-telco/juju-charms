@@ -1,0 +1,11 @@
+#!/bin/bash
+set -xe
+
+if [ -f lib/restcomm/start-restcomm.sh ]; then
+    juju-log "Starting RestComm"
+    PUBLIC_HOSTNAME=`unit-get public-address`
+    STATIC_ADDRESS=`dig +short @8.8.8.8 $PUBLIC_HOSTNAME`
+    juju-log "Will start Restcomm using Static IP Address: $STATIC_ADDRESS"
+    source lib/restcomm/start-restcomm.sh
+fi
+
