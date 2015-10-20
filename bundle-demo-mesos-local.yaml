@@ -42,13 +42,13 @@ demo:
       constraints: "mem=1536M"
       annotations:
         "gui-x": 2280
-        "gui-y": 950
+        "gui-y": 190
     haproxy:
       charm: cs:trusty/haproxy-11
       expose: true
       annotations:
         "gui-x": 2280
-        "gui-y": 190
+        "gui-y": 950
     juju-gui:
       charm: cs:trusty/juju-gui-39
       expose: true
