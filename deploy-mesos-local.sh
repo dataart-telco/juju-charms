@@ -4,7 +4,7 @@ juju set-env "default-series=trusty"
 juju set-constraints "mem=512M"
 #juju set-constraints 'instance-type=m1.small'
 
-juju-deployer -c bundle-demo-mesos.yaml -c config-demo.yaml demo
+juju-deployer -c bundle-demo-mesos-local.yaml -c config-demo.yaml demo
 
 JUJU_CUR_ENV=`cat ~/.juju/current-environment`
 
