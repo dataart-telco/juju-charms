@@ -1,0 +1,14 @@
+options:
+  GMAIL_USER:
+    type: string
+    default: ""
+    description: "Gmail email"
+  GMAIL_PASS:
+    type: string
+    default: ""
+    description: "Gmail app password"
+  DUMP_TIMER:
+    type: int
+    default: 1
+    description: "Send data timeout in minutes"
+

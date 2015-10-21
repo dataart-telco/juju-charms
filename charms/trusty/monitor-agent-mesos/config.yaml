@@ -1,5 +1,5 @@
 options:
   UPDATE_PERIOD:
     type: int
-    default: "5"
+    default: 5
     description: "Update period in seconds"

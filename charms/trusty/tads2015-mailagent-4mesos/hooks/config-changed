@@ -1,0 +1,12 @@
+#!/bin/bash
+# config-changed occurs everytime a new configuration value is updated (juju set)
+
+. hooks/common.sh
+. $CONFIG_PATH
+
+GMAIL_USER=`config-get GMAIL_USER`
+GMAIL_PASS=`config-get GMAIL_PASS`
+DUMP_TIMER=`config-get DUMP_TIMER`
+
+render_config
+restart_me

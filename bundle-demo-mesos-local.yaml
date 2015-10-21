@@ -11,6 +11,7 @@ demo:
     mesos-slave: 
       charm: local:trusty/mesos-slave
       expose: true
+      num_units: 2
       constraints: "mem=1G"
       annotations: 
         "gui-x": 1140
@@ -19,7 +20,7 @@ demo:
       charm: local:trusty/tads2015-calls-consumer-4mesos
       annotations:
         "gui-x": 1710
-        "gui-y": 950
+        "gui-y": 190
     conference-call:
       charm: local:trusty/tads2015-conference-call-4mesos
       annotations:
@@ -29,26 +30,26 @@ demo:
       charm: local:trusty/tads2015-sms-feedback-4mesos
       annotations:
         "gui-x": 1710
-        "gui-y": 190
+        "gui-y": 950
     redis-master:
       charm: cs:~mbruzek/trusty/redis-master-0
       expose: true
       annotations:
         "gui-x": 2280
-        "gui-y": 570
+        "gui-y": 760
     telscale-restcomm:
       charm: local:trusty/telscale-restcomm-7.3.1
       expose: true
       constraints: "mem=1536M"
       annotations:
         "gui-x": 2280
-        "gui-y": 190
+        "gui-y": 0
     haproxy:
       charm: cs:trusty/haproxy-11
       expose: true
       annotations:
         "gui-x": 2280
-        "gui-y": 950
+        "gui-y": 380
     juju-gui:
       charm: cs:trusty/juju-gui-39
       expose: true

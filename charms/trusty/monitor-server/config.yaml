@@ -1,7 +1,7 @@
 options:
   CHECK_PERIOD:
     type: int
-    default: "5"
+    default: 5
     description: "Avg period in minutes"
   PORT:
     type: int

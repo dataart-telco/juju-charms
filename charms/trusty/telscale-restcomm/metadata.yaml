@@ -1,0 +1,20 @@
+name: telscale-restcomm
+maintainer: Gennadiy Dubina <gdubina@dataart.com>
+summary: Mobicents RestComm
+description: Mobicents Restcomm
+tags: 
+  - app-servers
+provides:
+  website:
+    interface: http
+  cscf:
+    interface: 3GPP-ISC
+requires:
+  database:
+    interface: mysql
+  clearwater-ellis:
+    interface: as-register
+    optional: true
+  load-balancer:
+    interface: mobicents-load-balancer
+    optional: true

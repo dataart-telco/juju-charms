@@ -1,0 +1,9 @@
+demo:
+  services:
+    haproxy:
+      options:
+        services: "[]"
+    telscale-restcomm:
+      options:
+        voicerss_key: "d80d266a1a7f46edac6b1a17ad797b63"   
+        init_password: "42d8aa7cde9c78c4757862d84620c335" 
