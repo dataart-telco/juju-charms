@@ -1,11 +1,39 @@
 #!/bin/bash
 set -xe
 
-if [ -f lib/restcomm/start-restcomm.sh ]; then
-    juju-log "Starting RestComm"
-    PUBLIC_HOSTNAME=`unit-get public-address`
-    STATIC_ADDRESS=`dig +short @8.8.8.8 $PUBLIC_HOSTNAME`
-    juju-log "Will start Restcomm using Static IP Address: $STATIC_ADDRESS"
-    source lib/restcomm/start-restcomm.sh
-fi
+NET_INTERFACE=eth0
+PRIVATE_IP=`unit-get private-address`
+
+SUBNET_MASK=`ifconfig $NET_INTERFACE | grep "Mask" | cut -d":" -f4 | cut -d" " -f1`
+NETWORK=`netstat -r | grep $SUBNET_MASK | cut -d" " -f1`
+BROADCAST_ADDRESS=`ifconfig $NET_INTERFACE | grep "Mask" | cut -d":" -f3 | cut -d" " -f1`
+
+STATIC_ADDRESS=`unit-get public-address`
+
+# patch config file
+
+RESTCOMM=/opt/restcomm/
+FILE=$RESTCOMM/bin/restcomm/restcomm.conf
+
+sed -i "s|NET_INTERFACE=.*|NET_INTERFACE=\'$NET_INTERFACE\'|" $FILE 
+sed -i "s|PRIVATE_IP=.*|PRIVATE_IP=\'$PRIVATE_IP\'|" $FILE 
+sed -i "s|SUBNET_MASK=.*|SUBNET_MASK=\'$SUBNET_MASK\'|" $FILE 
+sed -i "s|NETWORK=.*|NETWORK=\'$NETWORK\'|" $FILE 
+sed -i "s|BROADCAST_ADDRESS=.*|BROADCAST_ADDRESS=\'$BROADCAST_ADDRESS\'|" $FILE 
+sed -i "s|STATIC_ADDRESS=.*|STATIC_ADDRESS=\'$STATIC_ADDRESS\'|" $FILE 
+
+#####
+
+#can be runned 
+hooks/stop
+
+/opt/restcomm/bin/restcomm/start-restcomm.sh
+
+#if [ -f lib/restcomm/start-restcomm.sh ]; then
+#    juju-log "Starting RestComm"
+#    PUBLIC_HOSTNAME=`unit-get public-address`
+#    STATIC_ADDRESS=`dig +short @8.8.8.8 $PUBLIC_HOSTNAME`
+#    juju-log "Will start Restcomm using Static IP Address: $STATIC_ADDRESS"
+#    source lib/restcomm/start-restcomm.sh
+#fi
 

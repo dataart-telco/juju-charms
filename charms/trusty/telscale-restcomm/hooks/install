@@ -1,9 +1,5 @@
 #!/bin/bash
 set -xe
-#apt-get install software-properties-common
-#apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
-#add-apt-repository 'deb http://ftp.heanet.ie/mirrors/mariadb/repo/10.0/ubuntu trusty main'
-#apt-add-repository ppa:awstools-dev/awstools
 
 apt-get update
 apt-get install -y zip unzip ipcalc software-properties-common openjdk-7-jdk maven python-cheetah python-lxml python-requests wireshark screen mysql-client-core-5.5
@@ -19,34 +15,11 @@ cd /opt
 wget -q --auth-no-challenge $dl
 
 # Extract to a known location
-#mv Mobicents-Restcomm-JBoss-AS7-7.3.1.675.zip $name-$version.zip
 juju-log "Extracting RestComm"
 unzip $name-$version.zip
 rm -f $name-$version.zip
 mv $name-$version restcomm
 
-#cd /opt/restcomm/bin/restcomm
-#rm -f telestax-license.xml
-#cat > telestax-license.xml << 'EOF'
-#<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-#<licenseStorage>
-#    <notification>
-#        <hostname></hostname>
-#        <smtpPort></smtpPort>
-#        <user></user>
-#        <password></password>
-#        <notifyEmail></notifyEmail>
-#        <useSSL></useSSL>
-#    </notification>
-#    <license>
-#        <product>Mobicents-RestComm</product>
-#        <licenseKey></licenseKey>
-#        <active>true</active>
-#    </license>
-#</licenseStorage>
-#EOF
- 
-#rm -f autoconfig.d/config-load-balancer.sh
 cd $CHARM_DIR
 cp /opt/restcomm/bin/restcomm/telestax-license.xml ./telestax-license.xml
 
@@ -81,18 +54,19 @@ juju-log "RestComm installed"
 
 juju-log "Open ports"
 
-#TODO do we need this
-open-port 22/tcp
-open-port 80/tcp
-open-port 443/tcp
+open-port 2000/TCP
+open-port 2000/UDP
+open-port 5065/TCP
+open-port 5065/UDP
 
-open-port 5080/udp
-open-port 64535-65535/udp
+open-port 2427/TCP 
 
+open-port 65434-65535/UDP
 open-port 8080/TCP
 open-port 5080/TCP
-open-port 5082/TCP
 open-port 5080/UDP
-open-port 2000/TCP 
+
+open-port 5082/TCP
+open-port 9990/TCP
 
 juju-log "Done!"
