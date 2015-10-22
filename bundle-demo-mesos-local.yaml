@@ -38,7 +38,7 @@ demo:
         "gui-x": 2280
         "gui-y": 760
     telscale-restcomm:
-      charm: local:trusty/telscale-restcomm-7.3.1
+      charm: local:trusty/telscale-restcomm
       expose: true
       constraints: "mem=1536M"
       annotations:

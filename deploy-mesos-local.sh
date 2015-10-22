@@ -1,7 +1,7 @@
 export JUJU_REPOSITORY=$PWD/charms/
 
 juju set-env "default-series=trusty"
-juju set-constraints "mem=512M"
+#juju set-constraints "mem=512M"
 #juju set-constraints 'instance-type=m1.small'
 
 juju-deployer -c bundle-demo-mesos-local.yaml -c config-demo.yaml demo
