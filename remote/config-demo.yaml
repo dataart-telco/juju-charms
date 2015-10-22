@@ -1,4 +1,4 @@
-demo:
+tads2015-demo:
   services:
     haproxy:
       options:
