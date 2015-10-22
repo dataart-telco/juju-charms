@@ -1,4 +1,3 @@
-export JUJU_REPOSITORY=$PWD/charms/
 
 juju set-env "default-series=trusty"
 
