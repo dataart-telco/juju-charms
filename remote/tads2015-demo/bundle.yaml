@@ -50,12 +50,12 @@ tads2015-demo:
       annotations:
         "gui-x": 2280
         "gui-y": 380
-    juju-gui:
-      charm: cs:trusty/juju-gui-39
-      expose: true
-      annotations:
-        "gui-x": 0
-        "gui-y": 570
+#    juju-gui:
+#      charm: cs:trusty/juju-gui-39
+#      expose: true
+#      annotations:
+#        "gui-x": 0
+#        "gui-y": 570
     monitor-server:
       charm: cs:~tads2015dataart/trusty/monitor-server-0
       expose: true
@@ -116,8 +116,8 @@ tads2015-demo:
 # monitor server
     - - monitor-server:redis
       - monitor-db:redis-master
-    - - monitor-server:api-server
-      - juju-gui:web
+#    - - monitor-server:api-server
+#      - juju-gui:web
 # end
 # mesos cluster
     - - mesos-master
