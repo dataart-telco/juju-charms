@@ -11,3 +11,5 @@ JUJU_PASS=$(grep password ~/.juju/environments/$JUJU_CUR_ENV.jenv | sed 's/.*: /
 
 echo 'juju admin password: '$JUJU_PASS
 juju set monitor-server JUJU_API_PASSWORD=$JUJU_PASS
+
+./bind-elaststic-ip.sh

@@ -11,3 +11,6 @@ options:
         type: string
         description: Init admin password. this arg will affect install process only
         default: ""
+    static_ip:
+        type: string
+        description: external static ip for the charm

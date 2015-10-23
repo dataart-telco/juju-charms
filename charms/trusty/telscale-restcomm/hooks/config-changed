@@ -6,8 +6,11 @@ juju-log "Configuring Restcomm"
 VOICERSS_KEY=`config-get voicerss_key`
 LICENSE_KEY=`config-get license_key`
 INIT_PASSWORD=`config-get init_password`
+STATIC_IP=`config-get static_ip`
 
 RESTCOMM=/opt/restcomm/
+
+SHOULD_RESTART=0
 
 if [ -n "$INIT_PASSWORD" ]; then
     juju-log "Update init password"
@@ -29,6 +32,15 @@ else
     juju-log "Init password is empty"
 fi
 
+if [ -n "$STATIC_IP"]; then
+	juju-log "Use STATIC_IP from config"
+
+	FILE=$RESTCOMM/bin/restcomm/restcomm.conf
+	sed -i "s|STATIC_IP=.*|STATIC_IP=\'$STATIC_IP\'|" $FILE
+
+	SHOULD_RESTART=1
+fi
+
 if [ -z "$VOICERSS_KEY" ]
 then
 	juju-log "VOICERSS_KEY is null"
@@ -46,14 +58,8 @@ else
 	sed -e "s|VOICERSS_KEY=.*|VOICERSS_KEY=\'$VOICERSS_KEY\'|" $FILE > $FILE.bak
 	mv -f $FILE.bak $FILE
 	echo 'Configured VoiceRSS Speech Synthesizer'
-
-	juju-log "Stopping services"
- 
-	hooks/stop
-
-	juju-log "Starting services"
- 
-	hooks/start
+	
+	SHOULD_RESTART=1
 fi
 
 if [ -z "$LICENSE_KEY" ]
@@ -84,17 +90,18 @@ cat > telestax-license.xml << 'EOF'
 </licenseStorage>
 EOF
 
-cd $CHARM_DIR
-cp /opt/restcomm/bin/restcomm/telestax-license.xml ./telestax-license.xml
+	cd $CHARM_DIR
+	cp /opt/restcomm/bin/restcomm/telestax-license.xml ./telestax-license.xml
 
+	SHOULD_RESTART=1
+fi
+
+if [ $SHOULD_RESTART -eq 1 ]; then
+	juju-log "Restart Restcomm with new config"
 	juju-log "Stopping services"
- 
 	hooks/stop
-
 	juju-log "Starting services"
- 
 	hooks/start
-
 fi
 
 exit 0

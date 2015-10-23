@@ -8,7 +8,14 @@ SUBNET_MASK=`ifconfig $NET_INTERFACE | grep "Mask" | cut -d":" -f4 | cut -d" " -
 NETWORK=`netstat -r | grep $SUBNET_MASK | cut -d" " -f1`
 BROADCAST_ADDRESS=`ifconfig $NET_INTERFACE | grep "Mask" | cut -d":" -f3 | cut -d" " -f1`
 
+CONFIG_STATIC_IP=`config-get static_ip`
+
 STATIC_ADDRESS=`unit-get public-address`
+
+if [ -n "$CONFIG_STATIC_IP" ]; then
+	juju-log "Use static IP instead of public ip"
+	STATIC_ADDRESS=$CONFIG_STATIC_IP
+fi
 
 # patch config file
 

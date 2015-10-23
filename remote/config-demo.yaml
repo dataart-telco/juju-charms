@@ -1,4 +1,4 @@
-tads2015-demo:
+demo:
   services:
     haproxy:
       options:
@@ -7,3 +7,4 @@ tads2015-demo:
       options:
         voicerss_key: "29b2d893df9f454abbfae94df6cff95b"   
         init_password: "42d8aa7cde9c78c4757862d84620c335" 
+        static_ip: "52.28.141.175"
