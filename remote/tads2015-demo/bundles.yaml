@@ -43,7 +43,7 @@ tads2015-demo:
         "gui-x": "2280"
         "gui-y": "760"
     telscale-restcomm:
-      charm: cs:~tads2015dataart/trusty/telscale-restcomm-3
+      charm: cs:~tads2015dataart/trusty/telscale-restcomm-2
       num_units: 1
       expose: true
       constraints: "mem=1536M"
