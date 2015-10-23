@@ -14,42 +14,42 @@ tads2015-demo:
       expose: true
       constraints: "mem=1G"
       annotations: 
-        "gui-x": 1140
-        "gui-y": 950
+        "gui-x": "1140"
+        "gui-y": "950"
     calls-consumer:
       charm: cs:~tads2015dataart/trusty/tads2015-calls-consumer-4mesos-1
       annotations:
-        "gui-x": 1710
-        "gui-y": 190
+        "gui-x": "1710"
+        "gui-y": "190"
     conference-call:
       charm: cs:~tads2015dataart/trusty/tads2015-conference-call-4mesos-0
       annotations:
-        "gui-x": 1710
-        "gui-y": 570
+        "gui-x": "1710"
+        "gui-y": "570"
     sms-feedback:
       charm: cs:~tads2015dataart/trusty/tads2015-sms-feedback-4mesos-0
       annotations:
-        "gui-x": 1710
-        "gui-y": 950
+        "gui-x": "1710"
+        "gui-y": "950"
     redis-master:
       charm: cs:~mbruzek/trusty/redis-master-0
       expose: true
       annotations:
-        "gui-x": 2280
-        "gui-y": 760
+        "gui-x": "2280"
+        "gui-y": "760"
     telscale-restcomm:
       charm: cs:~tads2015dataart/trusty/telscale-restcomm-1
       expose: true
       constraints: "mem=1536M"
       annotations:
-        "gui-x": 2280
-        "gui-y": 0
+        "gui-x": "2280"
+        "gui-y": "0"
     haproxy:
       charm: cs:trusty/haproxy-11
       expose: true
       annotations:
-        "gui-x": 2280
-        "gui-y": 380
+        "gui-x": "2280"
+        "gui-y": "380"
 #    juju-gui:
 #      charm: cs:trusty/juju-gui-39
 #      expose: true
@@ -61,8 +61,8 @@ tads2015-demo:
       expose: true
       constraints: "mem=512M"
       annotations:
-        "gui-x": 380
-        "gui-y": 570
+        "gui-x": "380"
+        "gui-y": "570"
       options:
         CHECK_PERIOD: 1
         SCALE_DOWN: 35
@@ -70,18 +70,18 @@ tads2015-demo:
       charm: cs:~mbruzek/trusty/redis-master-0
       expose: true
       annotations:
-        "gui-x": 380
-        "gui-y": 190             
+        "gui-x": "380"
+        "gui-y": "190"             
     monitor-agent-mesos:
       charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-0
       annotations:
-        "gui-x": 760
-        "gui-y": 950
+        "gui-x": "760"
+        "gui-y": "950"
     monitor-agent-mesos-master:
       charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-master-0
       annotations:
-        "gui-x": 760
-        "gui-y": 190
+        "gui-x": "760"
+        "gui-y": "190"
   relations:
 # callc consumer
     - - calls-consumer:redis
