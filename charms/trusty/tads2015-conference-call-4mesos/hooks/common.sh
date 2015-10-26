@@ -3,7 +3,7 @@
 WORK_DIR="/var/lib/tads2015-conference-call"
 APP_NAME="tads2015-conference-call"
 APP_PORT=30791
-DOCKER_IMAGE=tads2015da/conference-call:0.0.10
+DOCKER_IMAGE=tads2015da/conference-call:0.0.11
 CPUS=0.5
 MEM=200
 
@@ -49,6 +49,9 @@ REDIS_SERVICE_HOST=${REDIS_SERVICE_HOST}
 REDIS_SERVICE_PORT=${REDIS_SERVICE_PORT}
 RESTCOMM_SERVICE=${RESTCOMM_SERVICE}
 UNIT_NAME=${UNIT_NAME}
+RESTCOMM_USER=$RESTCOMM_USER
+RESTCOMM_PASSWORD=$RESTCOMM_PASSWORD
+PHONE_NUMBER=$PHONE_NUMBER
 " > ${CONFIG_PATH}
 
   render_create
@@ -70,6 +73,9 @@ render_create(){
         { "key": "env", "value": "REDIS_SERVICE_HOST='$REDIS_SERVICE_HOST'" },
         { "key": "env", "value": "REDIS_SERVICE_PORT='$REDIS_SERVICE_PORT'" },
         { "key": "env", "value": "RESTCOMM_SERVICE='$RESTCOMM_SERVICE'" },
+        { "key": "env", "value": "RESTCOMM_USER='$RESTCOMM_USER'" },
+        { "key": "env", "value": "RESTCOMM_PASSWORD='$RESTCOMM_PASSWORD'" },
+        { "key": "env", "value": "PHONE_CONFERENCE='$PHONE_NUMBER'" },
         { "key": "env", "value": "COLLECTD_DOCKER_APP='$APP_NAME'" },
         { "key": "env", "value": "COLLECTD_DOCKER_TASK_ENV=MESOS_TASK_ID" }
       ],

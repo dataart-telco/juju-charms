@@ -4,6 +4,7 @@
 . hooks/common.sh
 . $CONFIG_PATH
 
+CONFIG_JUJU_API_HOST=`config-get JUJU_API_HOST`
 JUJU_API_PASSWORD=`config-get JUJU_API_PASSWORD`
 CHECK_PERIOD=`config-get CHECK_PERIOD`
 PORT=`config-get PORT`

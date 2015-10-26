@@ -3,7 +3,7 @@
 WORK_DIR="/var/lib/tads2015-drop-conference"
 APP_NAME="tads2015-drop-conference"
 
-DOCKER_IMAGE=tads2015da/drop-conference:0.0.10
+DOCKER_IMAGE=tads2015da/drop-conference:0.0.11
 CPUS=0.5
 MEM=200
 
@@ -32,6 +32,8 @@ REDIS_SERVICE_HOST=${REDIS_SERVICE_HOST}
 REDIS_SERVICE_PORT=${REDIS_SERVICE_PORT}
 RESTCOMM_SERVICE=${RESTCOMM_SERVICE}
 UNIT_NAME=${UNIT_NAME}
+RESTCOMM_USER=$RESTCOMM_USER
+RESTCOMM_PASSWORD=$RESTCOMM_PASSWORD
 " > ${CONFIG_PATH}
 
   render_create
@@ -52,7 +54,9 @@ render_create(){
         { "key": "env", "value": "EXTERNAL_IP='$EXTERNAL_IP'" },
         { "key": "env", "value": "REDIS_SERVICE_HOST='$REDIS_SERVICE_HOST'" },
         { "key": "env", "value": "REDIS_SERVICE_PORT='$REDIS_SERVICE_PORT'" },
-        { "key": "env", "value": "RESTCOMM_SERVICE='$RESTCOMM_SERVICE'" }
+        { "key": "env", "value": "RESTCOMM_SERVICE='$RESTCOMM_SERVICE'" },
+        { "key": "env", "value": "RESTCOMM_USER='$RESTCOMM_USER'" },
+        { "key": "env", "value": "RESTCOMM_PASSWORD='$RESTCOMM_PASSWORD'" }
       ]    }
   }}' > $FILE_CREATE
 }

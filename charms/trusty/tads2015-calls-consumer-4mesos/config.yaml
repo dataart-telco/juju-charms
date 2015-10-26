@@ -7,3 +7,7 @@ options:
     type: string
     description: "Restcomm password"
     default: "42d8aa7cde9c78c4757862d84620c335"
+  PHONE_NUMBER:
+    type: string
+    description: "Restcomm phone number for service"
+    default: "+5555"

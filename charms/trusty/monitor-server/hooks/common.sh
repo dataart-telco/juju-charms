@@ -22,8 +22,14 @@ install(){
 
 render_juju_tool_config(){
 
+  local API_HOST=$JUJU_API_HOST
+  
+  if [ -n "$CONFIG_JUJU_API_HOST" ]; then
+      API_HOST=$CONFIG_JUJU_API_HOST
+  fi
+
   echo "juju-api:
-  endpoint: "wss://"${JUJU_API_HOST}"/ws"
+  endpoint: "wss://"${API_HOST}"/ws"
   admin-secret: ${JUJU_API_PASSWORD}
 " > $JUJU_TOOL_CONFIG_PATH
 
@@ -41,6 +47,7 @@ MESOS_DEPLOY_DELAY=${MESOS_DEPLOY_DELAY}
 MARATHON_API_HOST=${MARATHON_API_HOST}
 SCALE_UP=${SCALE_UP}
 SCALE_DOWN=${SCALE_DOWN}
+CONFIG_JUJU_API_HOST=${CONFIG_JUJU_API_HOST}
 " > $CONFIG_PATH
 }
 

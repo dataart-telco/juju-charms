@@ -1,12 +1,13 @@
 #!/bin/bash
 # config-changed occurs everytime a new configuration value is updated (juju set)
 
-source hooks/common.sh
+. hooks/common.sh
 
-. ${CONFIG_PATH}
+. $CONFIG_PATH
 
-# TODO get new params and render script
+RESTCOMM_USER=`config-get RESTCOMM_USER`
+RESTCOMM_PASSWORD=`config-get RESTCOMM_PASSWORD`
 
-#render_config
+render_config
 
-
+restart_me
