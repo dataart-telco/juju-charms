@@ -18,6 +18,8 @@ install(){
 
   render_config
   render_init
+
+  open-port 8090
 }
 
 render_juju_tool_config(){
