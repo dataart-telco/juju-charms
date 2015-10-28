@@ -18,16 +18,22 @@ services:
       gui-y: "950"
   calls-consumer:
     charm: cs:~tads2015dataart/trusty/tads2015-calls-consumer-4mesos-2
+    options:
+      RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
     annotations:
       gui-x: "1710"
       gui-y: "190"
   conference-call:
     charm: cs:~tads2015dataart/trusty/tads2015-conference-call-4mesos-1
+    options:
+      RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
     annotations:
       gui-x: "1710"
       gui-y: "570"
   sms-feedback:
     charm: cs:~tads2015dataart/trusty/tads2015-sms-feedback-4mesos-1
+    options:
+      RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
     annotations:
       gui-x: "1710"
       gui-y: "950"
@@ -43,6 +49,9 @@ services:
     num_units: 1
     expose: true
     constraints: "mem=1536M"
+    options:
+      init_password: "42d8aa7cde9c78c4757862d84620c335"
+      voicerss_key: "29b2d893df9f454abbfae94df6cff95b"
     annotations:
       gui-x: "2280"
       gui-y: "0"
