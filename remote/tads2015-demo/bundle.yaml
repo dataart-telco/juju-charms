@@ -90,12 +90,12 @@ services:
       gui-x: "380"
       gui-y: "190"             
   monitor-agent-mesos:
-    charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-1
+    charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-2
     annotations:
       gui-x: "760"
       gui-y: "950"
   monitor-agent-mesos-master:
-    charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-master-1
+    charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-master-2
     annotations:
       gui-x: "760"
       gui-y: "190"
