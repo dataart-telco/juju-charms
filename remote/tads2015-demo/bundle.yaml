@@ -17,21 +17,21 @@ services:
       gui-x: "1140"
       gui-y: "950"
   calls-consumer:
-    charm: cs:~tads2015dataart/trusty/tads2015-calls-consumer-4mesos-2
+    charm: cs:~tads2015dataart/trusty/tads2015-calls-consumer-4mesos-3
     options:
       RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
     annotations:
       gui-x: "1710"
       gui-y: "190"
   conference-call:
-    charm: cs:~tads2015dataart/trusty/tads2015-conference-call-4mesos-1
+    charm: cs:~tads2015dataart/trusty/tads2015-conference-call-4mesos-2
     options:
       RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
     annotations:
       gui-x: "1710"
       gui-y: "570"
   sms-feedback:
-    charm: cs:~tads2015dataart/trusty/tads2015-sms-feedback-4mesos-1
+    charm: cs:~tads2015dataart/trusty/tads2015-sms-feedback-4mesos-2
     options:
       RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
     annotations:
@@ -71,7 +71,7 @@ services:
 #        "gui-x": 0
 #        "gui-y": 570
   monitor-server:
-    charm: cs:~tads2015dataart/trusty/monitor-server-2
+    charm: cs:~tads2015dataart/trusty/monitor-server-3
     num_units: 1
     expose: true
     constraints: "mem=512M"
@@ -89,12 +89,12 @@ services:
       gui-x: "380"
       gui-y: "190"             
   monitor-agent-mesos:
-    charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-0
+    charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-1
     annotations:
       gui-x: "760"
       gui-y: "950"
   monitor-agent-mesos-master:
-    charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-master-0
+    charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-master-1
     annotations:
       gui-x: "760"
       gui-y: "190"

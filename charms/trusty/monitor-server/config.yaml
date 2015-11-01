@@ -22,11 +22,20 @@ options:
     type: int
     default: 1
     description: "Mesos service deploy delay"
-  SCALE_UP:
+  JUJU_SCALE_UP:
     type: int
     default: 70
-    description: "Scale up limit"
-  SCALE_DOWN:
+    description: "Juju scale up limit"
+  JUJU_SCALE_DOWN:
     type: int
     default: 30
-    description: "Scale down limit"
+    description: "Juju scale down limit"
+  MESOS_SCALE_UP:
+    type: int
+    default: 60
+    description: "Mesos scale up limit"
+  MESOS_SCALE_DOWN:
+    type: int
+    default: 10
+    description: "Mesos scale down limit"
+

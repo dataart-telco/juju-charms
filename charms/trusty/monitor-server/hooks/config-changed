@@ -10,8 +10,10 @@ CHECK_PERIOD=`config-get CHECK_PERIOD`
 PORT=`config-get PORT`
 JUJU_DEPLOY_DELAY=`config-get JUJU_DEPLOY_DELAY`
 MESOS_DEPLOY_DELAY=`config-get MESOS_DEPLOY_DELAY`
-SCALE_UP=`config-get SCALE_UP`
-SCALE_DOWN=`config-get SCALE_DOWN`
+JUJU_SCALE_UP=`config-get JUJU_SCALE_UP`
+JUJU_SCALE_DOWN=`config-get JUJU_SCALE_DOWN`
+MESOS_SCALE_UP=`config-get MESOS_SCALE_UP`
+MESOS_SCALE_DOWN=`config-get MESOS_SCALE_DOWN`
 
 render_config
 render_juju_tool_config

@@ -1,10 +1,45 @@
 #!/bin/bash
 
-HAPROXY_HOST=`juju status haproxy | grep public-address | sed 's/.*: //g'`
+JUJU_ENV=''
+ITERATES=1
+PORT=80
+HOST=''
 
-for (( c=1; c<=$1; c++ ))
-do
-    echo "Iteration #$c"
+print_usage(){
+  printf "usage:
+    [-i count]
+    [-e juju env to find haproxy]
+    [-p haproxy port]
+    [-h host - ignore find haproxy]
+    \n"
+}
 
-    ab -n 1000000 -c 1000 http://$HAPROXY_HOST:$2/ &
+while getopts 'e:i:p:h:' flag; do
+    case "${flag}" in
+        e)  JUJU_ENV=$OPTARG ;;
+        i)  ITERATES=$OPTARG ;;
+        p)  PORT="$OPTARG" ;;
+        h)  HOST=$OPTARG ;;
+        *)  print_usage
+            exit 1
+            ;;
+    esac
 done
+
+if [ -z "$HOST" ]; then
+    if [ -z "$JUJU_ENV" ]; then   
+        print_usage
+        exit 1
+    fi
+    HAPROXY_HOST=`juju status -e $JUJU_ENV haproxy | grep public-address | sed 's/.*: //g'`
+    HOST="$HAPROXY_HOST:$PORT"
+fi
+
+URL=http://$HOST/
+
+echo "Run $ITERATES iterate(s) for $URL"
+
+
+ab -n 1000000 -c $ITERATES -r $URL 
+
+

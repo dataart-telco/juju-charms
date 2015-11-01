@@ -100,8 +100,11 @@ func main() {
 	m := flag.String("m", "127.0.0.1:8080", "Marathon host")
 	l := flag.String("l", "INFO", "Log level: TRACE, INFO")
 
-	up := flag.Int("up", 70, "Scale up limit")
-	down := flag.Int("down", 30, "Scale down limit")
+	mesosUp := flag.Int("m-up", 70, "Scale up limit for mesos")
+	mesosDown := flag.Int("m-down", 30, "Scale down limit for mesos")
+
+	jujuUp := flag.Int("j-up", 70, "Scale up limit fir juju")
+	jujuDown := flag.Int("j-down", 30, "Scale down limit for juju")
 
 	flag.Parse()
 
@@ -121,14 +124,16 @@ func main() {
 		"| meoso scale delay =", *md,
 		"| marathon host =", *m,
 		"| log level =", *l,
-		"| upLimit =", *up,
-		"| downLimit =", *down)
+		"| juju up limit =", *jujuUp,
+		"| juju down limit =", *jujuDown,
+		"| mesos up limit =", *mesosUp,
+		"| mesos down limit =", *mesosDown)
 
 	ipRedis = *host
 
 	handlers = make([]MetricsHandler, 2)
-	handlers[0] = &JujuCharmHandler{Period: *t, CliDir: *cli, ScaleUp: *up, ScaleDown: *down, ScaleDelay: *jd}
-	handlers[1] = &MesosAppsHandler{Period: time.Duration(*t) * time.Minute, Host: *m, ScaleUp: *up, ScaleDown: *down, ScaleDelay: *md}
+	handlers[0] = &JujuCharmHandler{Period: *t, CliDir: *cli, ScaleUp: *jujuUp, ScaleDown: *jujuDown, ScaleDelay: *jd}
+	handlers[1] = &MesosAppsHandler{Period: time.Duration(*t) * time.Minute, Host: *m, ScaleUp: *mesosUp, ScaleDown: *mesosDown, ScaleDelay: *md}
 
 	resetDb()
 

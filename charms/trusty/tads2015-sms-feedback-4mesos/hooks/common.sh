@@ -75,7 +75,7 @@ render_create(){
         { "key": "env", "value": "RESTCOMM_SERVICE='$RESTCOMM_SERVICE'" },
         { "key": "env", "value": "RESTCOMM_USER='$RESTCOMM_USER'" },
         { "key": "env", "value": "RESTCOMM_PASSWORD='$RESTCOMM_PASSWORD'" },
-        { "key": "env", "value": "PHONE_SMS='$PHONE_NUMBER'" },
+        { "key": "env", "value": "PHONE_NUMBER='$PHONE_NUMBER'" },
         { "key": "env", "value": "COLLECTD_DOCKER_APP='$APP_NAME'" },
         { "key": "env", "value": "COLLECTD_DOCKER_TASK_ENV=MESOS_TASK_ID" }
       ],

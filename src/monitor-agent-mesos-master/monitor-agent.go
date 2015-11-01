@@ -43,6 +43,9 @@ func sendData(host string, appId string, cpuLoad1 int, cpuLoad5 int, mem int) {
 			"mem":       {strconv.Itoa(mem)},
 			"appId":     {appId},
 			"machineId": {pcName}})
+
+	resp.Close = true
+
 	if err != nil {
 		Error.Println("Error: ", err)
 		return

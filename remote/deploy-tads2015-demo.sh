@@ -1,3 +1,17 @@
+USE_EIP=0
+
+print_usage(){
+    printf "usage: [-eip] <juju env>\n"
+}
+
+while getopts 'eip:' flag; do
+    case "${flag}" in
+        eip) USE_EIP=1 ;;
+        *)  print_usage
+            exit 1
+            ;;
+   esac
+done
 
 if [ "$#" -ge 1 ]; then
     JUJU_CUR_ENV=$1
@@ -15,8 +29,9 @@ JUJU_PASS=$(grep password ~/.juju/environments/$JUJU_CUR_ENV.jenv | sed 's/.*: /
 
 echo 'juju admin password: '$JUJU_PASS
 juju set -e $JUJU_CUR_ENV monitor-server JUJU_API_PASSWORD=$JUJU_PASS
-juju set -e $JUJU_CUR_ENV telscale-restcomm static_ip=52.28.141.175
-
 juju add-relation -e $JUJU_CUR_ENV monitor-server:api-server juju-gui:web
 
-./bind-elaststic-ip.sh
+if [ $USE_EAPI -eq 1 ]; then
+    juju set -e $JUJU_CUR_ENV telscale-restcomm static_ip=52.28.141.175
+    ./bind-elaststic-ip.sh
+fi
