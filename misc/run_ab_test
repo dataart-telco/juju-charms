@@ -35,12 +35,13 @@ if [ -z "$HOST" ]; then
     HOST="$HAPROXY_HOST:$PORT"
 fi
 
-URL=http://$HOST/
+URL=http://$HOST/test.xml
 
 echo "Run $ITERATES iterate(s) for $URL"
 
 
 ab -n 1000000 -c $ITERATES -r $URL
+#ab -n 1000000 -c $ITERATES -r $URL
 #-T application/x-www-form-urlencoded -p ab.data $URL
 
 

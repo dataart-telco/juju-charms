@@ -80,7 +80,7 @@ services:
       gui-y: "570"
     options:
       CHECK_PERIOD: 1
-      JUJU_SCALE_DOWN: 35
+      JUJU_SCALE_DOWN: 37
       MESOS_SCALE_DOWN: 10
   monitor-db:
     charm: cs:~mbruzek/trusty/redis-master-0
