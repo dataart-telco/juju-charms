@@ -50,10 +50,13 @@ do
         *Ready )
             sleep 1
             echo ">>> initializing"
-            for command in "soundcard use files" "register sip:$USER@$PROXY sip:$PROXY $PASS" "call $NUMBER"
+            for command in "soundcard use files" "register sip:$USER@$PROXY sip:$PROXY $PASS"
             do
                 echo -n $command | nc -q 5 -U $socket
             done
+            ;;
+        *Registration\ on\ *\ successful* )
+                echo -n "call $NUMBER" | nc -q 5 -U $socket
             ;;
         *Receiving\ new\ incoming* )           
             echo "!!! New call: sleep 3sec"
