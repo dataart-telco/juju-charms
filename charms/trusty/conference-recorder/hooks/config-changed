@@ -1,0 +1,14 @@
+#!/bin/bash
+# config-changed occurs everytime a new configuration value is updated (juju set)
+
+. hooks/common.sh
+. $CONFIG_PATH
+
+USER=`config-get user`
+PASSWORD=`config-get password`
+PROXY=`config-get proxy`
+NUMBER=`config-get number`
+
+render_config
+
+restart_me

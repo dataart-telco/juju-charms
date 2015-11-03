@@ -1,0 +1,18 @@
+options:
+  user:
+    type: string
+    default: "bob"
+    description: "user"
+  password:
+    type: string
+    default: "1234"
+    description: "password"
+  proxy:
+    type: string
+    default: ""
+    description: "proxy ip:port"
+  number:
+    type: string
+    default: "+5555"
+    description: "conference call"
+
