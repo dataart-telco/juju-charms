@@ -44,8 +44,10 @@ normal exit 0
 limit nofile 20000 20000
 
 script
+
   . '$CONFIG_PATH'
-  '$WORK_DIR'/'$APP_NAME'.sh -u '$USER' -p '$PASSWORD' -h '$PROXY' -n '$NUMBER' -d '$WORK_DIR'/records
+  sudo -u ubuntu '$WORK_DIR'/'$APP_NAME'.sh -u $USER -p $PASSWORD -h $PROXY -n $NUMBER -d '$WORK_DIR'/records
+
 end script
 ' > /etc/init/${APP_NAME}.conf
 
