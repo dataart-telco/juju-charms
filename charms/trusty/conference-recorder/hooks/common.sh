@@ -2,16 +2,21 @@
 APP_NAME=conference-recorder
 APP_PORT=8080
 
-WORK_DIR=/var/lib/$APP_NAME
+WORK_DIR=/opt/$APP_NAME
 CONFIG_PATH=${WORK_DIR}/${APP_NAME}.conf
-
 
 install(){
   rm -rf $WORK_DIR
-  mkdir -p $WORK_DIR
+  mkdir -p -m 777 $WORK_DIR
 
   #install jujuapicli
+  apt-get install -y linux-image-extra-virtual
+  modprobe snd-dummy
+
   apt-get install -y linphone
+  apt-get install -y nginx
+
+  init_nginx
 
   #install server
   cp ./lib/recorder.sh $WORK_DIR/${APP_NAME}.sh
@@ -20,6 +25,27 @@ install(){
   render_init
 
   open-port $APP_PORT
+
+  open-port 5060
+ 
+  open-port 5061
+  open-port 9000-9500/UDP
+
+  open-port 2000/TCP
+  open-port 2000/UDP
+  open-port 5065/TCP
+  open-port 5065/UDP
+
+  open-port 2427/TCP
+
+  open-port 65434-65535/UDP
+ 
+  open-port 5080/TCP
+  open-port 5080/UDP
+
+  open-port 5082/TCP
+  open-port 9990/TCP
+
 }
 
 render_config(){
@@ -29,6 +55,21 @@ PASSWORD=${PASSWORD}
 PROXY=${PROXY}
 NUMBER=${NUMBER}
 " > $CONFIG_PATH
+}
+
+init_nginx(){
+  echo "
+server {
+        listen 8080;
+        root $WORK_DIR/records;
+        location /{
+        }
+}
+" > /etc/nginx/sites-available/recorder
+
+ln -s /etc/nginx/sites-available/recorder /etc/nginx/sites-enabled/recorder
+
+service nginx restart
 }
 
 render_init(){

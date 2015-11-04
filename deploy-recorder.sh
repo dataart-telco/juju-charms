@@ -14,5 +14,6 @@ echo 'conference-recorder:
 ' > /tmp/conference-recorder.yaml
 
 juju deploy -e $JUJU_ENV local:trusty/conference-recorder conference-recorder --config /tmp/conference-recorder.yaml
+juju add-relation -e $JUJU_ENV sms-feedback:recorder conference-recorder:api
 juju expose -e $JUJU_ENV conference-recorder
  

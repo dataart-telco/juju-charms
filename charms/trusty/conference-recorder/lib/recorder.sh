@@ -59,19 +59,27 @@ do
                 echo -n "call $NUMBER" | nc -q 5 -U $socket
             ;;
         *Receiving\ new\ incoming* )           
-            echo "!!! New call: sleep 3sec"
-            sleep 1
+            echo "!!! New call"
+            
             now=$(date +%s)
-            filename=$records_folder/record_${now}.wav
+	    name=record_${now}.wav
+            filename=$records_folder/$name
+	    echo $name > $records_folder/last
+	    touch $filename
+	    chmod 777 $filename
 
+	    sleep 1
             echo -n "record $filename" | nc -q 5 -U $socket
 
+	    sleep 1	
             echo -n answer | nc -q 5 -U $socket
-
             ;;
         *Call\ *\ with\ *\ connected. )
             ;;
-        *Call\ *\ ended. )
+	*Call*DataArt*ended*)
+	    echo "Call to conference again..."
+	    sleep 10
+	    echo -n "call $NUMBER" | nc -q 5 -U $socket
             ;;
         *Terminating* )
             echo "Finish script"
@@ -81,7 +89,7 @@ do
             #exit 1
             
             # force close app
-            pid=`ps -ax | grep "linphonec --pipe" | head -1 | cut -d" " -f2`
+	    pid=`ps -ax | grep "linphonec --pipe" | head -1 | sed 's/ *//' | cut -d" " -f1`            
             kill -9 $pid
             ;;
         *)
