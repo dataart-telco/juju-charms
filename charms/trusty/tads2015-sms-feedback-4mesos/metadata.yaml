@@ -16,6 +16,8 @@ requires:
     interface: redis
   restcomm:
     interface: http
+  recorder:
+    interface: http
   mesos:
     interface: juju-info
     scope: container
