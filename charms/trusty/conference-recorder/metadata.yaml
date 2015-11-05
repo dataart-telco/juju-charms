@@ -8,10 +8,6 @@ tags:
   # https://juju.ubuntu.com/docs/authors-charm-metadata.html#charm-metadata
   - misc
 subordinate: false
-requires:
-  calls-consumer:
-    interface: http
-    optional: true
 provides:
   api:
     interface: http
