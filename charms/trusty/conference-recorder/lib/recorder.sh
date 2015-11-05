@@ -64,7 +64,7 @@ do
             now=$(date +%s)
 	    name=record_${now}.wav
             filename=$records_folder/$name
-	    echo $name > $records_folder/last
+	    echo -n $name > $records_folder/last
 	    touch $filename
 	    chmod 777 $filename
 
