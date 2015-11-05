@@ -3,7 +3,7 @@
 . hooks/common.sh
 . $CONFIG_PATH
 
-PRIVATE_ADDRESS=$(unit-get private-address)
+IP=$(unit-get public-address)
 
-relation-set "hostname=${PRIVATE_ADDRESS}"
+relation-set "hostname=${IP}"
 relation-set "port=$APP_PORT"
