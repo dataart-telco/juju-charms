@@ -76,6 +76,11 @@ do
             ;;
         *Call\ *\ with\ *\ connected. )
             ;;
+        *Call*$NUMBER*error*)
+            echo "Will call again after 10sec"
+            sleep 10
+            echo -n "call $NUMBER" | nc -q 5 -U $socket
+            ;;
 	*Call*DataArt*ended*)
 	    echo "Call to conference again..."
 	    sleep 10

@@ -11,8 +11,7 @@ install(){
 
   #install jujuapicli
   apt-get install -y linux-image-extra-virtual
-  modprobe snd-dummy
-
+  
   apt-get install -y linphone
   apt-get install -y nginx
 
@@ -45,7 +44,8 @@ install(){
 
   open-port 5082/TCP
   open-port 9990/TCP
-
+  
+  juju-reboot
 }
 
 render_config(){
@@ -85,6 +85,8 @@ normal exit 0
 limit nofile 20000 20000
 
 script
+
+  modprobe snd-dummy
 
   . '$CONFIG_PATH'
   sudo -u ubuntu '$WORK_DIR'/'$APP_NAME'.sh -u $USER -p $PASSWORD -h $PROXY -n $NUMBER -d '$WORK_DIR'/records
