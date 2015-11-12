@@ -8,8 +8,8 @@ options:
     description: "Admin password to api"
   CHECK_PERIOD:
     type: int
-    default: 5
-    description: "Avg period in minutes"
+    default: 300
+    description: "Avg period in seconds"
   PORT:
     type: int
     default: 8090

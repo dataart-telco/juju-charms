@@ -92,7 +92,7 @@ func start(port int) {
 
 func main() {
 	host := flag.String("r", "127.0.0.1:6379", "Redis server")
-	t := flag.Int("t", 5, "Avg period in minutes")
+	t := flag.Int("t", 300, "Avg period in seconds")
 	port := flag.Int("p", 8080, "Bind port")
 	cli := flag.String("cli-dir", "/var/lib/simple-monitor-service", "cli directory command")
 	jd := flag.Int("jd", 10, "juju delay scale actions")
@@ -132,14 +132,15 @@ func main() {
 	ipRedis = *host
 
 	handlers = make([]MetricsHandler, 2)
-	handlers[0] = &JujuCharmHandler{Period: *t, CliDir: *cli, ScaleUp: *jujuUp, ScaleDown: *jujuDown, ScaleDelay: *jd}
-	handlers[1] = &MesosAppsHandler{Period: time.Duration(*t) * time.Minute, Host: *m, ScaleUp: *mesosUp, ScaleDown: *mesosDown, ScaleDelay: *md}
+	period := time.Duration(*t) * time.Second
+	handlers[0] = &JujuCharmHandler{Period: period, CliDir: *cli, ScaleUp: *jujuUp, ScaleDown: *jujuDown, ScaleDelay: *jd}
+	handlers[1] = &MesosAppsHandler{Period: period, Host: *m, ScaleUp: *mesosUp, ScaleDown: *mesosDown, ScaleDelay: *md}
 
 	resetDb()
 
 	//timeout in seconds
 	for _, h := range handlers {
-		schedule((*t * 60), h.checkState)
+		schedule(*t, h.checkState)
 	}
 
 	start(*port)

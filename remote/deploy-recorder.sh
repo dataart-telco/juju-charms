@@ -9,7 +9,7 @@ echo 'conference-recorder:
   number: "+5555"
 ' > /tmp/conference-recorder.yaml
 
-juju deploy -e $JUJU_ENV cs:~tads2015dataart/trusty/conference-recorder-1 conference-recorder --config /tmp/conference-recorder.yaml
+juju deploy -e $JUJU_ENV cs:~tads2015dataart/trusty/conference-recorder-2 conference-recorder --config /tmp/conference-recorder.yaml
 juju add-relation -e $JUJU_ENV sms-feedback:recorder conference-recorder:api
 juju expose -e $JUJU_ENV conference-recorder
  

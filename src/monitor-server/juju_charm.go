@@ -23,7 +23,7 @@ type JujuCharmHandler struct {
 	ScaleDelay int
 	ScaleUp    int
 	ScaleDown  int
-	Period     int
+	Period     time.Duration
 	CliDir     string
 }
 
@@ -57,7 +57,7 @@ func (h *JujuCharmHandler) checkState() {
 
 	for k, v := range stats {
 		cpuLoad := v.CpuLoad1Avg
-		if h.Period > 1 {
+		if h.Period.Minutes() > 1 {
 			cpuLoad = v.CpuLoad5Avg
 		}
 
