@@ -17,7 +17,7 @@ services:
       gui-x: "1140"
       gui-y: "950"
   calls-consumer:
-    charm: cs:~tads2015dataart/trusty/tads2015-calls-consumer-4mesos-3
+    charm: cs:~tads2015dataart/trusty/tads2015-calls-consumer-4mesos-4      
     options:
       RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
     annotations:
@@ -31,7 +31,7 @@ services:
       gui-x: "1710"
       gui-y: "570"
   sms-feedback:
-    charm: cs:~tads2015dataart/trusty/tads2015-sms-feedback-4mesos-3
+    charm: cs:~tads2015dataart/trusty/tads2015-sms-feedback-4mesos-4
     options:
       RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
     annotations:
@@ -71,7 +71,7 @@ services:
 #        "gui-x": 0
 #        "gui-y": 570
   monitor-server:
-    charm: cs:~tads2015dataart/trusty/monitor-server-4
+    charm: cs:~tads2015dataart/trusty/monitor-server-5
     num_units: 1
     expose: true
     constraints: "mem=512M"
