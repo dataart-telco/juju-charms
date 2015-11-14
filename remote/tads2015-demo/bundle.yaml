@@ -20,6 +20,8 @@ services:
     charm: cs:~tads2015dataart/trusty/tads2015-calls-consumer-4mesos-4      
     options:
       RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
+      PHONE_NUMBER: "5555"
+      DID_DOMAIN: "80.250.109.132"
     annotations:
       gui-x: "1710"
       gui-y: "190"
@@ -34,6 +36,7 @@ services:
     charm: cs:~tads2015dataart/trusty/tads2015-sms-feedback-4mesos-4
     options:
       RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
+      DID_DOMAIN: ""
     annotations:
       gui-x: "1710"
       gui-y: "950"
@@ -45,11 +48,12 @@ services:
       gui-x: "2280"
       gui-y: "760"
   telscale-restcomm:
-    charm: cs:~tads2015dataart/trusty/telscale-restcomm-2
+    charm: cs:~tads2015dataart/trusty/telscale-restcomm-3
     num_units: 1
     expose: true
     constraints: "mem=1536M"
     options:
+      sms_proxy: "54.174.171.104"
       init_password: "42d8aa7cde9c78c4757862d84620c335"
       voicerss_key: "29b2d893df9f454abbfae94df6cff95b"
     annotations:

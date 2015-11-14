@@ -14,3 +14,8 @@ options:
     static_ip:
         type: string
         description: external static ip for the charm
+        default: ""
+    sms_proxy:
+        type: string
+        description: proxy host for outbound sms
+        default: ""

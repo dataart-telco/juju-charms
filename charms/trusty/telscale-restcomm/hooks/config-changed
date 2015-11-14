@@ -7,6 +7,8 @@ VOICERSS_KEY=`config-get voicerss_key`
 LICENSE_KEY=`config-get license_key`
 INIT_PASSWORD=`config-get init_password`
 STATIC_IP=`config-get static_ip`
+SMS_PROXY=`config-get sms_proxy`
+
 
 RESTCOMM=/opt/restcomm/
 
@@ -37,6 +39,17 @@ if [ -n "$STATIC_IP"]; then
 
 	FILE=$RESTCOMM/bin/restcomm/restcomm.conf
 	sed -i "s|STATIC_IP=.*|STATIC_IP=\'$STATIC_IP\'|" $FILE
+
+	SHOULD_RESTART=1
+fi
+
+if [ -n "$SMS_PROXY"]; then
+	juju-log "Use SMS_PROXY from config"
+
+	FILE=$RESTCOMM/bin/restcomm/restcomm.conf
+
+    sed -i "s|SMS_PREFIX=.*|SMS_PREFIX=\'\'|" $FILE
+	sed -i "s|SMS_OUTBOUND_PROXY=.*|SMS_OUTBOUND_PROXY=\'$SMS_PROXY\'|" $FILE
 
 	SHOULD_RESTART=1
 fi
