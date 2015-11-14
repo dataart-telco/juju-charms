@@ -75,7 +75,7 @@ services:
 #        "gui-x": 0
 #        "gui-y": 570
   monitor-server:
-    charm: cs:~tads2015dataart/trusty/monitor-server-5
+    charm: cs:~tads2015dataart/trusty/monitor-server-6
     num_units: 1
     expose: true
     constraints: "mem=512M"
