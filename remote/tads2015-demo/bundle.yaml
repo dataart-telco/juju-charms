@@ -3,7 +3,7 @@ services:
   mesos-master:
     charm: cs:~tads2015dataart/trusty/mesos-master-0
     num_units: 1
-    exposed: true
+    expose: true
     constraints: "mem=1G"
     annotations:
       gui-x: "1140"
