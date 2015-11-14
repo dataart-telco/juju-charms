@@ -42,13 +42,13 @@ elif args.choice=='remove-unit':
 elif args.choice=='scale-down':
     units = env.get_stat()['services'][args.charm]['units'].keys()
     count = len(units)
-    if count < 2 :
+    if count > 1 :
+        unit = units[0]
+        env.remove_units([unit])
+        print "remove :" + unit
+    else:
         print "No need to scale. have only " + count + " unit"
-        return
-    unit = units[count - 1]
-    env.remove_units([unit])
-    print "remove :" + unit
-    #Remove the second available unit in the service (always leave one)
+
 elif args.choice=='print-env':
     pprint.pprint(env.get_stat()['services'][args.charm])
 
