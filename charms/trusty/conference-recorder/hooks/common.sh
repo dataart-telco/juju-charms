@@ -55,6 +55,8 @@ PASSWORD=${PASSWORD}
 PROXY=${PROXY}
 NUMBER=${NUMBER}
 " > $CONFIG_PATH
+
+chown -R ubuntu:ubuntu $WORK_DIR
 }
 
 init_nginx(){
@@ -74,38 +76,28 @@ service nginx restart
 
 render_init(){
 
-    echo '
-description "conference-recorder"
-author "gdubina <gdubina@dataart.com>"
-start on runlevel [2345]
-stop on runlevel [!2345]
-respawn
-normal exit 0
+echo '#!/bin/bash
 
-limit nofile 20000 20000
+. '$CONFIG_PATH'
+'$WORK_DIR'/'$APP_NAME'.sh -u $USER -p $PASSWORD -h $PROXY -n $NUMBER -d '$WORK_DIR'/records
 
-script
+' > $WORK_DIR/start_recorder.sh
 
-  modprobe snd-dummy
+chmod +x $WORK_DIR/start_recorder.sh
 
-  . '$CONFIG_PATH'
-  sudo -u ubuntu '$WORK_DIR'/'$APP_NAME'.sh -u $USER -p $PASSWORD -h $PROXY -n $NUMBER -d '$WORK_DIR'/records
-
-end script
-' > /etc/init/${APP_NAME}.conf
+chown -R ubuntu:ubuntu $WORK_DIR
+cp $WORK_DIR/start_recorder.sh /home/ubuntu/start_recorder.sh
+chown ubuntu:ubuntu /home/ubuntu/start_recorder.sh
 
 }
 
 start_me(){
-  if [ -z "`status $APP_NAME | grep start`" ]; then
-    start $APP_NAME
-  fi
+    echo "start me"
+    modprobe snd-dummy
 }
 
 stop_me(){
-  if [ -n "`status $APP_NAME | grep start`" ]; then
-    stop $APP_NAME
-  fi
+    echo "stop me"
 }
 
 restart_me(){

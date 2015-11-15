@@ -1,5 +1,7 @@
 JUJU_ENV=$1
 
+export JUJU_REPOSITORY=$PWD/../charms/
+
 juju set-env -e $JUJU_ENV "default-series=trusty"
 
 echo 'conference-recorder:
@@ -9,7 +11,7 @@ echo 'conference-recorder:
   number: "5555"
 ' > /tmp/conference-recorder.yaml
 
-juju deploy -e $JUJU_ENV cs:~tads2015dataart/trusty/conference-recorder-2 conference-recorder --config /tmp/conference-recorder.yaml
+juju deploy -e $JUJU_ENV local:trusty/conference-recorder conference-recorder --config /tmp/conference-recorder.yaml
 juju add-relation -e $JUJU_ENV sms-feedback:recorder conference-recorder:api
 juju expose -e $JUJU_ENV conference-recorder
  
