@@ -40,7 +40,7 @@ URL=http://$HOST/test.xml
 echo "Run $ITERATES iterate(s) for $URL"
 
 
-ab -n 1000000 -c $ITERATES -r $URL
+ab -n 2000000 -c $ITERATES -r $URL
 #ab -n 1000000 -c $ITERATES -r $URL
 #-T application/x-www-form-urlencoded -p ab.data $URL
 
