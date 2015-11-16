@@ -37,10 +37,22 @@ if [ -z $PROXY ]; then
     exit 1
 fi
 
-filename=$records_folder/record.wav
-
 mkdir -p $records_folder
 
+#del repv
+rm $records_folder/last
+
+#create new
+now=$(date +%s)
+name=record_${now}.wav
+filename=$records_folder/$name
+
+echo "Target file $filename"
+echo -n $name > $records_folder/last
+touch $filename
+chmod 777 $filename
+
+#start sipphone
 linphonec --pipe -c /dev/null 2>&1 |
 while read -r line
 do
@@ -49,24 +61,16 @@ do
         *Ready )
             sleep 1
             echo ">>> initializing"
-            for command in "soundcard use files" "register sip:$USER@$PROXY sip:$PROXY $PASS"
+            for command in "soundcard use files" "record $filename"  "register sip:$USER@$PROXY sip:$PROXY $PASS"
             do
                 echo -n $command | nc -q 5 -U $socket
             done
             ;;
         *Registration\ on\ *\ successful* )
-                rm $records_folder/last
-                echo -n "chat $NUMBER test" | nc -q 5 -U $socket
+            echo -n "chat $NUMBER test" | nc -q 5 -U $socket
             ;;
         *Receiving\ new\ incoming* )
             echo "!!! New call"
-            now=$(date +%s)
-            name=record_${now}.wav
-            filename=$records_folder/$name
-            echo -n $name > $records_folder/last
-            touch $filename
-            chmod 777 $filename
-            echo -n "record $filename" | nc -q 5 -U $socket
 
             sleep 1
             echo -n answer | nc -q 5 -U $socket
@@ -93,3 +97,4 @@ do
             ;;
     esac
 done
+
