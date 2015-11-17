@@ -26,7 +26,7 @@ services:
       gui-x: "1710"
       gui-y: "190"
   conference-call:
-    charm: cs:~tads2015dataart/trusty/tads2015-conference-call-4mesos-3
+    charm: cs:~tads2015dataart/trusty/tads2015-conference-call-4mesos-4
     options:
       RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
       DID_DOMAIN: "80.250.109.132"
