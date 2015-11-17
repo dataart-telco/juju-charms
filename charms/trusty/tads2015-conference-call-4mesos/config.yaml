@@ -11,3 +11,7 @@ options:
     type: string
     description: "Restcomm phone number for service"
     default: "9999"
+  DID_DOMAIN:
+    type: string
+    description: "DID provider domain"
+    default: ""

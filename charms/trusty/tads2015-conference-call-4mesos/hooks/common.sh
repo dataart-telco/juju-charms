@@ -52,6 +52,7 @@ UNIT_NAME=${UNIT_NAME}
 RESTCOMM_USER=$RESTCOMM_USER
 RESTCOMM_PASSWORD=$RESTCOMM_PASSWORD
 PHONE_NUMBER=$PHONE_NUMBER
+DID_DOMAIN=${DID_DOMAIN}
 " > ${CONFIG_PATH}
 
   render_create
@@ -76,6 +77,7 @@ render_create(){
         { "key": "env", "value": "RESTCOMM_USER='$RESTCOMM_USER'" },
         { "key": "env", "value": "RESTCOMM_PASSWORD='$RESTCOMM_PASSWORD'" },
         { "key": "env", "value": "PHONE_NUMBER='$PHONE_NUMBER'" },
+        { "key": "env", "value": "DID_DOMAIN='$DID_DOMAIN'" },
         { "key": "env", "value": "COLLECTD_DOCKER_APP='$APP_NAME'" },
         { "key": "env", "value": "COLLECTD_DOCKER_TASK_ENV=MESOS_TASK_ID" }
       ],
