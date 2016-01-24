@@ -1,0 +1,15 @@
+
+---
+- name: get juju api host
+  shell: relation-get hostname
+  register: relation_host
+
+- set_fact:
+    JUJU_API_HOST_VAR: "{{ relation_host.stdout }}"
+  changed_when: true
+  notify: 
+    - dump config
+    - restart
+
+- name: render juju cli config with relation value
+  template: src=./templates/juju.yaml dest={{ JUJU_TOOL_CONFIG_PATH }}
