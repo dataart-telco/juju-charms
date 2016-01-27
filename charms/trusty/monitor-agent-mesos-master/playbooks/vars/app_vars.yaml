@@ -1,0 +1,5 @@
+
+---
+global:
+  SERVER_HOST:
+  JUJU_SERVICE_ID:

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+. hooks/common.sh 
+. $CONFIG_PATH
+
+SERVER_HOST=`relation-get hostname`:`relation-get port`/metrics
+
+render_config
+restart_me

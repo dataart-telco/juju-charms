@@ -1,0 +1,11 @@
+
+---
+- name: map config to var
+  set_fact:
+#reload config vars to our vars
+    global:
+      UPDATE_PERIOD: "{{ UPDATE_PERIOD }}"
+  changed_when: true
+  notify: 
+    - dump config
+    - restart

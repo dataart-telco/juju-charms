@@ -4,7 +4,7 @@ demo:
     mesos-master:
       charm: local:trusty/mesos-master
       expose: true
-      constraints: "mem=1G"
+      constraints: "mem=2G"
       annotations:
         "gui-x": "1140"
         "gui-y": "570"
@@ -12,7 +12,7 @@ demo:
       charm: local:trusty/mesos-slave
       expose: true
       num_units: 1
-      constraints: "mem=1G"
+      constraints: "mem=2G"
       annotations: 
         "gui-x": 1140
         "gui-y": 950
@@ -37,19 +37,19 @@ demo:
       annotations:
         "gui-x": 2280
         "gui-y": 760
-    telscale-restcomm:
-      charm: local:trusty/telscale-restcomm
-      expose: true
-      constraints: "mem=1536M"
-      annotations:
-        "gui-x": 2280
-        "gui-y": 0
-    haproxy:
-      charm: cs:trusty/haproxy-11
-      expose: true
-      annotations:
-        "gui-x": 2280
-        "gui-y": 380
+#    telscale-restcomm:
+#      charm: local:trusty/telscale-restcomm
+#      expose: true
+#      constraints: "mem=1536M"
+#      annotations:
+#        "gui-x": 2280
+#        "gui-y": 0
+#    haproxy:
+#      charm: cs:trusty/haproxy-11
+#      expose: true
+#      annotations:
+#        "gui-x": 2280
+#        "gui-y": 380
     juju-gui:
       charm: cs:trusty/juju-gui-39
       expose: true
@@ -64,14 +64,15 @@ demo:
         "gui-x": 380
         "gui-y": 570
       options:
-        CHECK_PERIOD: 1
-        SCALE_DOWN: 35
+        CHECK_PERIOD: 60
+        JUJU_SCALE_DOWN: 10
+        MESOS_SCALE_DOWN: 10
     monitor-db:
       charm: cs:~mbruzek/trusty/redis-master-0
       expose: true
       annotations:
         "gui-x": 380
-        "gui-y": 190             
+        "gui-y": 190
     monitor-agent-mesos:
       charm: local:trusty/monitor-agent-mesos
       annotations:
@@ -86,10 +87,10 @@ demo:
 # callc consumer
     - - calls-consumer:redis
       - redis-master:db
-    - - calls-consumer:restcomm
-      - telscale-restcomm:website
-    - - haproxy:reverseproxy
-      - calls-consumer:haproxy
+#    - - calls-consumer:restcomm
+#      - telscale-restcomm:website
+#    - - haproxy:reverseproxy
+#      - calls-consumer:haproxy
     - - calls-consumer
       - mesos-master
 # end 
@@ -97,19 +98,19 @@ demo:
     - - conference-call:redis
       - redis-master:db
     - - conference-call:restcomm
-      - telscale-restcomm:website
-    - - haproxy:reverseproxy
-      - conference-call:haproxy
-    - - conference-call
+#      - telscale-restcomm:website
+#    - - haproxy:reverseproxy
+#      - conference-call:haproxy
+#    - - conference-call
       - mesos-master
 # end
 # conference
     - - sms-feedback:redis
       - redis-master:db
-    - - sms-feedback:restcomm
-      - telscale-restcomm:website
-    - - haproxy:reverseproxy
-      - sms-feedback:haproxy
+#    - - sms-feedback:restcomm
+#      - telscale-restcomm:website
+#    - - haproxy:reverseproxy
+#      - sms-feedback:haproxy
     - - sms-feedback
       - mesos-master
 # end

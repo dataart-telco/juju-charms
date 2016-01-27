@@ -1,6 +1,1 @@
-#!/bin/bash
-
-source hooks/common.sh
-
-install
-
+hooks.py
