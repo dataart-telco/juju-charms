@@ -4,15 +4,15 @@
     WORK_DIR: "/var/lib/{{ APP_NAME }}"
     CONFIG_PATH: "{{ WORK_DIR }}/{{ APP_NAME }}.conf"
     APP_BIN: "{{ WORK_DIR }}/monitor-agent-docker"
-    APP_SCRIPT_CONFIG: vars/app_vars.yaml
+    SCRIPT_CONFIG: "vars/app_vars.yaml"
   vars_files:
-    - "{{ APP_SCRIPT_CONFIG }}"
+    - "{{ SCRIPT_CONFIG }}"
   handlers:
     - name: dump config
       template: src={{ item.src }} dest={{ item.dest }}
       with_items:
         - { src: './templates/app.conf', dest: "{{ CONFIG_PATH }}" }
-        - { src: './templates/app_vars.yaml', dest: "{{ APP_SCRIPT_CONFIG }}" }
+        - { src: './templates/app_vars.yaml', dest: "{{ SCRIPT_CONFIG }}" }
 
     - name: restart
       service: name={{ APP_NAME }} state=restarted

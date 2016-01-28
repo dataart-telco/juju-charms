@@ -9,8 +9,7 @@
   register: local_port
 
 - set_fact:
-    global:
-      SERVER_HOST: "{{ local_host.stdout }}:{{ local_port.stdout }}/mesos/apps"
+    SERVER_HOST_VAR: "{{ local_host.stdout }}:{{ local_port.stdout }}/mesos/apps"
   changed_when: true
   notify: 
     - dump config

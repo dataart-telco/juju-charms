@@ -18,7 +18,7 @@ hooks = charmhelpers.contrib.ansible.AnsibleHooks(
         'config-changed',
         'upgrade-charm',
         'api-server-relation-changed',
-        'redis-relation-relation-changed',
+        'redis-relation-changed',
         'mesos-master-relation-changed',
         'monitor-server-relation-changed',
     ])

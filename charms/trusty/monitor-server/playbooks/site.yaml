@@ -37,11 +37,11 @@
 
     - name: mesos master relation changed 
       include: mesos-master-changed.yaml
-      tags: mesos-master-changed
+      tags: mesos-master-relation-changed
 
     - name: monitor server relation changed
       include: monitor-server-changed.yaml
-      tags: monitor-server-changed
+      tags: monitor-server-relation-changed
 
     - name: start app
       service: name={{ APP_NAME }} state=started

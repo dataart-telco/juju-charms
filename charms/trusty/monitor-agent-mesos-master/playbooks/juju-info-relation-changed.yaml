@@ -5,8 +5,7 @@
   register: local_machine_host
 
 - set_fact:
-    global:
-      JUJU_SERVICE_ID: "{{ local_machine_host.stdout }}"
+    JUJU_SERVICE_ID_VAR: "{{ local_machine_host.stdout }}"
   changed_when: true
   notify: 
     - dump config
