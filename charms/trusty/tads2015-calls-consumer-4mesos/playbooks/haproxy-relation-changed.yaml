@@ -1,0 +1,13 @@
+
+---
+- name: get redis host
+  shell: relation-get public-address
+  register: local_host
+
+- set_fact:
+    EXTERNAL_IP_VAR: "{{ local_host.stdout }}"
+  changed_when: true
+  when: local_host.stdout != EXTERNAL_IP_VAR
+  notify: 
+    - dump config
+    - restart

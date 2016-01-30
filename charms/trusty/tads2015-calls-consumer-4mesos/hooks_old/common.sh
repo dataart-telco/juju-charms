@@ -175,7 +175,8 @@ restart_me(){
   api_delete
   api_create
   
-  start_me
+  api_instances 1
+  cron_add
 }
 
 run_update_haproxy(){
