@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -38,28 +37,14 @@ var pages map[string]HttpHandler
 var ipRedis string
 
 var handlers []MetricsHandler
+var statsDump StatsDump
 
 func handleGet(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	Trace.Println("\thandleGet")
 
-	h := handlers[0]
-	stats, metrics := h.avgStat()
-
-	jm1, _ := json.Marshal(metrics)
-	jm2, _ := json.Marshal(stats)
-
-	juju := fmt.Sprintf("{\"avg\": %s, \"data\": %s}", jm2, jm1)
-
-	h2 := handlers[1]
-	stats2, metrics2 := h2.avgStat()
-	jm21, _ := json.Marshal(metrics2)
-	jm22, _ := json.Marshal(stats2)
-
-	mesos := fmt.Sprintf("{\"avg\": %s, \"data\": %s}", jm22, jm21)
-
-	fmt.Fprintf(w, "{\"charm\": %s, \"mesos:\": %s}", juju, mesos)
+	io.WriteString(w, statsDump.getJsonString())
 }
 
 func initHandlers() {
@@ -90,6 +75,9 @@ func start(port int) {
 	}
 }
 
+func send2es() {
+}
+
 func main() {
 	host := flag.String("r", "127.0.0.1:6379", "Redis server")
 	t := flag.Int("t", 300, "Avg period in seconds")
@@ -105,6 +93,9 @@ func main() {
 
 	jujuUp := flag.Int("j-up", 70, "Scale up limit fir juju")
 	jujuDown := flag.Int("j-down", 30, "Scale down limit for juju")
+
+	esHost := flag.String("es-host", "", "ElasticSearch host")
+	esTiming := flag.Int("es-timing", 10, "ElasticSearch send data period")
 
 	flag.Parse()
 
@@ -127,7 +118,9 @@ func main() {
 		"| juju up limit =", *jujuUp,
 		"| juju down limit =", *jujuDown,
 		"| mesos up limit =", *mesosUp,
-		"| mesos down limit =", *mesosDown)
+		"| mesos down limit =", *mesosDown,
+		"| esHost =", *esHost,
+		"| esTiming =", *esTiming)
 
 	ipRedis = *host
 
@@ -136,11 +129,16 @@ func main() {
 	handlers[0] = &JujuCharmHandler{Period: period, CliDir: *cli, ScaleUp: *jujuUp, ScaleDown: *jujuDown, ScaleDelay: *jd}
 	handlers[1] = &MesosAppsHandler{Period: period, Host: *m, ScaleUp: *mesosUp, ScaleDown: *mesosDown, ScaleDelay: *md}
 
+	statsDump = StatsDump{handlers: handlers}
 	resetDb()
 
 	//timeout in seconds
 	for _, h := range handlers {
 		schedule(*t, h.checkState)
+	}
+	if *esHost != "" && *esTiming > 0 {
+		Info.Println("Schedule send data to elasticsearch")
+		schedule(*esTiming, send2es)
 	}
 
 	start(*port)

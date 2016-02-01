@@ -21,6 +21,7 @@ hooks = charmhelpers.contrib.ansible.AnsibleHooks(
         'redis-relation-changed',
         'mesos-master-relation-changed',
         'monitor-server-relation-changed',
+        'essearch-relation-changed'
     ])
 
 

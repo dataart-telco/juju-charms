@@ -38,4 +38,7 @@ options:
     type: int
     default: 10
     description: "Mesos scale down limit"
-
+  ESSEARCH_TIMING:
+    type: int
+    default: 10
+    description: "Send data to essearch period (in seconds)"

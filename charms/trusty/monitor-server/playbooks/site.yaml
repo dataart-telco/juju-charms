@@ -43,6 +43,10 @@
       include: monitor-server-changed.yaml
       tags: monitor-server-relation-changed
 
+    - name: essearch relation changed
+      include: essearch-relation-changed.yaml
+      tags: essearch-relation-changed
+
     - name: start app
       service: name={{ APP_NAME }} state=started
       tags: start

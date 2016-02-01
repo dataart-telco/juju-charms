@@ -1,3 +1,0 @@
-juju-api:
-  endpoint: "wss://"{{ JUJU_API_HOST }}"/ws"
-  admin-secret: {{ JUJU_API_PASSWORD }}

@@ -13,6 +13,7 @@
     JUJU_SCALE_DOWN_VAR: "{{ JUJU_SCALE_DOWN }}"
     MESOS_SCALE_UP_VAR: "{{ MESOS_SCALE_UP }}"
     MESOS_SCALE_DOWN_VAR: "{{ MESOS_SCALE_DOWN }}"
+    ESSEARCH_TIMING_VAR: "{{ ESSEARCH_TIMING }}"
   changed_when: true
   notify: 
     - dump config
