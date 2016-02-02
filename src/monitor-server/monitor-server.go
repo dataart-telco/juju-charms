@@ -75,9 +75,6 @@ func start(port int) {
 	}
 }
 
-func send2es() {
-}
-
 func main() {
 	host := flag.String("r", "127.0.0.1:6379", "Redis server")
 	t := flag.Int("t", 300, "Avg period in seconds")
@@ -129,7 +126,7 @@ func main() {
 	handlers[0] = &JujuCharmHandler{Period: period, CliDir: *cli, ScaleUp: *jujuUp, ScaleDown: *jujuDown, ScaleDelay: *jd}
 	handlers[1] = &MesosAppsHandler{Period: period, Host: *m, ScaleUp: *mesosUp, ScaleDown: *mesosDown, ScaleDelay: *md}
 
-	statsDump = StatsDump{handlers: handlers}
+	statsDump = StatsDump{Handlers: handlers}
 	resetDb()
 
 	//timeout in seconds
@@ -138,7 +135,9 @@ func main() {
 	}
 	if *esHost != "" && *esTiming > 0 {
 		Info.Println("Schedule send data to elasticsearch")
-		schedule(*esTiming, send2es)
+		esDump := &EsDump{Dumper: &statsDump, Host: *esHost}
+		esDump.createMapping()
+		schedule(*esTiming, esDump.sendData)
 	}
 
 	start(*port)

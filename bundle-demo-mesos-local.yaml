@@ -86,7 +86,10 @@ demo:
     elasticsearch:
       charm: cs:trusty/elasticsearch
       expose: true
-      constraints: "mem=1G"
+      constraints: "mem=1.5G"
+      options:
+        apt-repository: "deb [arch=amd64] http://packages.elastic.co/elasticsearch/2.x/debian stable main"
+        firewall_enabled: false
     kibana:
       charm: cs:trusty/kibana
       expose: true
