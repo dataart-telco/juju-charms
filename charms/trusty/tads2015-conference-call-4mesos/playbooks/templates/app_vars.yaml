@@ -1,0 +1,11 @@
+
+---
+EXTERNAL_IP_VAR: "{{ EXTERNAL_IP_VAR | default("") }}"
+REDIS_SERVICE_HOST_VAR: "{{ REDIS_SERVICE_HOST_VAR | default("") }}"
+REDIS_SERVICE_PORT_VAR: {{ REDIS_SERVICE_PORT_VAR|default(0) }}
+RESTCOMM_SERVICE_VAR: "{{ RESTCOMM_SERVICE_VAR | default("") }}"
+UNIT_NAME_VAR: "{{ UNIT_NAME_VAR | default("") }}"
+RESTCOMM_USER_VAR: "{{ RESTCOMM_USER_VAR | default("") }}"
+RESTCOMM_PASSWORD_VAR: "{{ RESTCOMM_PASSWORD_VAR | default("") }}"
+PHONE_NUMBER_VAR: "{{ PHONE_NUMBER_VAR | default("") }}"
+DID_DOMAIN_VAR: "{{ DID_DOMAIN_VAR | default("") }}"

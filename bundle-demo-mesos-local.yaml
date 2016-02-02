@@ -83,6 +83,13 @@ demo:
       annotations:
         "gui-x": 760
         "gui-y": 190
+    elasticsearch:
+      charm: cs:trusty/elasticsearch
+      expose: true
+      constraints: "mem=1G"
+    kibana:
+      charm: cs:trusty/kibana
+      expose: true
   relations:
 # callc consumer
     - - calls-consumer:redis
@@ -136,3 +143,5 @@ demo:
     - - monitor-server
       - mesos-master
 # end
+    - - elasticsearch
+      - kibana

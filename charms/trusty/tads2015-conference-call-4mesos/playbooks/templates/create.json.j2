@@ -1,0 +1,32 @@
+{
+  "id": "{{ APP_NAME}}",
+  "cpus": {{ CPU }},
+  "mem": {{ MEM }},
+  "instances": 0,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "network": "BRIDGE",
+      "image": "{{ DOCKER_IMAGE }}",
+      "parameters": [
+        { "key": "env", "value": "EXTERNAL_IP={{ EXTERNAL_IP_VAR }}" },
+        { "key": "env", "value": "REDIS_SERVICE_HOST={{ REDIS_SERVICE_HOST_VAR }}" },
+        { "key": "env", "value": "REDIS_SERVICE_PORT={{ REDIS_SERVICE_PORT_VAR }}" },
+        { "key": "env", "value": "RESTCOMM_SERVICE={{ RESTCOMM_SERVICE_VAR }}" },
+        { "key": "env", "value": "RESTCOMM_USER={{ RESTCOMM_USER_VAR }}" },
+        { "key": "env", "value": "RESTCOMM_PASSWORD={{ RESTCOMM_PASSWORD_VAR }}" },
+        { "key": "env", "value": "PHONE_NUMBER={{ PHONE_NUMBER_VAR }}" },
+        { "key": "env", "value": "DID_DOMAIN={{ DID_DOMAIN_VAR }}" },
+        { "key": "env", "value": "COLLECTD_DOCKER_APP={{ APP_NAME }}" },
+        { "key": "env", "value": "COLLECTD_DOCKER_TASK_ENV=MESOS_TASK_ID" }
+      ],
+      "portMappings": [
+        { "containerPort": {{ APP_PORT }}, "hostPort": 0, "servicePort": 0, "protocol": "tcp" }
+      ]
+    }
+  },
+  "labels": {
+        "collectd_docker_app": "{{ APP_NAME }}",
+        "collectd_docker_task": "{{ APP_NAME }}"
+  }
+}

@@ -1,0 +1,13 @@
+
+---
+- name: get redis host
+  shell: relation-get private-address
+  register: local_host
+
+- set_fact:
+    REDIS_SERVICE_HOST_VAR: "{{ local_host.stdout }}"
+  changed_when: true
+  when: local_host.stdout != REDIS_SERVICE_HOST_VAR
+  notify: 
+    - dump config
+    - restart

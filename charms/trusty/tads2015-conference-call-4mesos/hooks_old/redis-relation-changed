@@ -1,0 +1,17 @@
+#!/bin/bash
+
+source hooks/common.sh
+
+. ${CONFIG_PATH}
+
+#REDIS_SERVICE_HOST=`relation-get hostname`
+#REDIS_SERVICE_PORT=`relation-get port`
+REDIS_SERVICE_HOST_NEW=`relation-get private-address`
+REDIS_SERVICE_PORT=6379
+
+if [ $REDIS_SERVICE_HOST != $REDIS_SERVICE_HOST_NEW ]; then
+    REDIS_SERVICE_HOST=$REDIS_SERVICE_HOST_NEW
+    render_config
+    restart_me
+fi
+

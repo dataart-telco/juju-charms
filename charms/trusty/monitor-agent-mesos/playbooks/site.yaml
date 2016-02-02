@@ -1,7 +1,7 @@
 - hosts: all
   vars:
     APP_NAME: monitor-agent-docker
-    WORK_DIR: "/var/lib/{{ APP_NAME }}"
+    WORK_DIR: "/opt/{{ APP_NAME }}"
     CONFIG_PATH: "{{ WORK_DIR }}/{{ APP_NAME }}.conf"
     APP_BIN: "{{ WORK_DIR }}/monitor-agent-docker"
     SCRIPT_CONFIG: "vars/app_vars.yaml"

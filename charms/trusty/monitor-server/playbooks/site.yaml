@@ -1,7 +1,7 @@
 - hosts: all
   vars:
-    APP_NAME: simple-monitor-server
-    WORK_DIR: "/var/lib/{{ APP_NAME }}"
+    APP_NAME: monitor-server
+    WORK_DIR: "/opt/{{ APP_NAME }}"
     CONFIG_PATH: "{{ WORK_DIR }}/{{ APP_NAME }}.conf"
     APP_SCRIPT_CONFIG: vars/app_vars.yaml
     APP_BIN: "{{ WORK_DIR }}/monitor-server"

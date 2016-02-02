@@ -1,15 +1,1 @@
-#!/bin/bash
-# config-changed occurs everytime a new configuration value is updated (juju set)
-
-. hooks/common.sh
-
-. $CONFIG_PATH
-
-RESTCOMM_USER=`config-get RESTCOMM_USER`
-RESTCOMM_PASSWORD=`config-get RESTCOMM_PASSWORD`
-PHONE_NUMBER=`config-get PHONE_NUMBER`
-DID_DOMAIN=`config-get DID_DOMAIN`
-
-render_config
-
-restart_me
+hooks.py
