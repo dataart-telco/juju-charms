@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"bytes"
 	"net/http"
 	"io/ioutil"
+	"time"
 )
 
 type EsDump struct {
@@ -11,10 +13,18 @@ type EsDump struct {
 	Host string
 }
 
+type AvgData struct {
+	Source string
+	Timestamp int64
+	CpuLoad1Avg int
+	CpuLoad5Avg int
+	MemAvg int
+}
+
 func (self *EsDump) createMapping(){
 	url := "http://" + self.Host + "/monitor";
 
-	mapping := "{\"mappings\":{\"monitor\":{\"properties\":{\"@timestamp\":{\"type\":\"date\",\"format\":\"epoch_millis\"},\"charm\":{\"properties\":{\"avg\":{\"properties\":{\"mesos-slave\":{\"properties\":{\"Count\":{\"type\":\"long\"},\"CpuLoad1\":{\"type\":\"long\"},\"CpuLoad1Avg\":{\"type\":\"long\"},\"CpuLoad5\":{\"type\":\"long\"},\"CpuLoad5Avg\":{\"type\":\"long\"},\"MemAvg\":{\"type\":\"long\"},\"MemSum\":{\"type\":\"long\"}}}}},\"data\":{\"properties\":{\"AppId\":{\"type\":\"string\"},\"CpuLoad1\":{\"type\":\"long\"},\"CpuLoad5\":{\"type\":\"long\"},\"Date\":{\"type\":\"long\"},\"MachineId\":{\"type\":\"string\"},\"Mem\":{\"type\":\"long\"}}}}},\"mesos:\":{\"properties\":{\"avg\":{\"type\":\"object\"}}},\"timeFormatted\":{\"type\":\"string\"}}}}}"
+	mapping := "{\"mappings\":{\"monitor\":{\"properties\":{\"Timestamp\":{\"type\":\"date\",\"format\":\"epoch_millis\"},\"Source\":{\"type\":\"string\",\"index\":\"not_analyzed\"},\"CpuLoad1Avg\":{\"type\":\"long\"},\"CpuLoad5Avg\":{\"type\":\"long\"},\"MemAvg\":{\"type\":\"long\"}}}}}"
 
 	buf := bytes.NewBufferString(mapping)
 	resp, err := http.Post(url, "application/json", buf)
@@ -25,13 +35,33 @@ func (self *EsDump) createMapping(){
 }
 
 func (self *EsDump) sendData() {
-	stats := self.Dumper.getJsonString()
+
+	now := time.Now()
+	millis := now.UnixNano() / 1000000;
+
+	avgMesosCluster, _ := self.Dumper.Handlers[0].avgStat()
+	avgApps, _ := self.Dumper.Handlers[1].avgStat()
+
+	self.sendStats(avgMesosCluster, millis)
+	self.sendStats(avgApps, millis)
+
+}
+
+func (self *EsDump) sendStats(data map[string]*Stat, now int64) {
+	for k, v := range data {
+		avg := AvgData{Source: k, Timestamp: now, CpuLoad1Avg: v.CpuLoad1Avg, CpuLoad5Avg: v.CpuLoad5Avg}
+		self.sendData2Server(&avg)
+	}
+}
+
+func (self *EsDump) sendData2Server(data *AvgData) {
 
 	url := "http://" + self.Host + "/monitor/monitor";
 
-	Trace.Println("Try to send data to: ", url, " with ", stats)
+	jsonData, _ := json.Marshal(&data)
 
-	buf := bytes.NewBufferString(stats)
+	Trace.Println("Try to send data to: ", url, " with ", string(jsonData))
+	buf := bytes.NewBuffer(jsonData)
 	resp, err := http.Post(url, "application/json", buf)
 	if err != nil {
 		Warning.Println("can not send data", err)
