@@ -136,7 +136,7 @@ func main() {
 	if *esHost != "" && *esTiming > 0 {
 		Info.Println("Schedule send data to elasticsearch")
 		esDump := &EsDump{Dumper: &statsDump, Host: *esHost}
-		esDump.createMapping()
+		esDump.createMappingV1()
 		schedule(*esTiming, esDump.sendData)
 	}
 

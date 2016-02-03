@@ -21,10 +21,23 @@ type AvgData struct {
 	MemAvg int
 }
 
-func (self *EsDump) createMapping(){
+func (self *EsDump) createMappingV2(){
 	url := "http://" + self.Host + "/monitor";
 
 	mapping := "{\"mappings\":{\"monitor\":{\"properties\":{\"Timestamp\":{\"type\":\"date\",\"format\":\"epoch_millis\"},\"Source\":{\"type\":\"string\",\"index\":\"not_analyzed\"},\"CpuLoad1Avg\":{\"type\":\"long\"},\"CpuLoad5Avg\":{\"type\":\"long\"},\"MemAvg\":{\"type\":\"long\"}}}}}"
+
+	buf := bytes.NewBufferString(mapping)
+	resp, err := http.Post(url, "application/json", buf)
+	if err != nil {
+		return
+	}
+	resp.Body.Close()
+}
+
+func (self *EsDump) createMappingV1(){
+	url := "http://" + self.Host + "/monitor";
+
+	mapping := "{\"mappings\":{\"monitor\":{\"_timestamp\":{\"enabled\":true}, \"properties\":{\"Source\":{\"type\":\"string\",\"index\":\"not_analyzed\"},\"CpuLoad1Avg\":{\"type\":\"long\"},\"CpuLoad5Avg\":{\"type\":\"long\"},\"MemAvg\":{\"type\":\"long\"}}}}}"
 
 	buf := bytes.NewBufferString(mapping)
 	resp, err := http.Post(url, "application/json", buf)

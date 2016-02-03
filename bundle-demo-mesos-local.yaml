@@ -85,18 +85,21 @@ demo:
         "gui-x": 760
         "gui-y": 190
     elasticsearch:
-      charm: cs:trusty/elasticsearch
+      charm: cs:trusty/elasticsearch-13
       expose: true
       constraints: "mem=1.5G"
       options:
-        apt-repository: "deb [arch=amd64] http://packages.elastic.co/elasticsearch/2.x/debian stable main"
+#       apt-repository: "deb [arch=amd64] http://packages.elastic.co/elasticsearch/2.x/debian stable main"
         firewall_enabled: false
+#use kibana 4.1.4 for elasticsearch v.1.7, elasticsearch charm does not support v.2.+
     kibana:
-      charm: cs:trusty/kibana
+      charm: cs:trusty/kibana-10
       expose: true
       options:
-        kibana_source: "https://download.elastic.co/kibana/kibana/kibana-4.4.0-linux-x64.tar.gz"
-        kibana_source_checksum: "82fa06e11942e13bba518655c1d34752ca259bab"
+        kibana_source: "https://download.elastic.co/kibana/kibana/kibana-4.1.4-linux-x64.tar.gz"
+        kibana_source_checksum: "f88a7ad612b4e7129a951cf0e64429e63d847ed9"
+#        kibana_source: "https://download.elastic.co/kibana/kibana/kibana-4.4.0-linux-x64.tar.gz"
+#        kibana_source_checksum: "82fa06e11942e13bba518655c1d34752ca259bab"
   relations:
 # callc consumer
     - - calls-consumer:redis
