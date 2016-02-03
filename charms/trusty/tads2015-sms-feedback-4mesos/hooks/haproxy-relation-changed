@@ -1,20 +1,41 @@
-#!/bin/bash
+#!/usr/bin/env python
 
-source hooks/common.sh
+import os
+import sys
 
-. $CONFIG_PATH 
+sys.path.insert(0, os.path.join(os.environ['CHARM_DIR'], 'lib'))
 
-PRIVATE_ADDRESS=$(unit-get private-address)
-EXTERNAL_IP_NEW=`relation-get public-address`
+import charmhelpers.contrib.ansible
 
-if [ $EXTERNAL_IP != $EXTERNAL_IP_NEW ]; then
-    EXTERNAL_IP=$EXTERNAL_IP_NEW
-    render_config
-    restart_me
+# Create the hooks helper, passing a list of hooks which will be
+# handled by default by running all sections of the playbook
+# tagged with the hook name.
+hooks = charmhelpers.contrib.ansible.AnsibleHooks(
+    playbook_path='playbooks/site.yaml',
+    default_hooks=[
+        'start',
+        'stop',
+        'config-changed',
+        'upgrade-charm',
+        'redis-relation-changed',
+        'haproxy-relation-changed',
+        'restcomm-relation-changed',
+    ])
 
-    sleep 10
-fi
+@hooks.hook('mesos-relation-changed')
+def nothing():
+    pass
 
-SERVICES=`get_ha_service`
+@hooks.hook('install', 'upgrade-charm')
+def install():
+    """Install ansible.
 
-relation-set "$SERVICES"
+    The hook() helper decorating this install function ensures that after this
+    function finishes, any tasks in the playbook tagged with install or
+    upgrade-charm are executed.
+    """
+    charmhelpers.contrib.ansible.install_ansible_support(from_ppa=True)
+
+
+if __name__ == "__main__":
+    hooks.execute(sys.argv)

@@ -5,4 +5,6 @@ juju set-constraints "mem=512M"
 #juju set-constraints 'instance-type=m1.small'
 
 juju deploy local:trusty/tads2015-drop-conference-4mesos drop-conference
-
+juju add-relation drop-conference:redis redis-master:db
+juju add-relation drop-conference:restcomm telscale-restcomm:website
+juju add-relation drop-conference mesos-master

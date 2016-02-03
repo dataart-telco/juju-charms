@@ -1,6 +1,6 @@
 - hosts: all
   vars:
-    APP_NAME: tads2015-conference-call
+    APP_NAME: conference-call
     APP_PORT: 30791
     WORK_DIR: "/opt/{{ APP_NAME }}"
     DOCKER_IMAGE: "tads2015da/conference-call:0.0.11"

@@ -1,6 +1,6 @@
 - hosts: all
   vars:
-    APP_NAME: tads2015-calls-consumer
+    APP_NAME: calls-consumer
     APP_PORT: 30790
     WORK_DIR: "/var/lib/{{ APP_NAME }}"
     DOCKER_IMAGE: "tads2015da/calls-consumer:0.0.11"

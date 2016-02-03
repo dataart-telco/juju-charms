@@ -10,6 +10,3 @@
   notify: 
     - dump config
     - restart
-
-- name: render juju cli config with relation value
-  template: src=./templates/juju.yaml dest={{ JUJU_TOOL_CONFIG_PATH }}

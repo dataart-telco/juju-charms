@@ -1,17 +1,41 @@
-#!/bin/bash
+#!/usr/bin/env python
 
-source hooks/common.sh
+import os
+import sys
 
-. ${CONFIG_PATH}
+sys.path.insert(0, os.path.join(os.environ['CHARM_DIR'], 'lib'))
 
-#REDIS_SERVICE_HOST=`relation-get hostname`
-#REDIS_SERVICE_PORT=`relation-get port`
-REDIS_SERVICE_HOST_NEW=`relation-get private-address`
-REDIS_SERVICE_PORT=6379
+import charmhelpers.contrib.ansible
 
-if [ $REDIS_SERVICE_HOST != $REDIS_SERVICE_HOST_NEW ]; then
-    REDIS_SERVICE_HOST=$REDIS_SERVICE_HOST_NEW
-    render_config
-    restart_me
-fi
+# Create the hooks helper, passing a list of hooks which will be
+# handled by default by running all sections of the playbook
+# tagged with the hook name.
+hooks = charmhelpers.contrib.ansible.AnsibleHooks(
+    playbook_path='playbooks/site.yaml',
+    default_hooks=[
+        'start',
+        'stop',
+        'config-changed',
+        'upgrade-charm',
+        'redis-relation-changed',
+        'haproxy-relation-changed',
+        'restcomm-relation-changed',
+    ])
 
+@hooks.hook('mesos-relation-changed')
+def nothing():
+    pass
+
+@hooks.hook('install', 'upgrade-charm')
+def install():
+    """Install ansible.
+
+    The hook() helper decorating this install function ensures that after this
+    function finishes, any tasks in the playbook tagged with install or
+    upgrade-charm are executed.
+    """
+    charmhelpers.contrib.ansible.install_ansible_support(from_ppa=True)
+
+
+if __name__ == "__main__":
+    hooks.execute(sys.argv)
