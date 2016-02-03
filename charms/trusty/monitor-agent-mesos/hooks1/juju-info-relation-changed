@@ -1,9 +1,0 @@
-#!/bin/bash
-
-. hooks/common.sh
-. $CONFIG_PATH
-
-JUJU_SERVICE_ID=`echo $JUJU_REMOTE_UNIT | sed 's/\/.*//g'`
-
-render_config
-restart_me
