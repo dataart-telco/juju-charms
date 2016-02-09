@@ -1,0 +1,21 @@
+name: restcomm-4mesos
+summary: Restcomm 
+maintainer: gdubina <gdubina@dataart.com>
+description: |
+  Restcomm
+tags:
+  - misc
+  - sip
+  - voip
+subordinate: true
+provides:
+  haproxy:
+    interface: http
+requires:
+  mysql:
+    interface: mysql
+  restcomm-loadbalancer:
+    interface: sip-balancer
+  mesos:
+    interface: juju-info
+    scope: container

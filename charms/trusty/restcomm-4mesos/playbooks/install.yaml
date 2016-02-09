@@ -1,0 +1,15 @@
+
+---
+- name: create work dir
+  file: path={{ WORK_DIR }} state=directory
+
+- name: init charm state
+  set_fact:
+    STATIC_ADDRESS_VAR: "{{ unit_public_address }}"
+    UNIT_NAME_VAR: "{{ local_unit }}"
+  changed_when: true
+  notify: 
+    - dump config
+
+#- name: render haproxy_util.sh to actions
+#  template: src="templates/haproxy_util.sh.j2" dest="../actions/haproxy_util.sh"  mode="761"
