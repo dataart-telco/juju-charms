@@ -9,12 +9,12 @@ tags:
   - voip
 subordinate: true
 provides:
-  haproxy:
+  website:
     interface: http
 requires:
   mysql:
     interface: mysql
-  restcomm-loadbalancer:
+  loadbalancer:
     interface: sip-balancer
   mesos:
     interface: juju-info

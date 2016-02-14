@@ -1,0 +1,12 @@
+
+---
+- name: get juju api host
+  shell: echo $JUJU_REMOTE_UNIT | sed 's/\/.*//g'
+  register: local_machine_host
+
+- set_fact:
+    JUJU_SERVICE_ID_VAR: "{{ local_machine_host.stdout }}"
+  changed_when: true
+  notify: 
+    - dump config
+    - restart

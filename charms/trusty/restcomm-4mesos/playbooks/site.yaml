@@ -2,9 +2,10 @@
   vars:
     APP_NAME: restcomm
     WORK_DIR: "/var/lib/{{ APP_NAME }}"
-    DOCKER_IMAGE: "hamsterksu/restcomm-lb"
+    DOCKER_IMAGE: "hamsterksu/restcomm"
+    RESTCOMM_PORT_VAR: 8090
     CPU: 1
-    MEM: 1536
+    MEM: 1152
     APP_MANAGER_API: "http://127.0.0.1:8080/v2/apps"
 #for script only
     APP_SCRIPT_CONFIG: vars/app_vars.yaml
@@ -23,16 +24,16 @@
       tags: config-changed
 
     - name: restcomm balancer relation changed
-      include: restcomm-balancer-relation-changed.yaml
-      tags: restcomm-balancer-relation-changed
+      include: loadbalancer-relation-changed.yaml
+      tags: loadbalancer-relation-changed
 
     - name: mysql relation changed
       include: mysql-relation-changed.yaml
       tags: mysql-relation-changed
 
-    - name: haproxy relation changed
-      include: haproxy-relation-changed.yaml
-      tags: haproxy-relation-changed
+    - name: website relation changed
+      include: website-relation-changed.yaml
+      tags: website-relation-changed
 
     - name: start app
       include: start.yaml

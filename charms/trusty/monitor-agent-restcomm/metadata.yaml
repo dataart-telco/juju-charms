@@ -1,0 +1,15 @@
+name: monitor-agent-restcomm
+summary: collect restcomm data for monitor system
+maintainer: gdubina <gdubina@dataart.com>
+description: |
+  collect restcomm data for monitor system
+tags:
+  - misc
+subordinate: true
+requires:
+  juju-info:
+    interface: juju-info
+    scope: container
+  monitor-server:
+    interface: monitor-server
+

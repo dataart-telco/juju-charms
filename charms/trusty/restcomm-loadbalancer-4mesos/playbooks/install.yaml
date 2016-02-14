@@ -1,0 +1,11 @@
+
+---
+- name: create work dir
+  file: path={{ WORK_DIR }} state=directory
+
+- name: init charm state
+  set_fact:
+    UNIT_NAME_VAR: "{{ local_unit }}"
+  changed_when: true
+  notify: 
+    - dump config

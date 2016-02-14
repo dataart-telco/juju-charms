@@ -1,0 +1,41 @@
+#!/bin/bash
+
+get_ha_service(){
+    SERVICES='services=['
+    SERVICES+="{'service_name': '{{ APP_NAME }}_{{ APP_PORT }}',"
+    SERVICES+=" 'service_host': '0.0.0.0',"
+    SERVICES+=" 'service_port': '{{ APP_PORT }}',"
+    SERVICES+=" 'service_options': ['mode http', 'balance roundrobin', 'option forwardfor'"
+    SERVICES+="],"
+    SERVICES+=" 'servers': ["
+
+    tasks=`curl -sSfLk -m 10 -H 'Accept: text/plain' {{ APP_MANAGER_API }}/{{ APP_NAME }}/tasks?force=true`
+
+    while read -r txt
+    do
+        set -- $txt
+        if [ $# -lt 2 ]; then
+            shift $#
+            continue
+        fi
+        shift 2
+
+        while [[ $# -ne 0 ]]
+        do
+            server=$1
+            server_name=`echo $server | sed 's/:.*//g'`
+            server_port=`echo $server | sed 's/.*://g'`
+
+            SERVICES+="['{{ APP_NAME }}_$#', '$server_name', '$server_port', 'check'],"
+
+            shift
+        done
+    done <<< $tasks
+
+    SERVICES+="]}"
+    SERVICES+="]"
+
+    echo $SERVICES
+}
+
+echo `get_ha_service`

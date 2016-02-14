@@ -1,0 +1,13 @@
+
+---
+- name: map config to var
+  set_fact:
+#reload config vars to our vars
+    LOG_LEVEL_VAR: "{{ log_level }}"
+    CONFIG_URL_VAR: "{{ config_url }}"
+    EXTERNAL_PORT_VAR: "{{ external_port }}"
+    INTERNAL_PORT_VAR: "{{ internal_port }}"
+  changed_when: true
+  notify: 
+    - dump config
+    - restart

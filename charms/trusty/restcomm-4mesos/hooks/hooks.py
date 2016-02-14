@@ -18,8 +18,8 @@ hooks = charmhelpers.contrib.ansible.AnsibleHooks(
         'config-changed',
         'upgrade-charm',
         'mysql-relation-changed',
-        'haproxy-relation-changed',
-        'restcomm-loadbalancer-relation-changed',
+        'loadbalancer-relation-changed',
+        'website-relation-changed'
     ])
 
 @hooks.hook('mesos-relation-changed')
