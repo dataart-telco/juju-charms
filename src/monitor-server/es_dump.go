@@ -13,12 +13,18 @@ type EsDump struct {
 	Host string
 }
 
-type AvgData struct {
+type HardwareAvgData struct {
 	Source string
 	Timestamp int64
 	CpuLoad1Avg int
 	CpuLoad5Avg int
 	MemAvg int
+}
+
+type RestcommAvgData struct {
+	Source string
+	Timestamp int64
+	LiveCallsAvg int
 }
 
 func (self *EsDump) createMappingV2(){
@@ -52,22 +58,30 @@ func (self *EsDump) sendData() {
 	now := time.Now()
 	millis := now.UnixNano() / 1000000;
 
-	avgMesosCluster, _ := self.Dumper.Handlers[0].avgStat()
-	avgApps, _ := self.Dumper.Handlers[1].avgStat()
-
-	self.sendStats(avgMesosCluster, millis)
-	self.sendStats(avgApps, millis)
-
-}
-
-func (self *EsDump) sendStats(data map[string]*Stat, now int64) {
-	for k, v := range data {
-		avg := AvgData{Source: k, Timestamp: now, CpuLoad1Avg: v.CpuLoad1Avg, CpuLoad5Avg: v.CpuLoad5Avg}
-		self.sendData2Server(&avg)
+	for _, h := range self.Dumper.Handlers{
+		data, _ := h.avgStat()
+		self.sendStats(data, millis)		
 	}
 }
 
-func (self *EsDump) sendData2Server(data *AvgData) {
+func (self *EsDump) sendStats(data map[string]interface{}, now int64) {
+	for k, v := range data {
+		self.sendData2Server(self.convert(k, v, now))
+	}
+}
+
+func (self *EsDump) convert(source string, data interface{}, now int64) interface{} {
+	switch v := data.(type) {
+		case *Stat:
+			return HardwareAvgData{Source: source, Timestamp: now, CpuLoad1Avg: v.CpuLoad1Avg, CpuLoad5Avg: v.CpuLoad5Avg}
+		case *RestcommAvgMetrics:
+			return RestcommAvgData{Source: source, Timestamp: now, LiveCallsAvg: v.LiveCallsAvg}
+		default:
+			return v
+	}
+}
+
+func (self *EsDump) sendData2Server(data interface{}) {
 
 	url := "http://" + self.Host + "/monitor/monitor";
 

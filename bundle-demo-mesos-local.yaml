@@ -47,13 +47,13 @@ demo:
       charm: local:trusty/restcomm-4mesos
       expose: true
       annotations:
-        "gui-x": 1520
-        "gui-y": 0
+        "gui-x": 1140
+        "gui-y": 190
     sip-loadbalancer:
       charm: local:trusty/restcomm-loadbalancer-4mesos
       expose: true
       annotations:
-        "gui-x": 1140
+        "gui-x": 1520
         "gui-y": 190
     juju-gui:
       charm: cs:trusty/juju-gui-39
@@ -123,7 +123,7 @@ demo:
     - - calls-consumer:redis
       - redis-master:db
     - - calls-consumer:restcomm
-      - restcomm:website
+      - sip-loadbalancer:sip
     - - haproxy:reverseproxy
       - calls-consumer:haproxy
     - - calls-consumer
@@ -133,7 +133,7 @@ demo:
     - - conference-call:redis
       - redis-master:db
     - - conference-call:restcomm
-      - restcomm:website
+      - sip-loadbalancer:sip
     - - haproxy:reverseproxy
       - conference-call:haproxy
     - - conference-call
@@ -143,7 +143,7 @@ demo:
     - - sms-feedback:redis
       - redis-master:db
     - - sms-feedback:restcomm
-      - restcomm:website
+      - sip-loadbalancer:sip
     - - haproxy:reverseproxy
       - sms-feedback:haproxy
     - - sms-feedback

@@ -3,9 +3,14 @@
 - name: create work dir
   file: path={{ WORK_DIR }} state=directory
 
+- name: get hostname
+  shell: hostname
+  register: local_host
+
 - name: init charm state
   set_fact:
     UNIT_NAME_VAR: "{{ local_unit }}"
+    HOSTNAME_VAR: "{{ local_host.stdout }}"
   changed_when: true
   notify: 
     - dump config

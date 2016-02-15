@@ -29,7 +29,7 @@ type HttpHandler func(http.ResponseWriter, *http.Request)
 type MetricsHandler interface {
 	handleMetrics(w http.ResponseWriter, r *http.Request)
 	checkState()
-	avgStat() (map[string]*Stat, []interface{})
+	avgStat() (map[string]interface{}, []interface{})
 }
 
 var pages map[string]HttpHandler
@@ -52,6 +52,7 @@ func initHandlers() {
 	pages["/"] = handleGet
 	pages["/metrics"] = handlers[0].handleMetrics
 	pages["/mesos/apps"] = handlers[1].handleMetrics
+	pages["/restcomm"] = handlers[2].handleMetrics
 }
 
 func httpHandlerPlay(w http.ResponseWriter, r *http.Request) {
@@ -121,10 +122,11 @@ func main() {
 
 	ipRedis = *host
 
-	handlers = make([]MetricsHandler, 2)
+	handlers = make([]MetricsHandler, 3)
 	period := time.Duration(*t) * time.Second
 	handlers[0] = &JujuCharmHandler{Period: period, CliDir: *cli, ScaleUp: *jujuUp, ScaleDown: *jujuDown, ScaleDelay: *jd}
-	handlers[1] = &MesosAppsHandler{Period: period, Host: *m, ScaleUp: *mesosUp, ScaleDown: *mesosDown, ScaleDelay: *md}
+	handlers[1] = NewMesosAppsHandler(*mesosUp, *mesosDown, period, *md, *m)
+	handlers[2] = NewRestcommAppHandler(*mesosUp, *mesosDown, period, *md, *m)
 
 	statsDump = StatsDump{Handlers: handlers}
 	resetDb()

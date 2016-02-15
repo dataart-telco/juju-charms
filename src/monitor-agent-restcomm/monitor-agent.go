@@ -13,6 +13,7 @@ import (
 	"syscall"
 	"time"
 	"fmt"
+	"errors"
 )
 
 type MesosTask struct {
@@ -62,6 +63,7 @@ func sendData(monitorHost string, appId string, taskId string, data *RestcommRes
 
 	resp, err := http.PostForm("http://" + monitorHost,
 		url.Values{"date": {strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)},
+			"maxLiveCalls":  {strconv.Itoa(restcommMaxCalls)},
 			"liveCalls":  {strconv.Itoa(data.Metrics.LiveCalls)},
 			"liveOutgoingCalls":  {strconv.Itoa(data.Metrics.LiveOutgoingCalls)},
 			"liveIncomingCalls":  {strconv.Itoa(data.Metrics.LiveIncomingCalls)},
@@ -86,6 +88,11 @@ func collectMetrics(marathonHost string, appId string, monitorHost string) {
 		return
 	}
 	defer resp.Body.Close()
+	
+	if(resp.StatusCode != 200){
+		Trace.Println("Response status is not OK. statusCode =", resp.StatusCode)
+	}
+
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		Error.Println("Read body error:", err)
@@ -101,7 +108,7 @@ func collectMetrics(marathonHost string, appId string, monitorHost string) {
 	}
 
 	for _, e := range respData.Tasks {
-		data, err := getRestCommCallStat(e.Host)
+		data, err := getRestCommCallStat("192.168.122.59")//e.Host)
 		if(err != nil){
 			Error.Println("Get restcomm metrics error:", err)
 			continue
@@ -123,6 +130,11 @@ func getRestCommCallStat(host string) (*RestcommResponse, error){
 	}
 
 	defer resp.Body.Close()
+	
+	if(resp.StatusCode != 200){
+		return nil, errors.New(fmt.Sprintf("Response status is not OK. statusCode = %d", resp.StatusCode))
+	}
+
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
@@ -139,6 +151,7 @@ func getRestCommCallStat(host string) (*RestcommResponse, error){
 var restcommUser string
 var restcommPswd string
 var restcommPort int
+var restcommMaxCalls int
 
 func main() {
 	restcommPort = 8090
@@ -152,6 +165,7 @@ func main() {
 	rPort := flag.Int("rPort", 8090, "Restcomm Port")
 	rUser := flag.String("rUser", "ACae6e420f425248d6a26948c17a9e2acf", "Restcomm user")
 	rPswd := flag.String("rPswd", "42d8aa7cde9c78c4757862d84620c335", "Restcomm password")
+	maxCalls := flag.Int("max", 50, "Max calls")
 
 	l := flag.String("l", "INFO", "Log level: TRACE, INFO")
 
@@ -160,6 +174,7 @@ func main() {
 	restcommPort = *rPort
 	restcommPswd = *rPswd
 	restcommUser = *rUser
+	restcommMaxCalls = *maxCalls
 
 	var traceHandle io.Writer
 	if *l == "TRACE" {

@@ -3,3 +3,7 @@ options:
     type: int
     default: 5
     description: "Update period in seconds"
+  MAX_CALLS:
+    type: int
+    default: 25
+    description: "Max live calls"

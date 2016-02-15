@@ -55,7 +55,8 @@ func (h *JujuCharmHandler) checkState() {
 
 	stats, _ := h.avgStat()
 
-	for k, v := range stats {
+	for k, e := range stats {
+		v := e.(*Stat)
 		cpuLoad := v.CpuLoad1Avg
 		if h.Period.Minutes() > 1 {
 			cpuLoad = v.CpuLoad5Avg
@@ -95,9 +96,9 @@ func (h *JujuCharmHandler) scaleJuju(action string, service string) {
 	setBoolKey(delayKey, h.ScaleDelay)
 }
 
-func (h *JujuCharmHandler) avgStat() (map[string]*Stat, []interface{}) {
+func (h *JujuCharmHandler) avgStat() (map[string]interface{}, []interface{}) {
 
-	stats := make(map[string]*Stat)
+	stats := make(map[string]interface{})
 
 	db := NewDbClient(ipRedis)
 
@@ -116,8 +117,8 @@ func (h *JujuCharmHandler) avgStat() (map[string]*Stat, []interface{}) {
 		if _, ok := stats[m.AppId]; !ok {
 			stats[m.AppId] = &Stat{}
 		}
-		var stat *Stat
-		stat = stats[m.AppId]
+		//var stat *Stat
+		stat := stats[m.AppId].(*Stat)
 		stat.CpuLoad1 += m.CpuLoad1
 		stat.CpuLoad5 += m.CpuLoad5
 		stat.MemSum += m.Mem
