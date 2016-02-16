@@ -3,6 +3,13 @@
 - name: install python-jujuclient
   apt: name=python-jujuclient
 
+- name: install redis
+  apt: name=redis-server
+
+- name: init vars
+  set_fact:
+    REDIS_HOST_VAR: "127.0.0.1:6379"
+
 - name: create work dir
   file: path={{ WORK_DIR }} state=directory
 

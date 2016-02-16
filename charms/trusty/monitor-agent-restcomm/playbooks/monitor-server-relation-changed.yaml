@@ -1,7 +1,7 @@
 
 ---
 - name: get redis host
-  shell: relation-get hostname
+  shell: relation-get private-address
   register: local_host
 
 - name: get redis port

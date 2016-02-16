@@ -20,3 +20,5 @@ JUJU_PASS=$(grep password ~/.juju/environments/$JUJU_CUR_ENV.jenv | sed 's/.*: /
 
 echo 'juju admin password: '$JUJU_PASS
 juju set -e $JUJU_CUR_ENV monitor-server JUJU_API_PASSWORD=$JUJU_PASS 
+
+juju ssh juju-gui/0 ifconfig

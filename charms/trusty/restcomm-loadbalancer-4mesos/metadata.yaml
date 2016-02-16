@@ -11,8 +11,6 @@ subordinate: true
 provides:
   loadbalancer:
     interface: sip-balancer
-  sip:
-    interface: http
 requires:
   mesos:
     interface: juju-info

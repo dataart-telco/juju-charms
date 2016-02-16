@@ -13,8 +13,8 @@ echo 'juju current env: '$JUJU_CUR_ENV
 juju set-env -e $JUJU_CUR_ENV "default-series=trusty"
 juju set-constraints "mem=512M"
 
-juju deploy --constraints="mem=3G" local:trusty/mesos-master
-juju deploy --constraints="mem=3G" local:trusty/mesos-slave
+juju deploy --constraints="mem=3G cpu-cores=2" local:trusty/mesos-master
+juju deploy --constraints="mem=3G cpu-cores=2" local:trusty/mesos-slave
 
 
 juju add-relation mesos-master mesos-slave

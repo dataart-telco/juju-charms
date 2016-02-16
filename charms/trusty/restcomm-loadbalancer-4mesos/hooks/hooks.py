@@ -17,8 +17,7 @@ hooks = charmhelpers.contrib.ansible.AnsibleHooks(
         'stop',
         'config-changed',
         'upgrade-charm',
-        'loadbalancer-relation-changed',
-        'sip-relation-changed'
+        'loadbalancer-relation-changed'
     ])
 
 @hooks.hook('mesos-relation-changed')
