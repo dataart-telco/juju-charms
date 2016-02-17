@@ -30,7 +30,7 @@ type RestcommAvgData struct {
 func (self *EsDump) createMappingV2(){
 	url := "http://" + self.Host + "/monitor";
 
-	mapping := "{\"mappings\":{\"monitor\":{\"properties\":{\"Timestamp\":{\"type\":\"date\",\"format\":\"epoch_millis\"},\"Source\":{\"type\":\"string\",\"index\":\"not_analyzed\"},\"CpuLoad1Avg\":{\"type\":\"long\"},\"CpuLoad5Avg\":{\"type\":\"long\"},\"MemAvg\":{\"type\":\"long\"}}}}}"
+	mapping := "{\"mappings\":{\"monitor\":{\"properties\":{\"Timestamp\":{\"type\":\"date\",\"format\":\"epoch_millis\"},\"Source\":{\"type\":\"string\",\"index\":\"not_analyzed\"},\"CpuLoad1Avg\":{\"type\":\"int\"},\"CpuLoad5Avg\":{\"type\":\"int\"},\"MemAvg\":{\"type\":\"int\"}}}}}"
 
 	buf := bytes.NewBufferString(mapping)
 	resp, err := http.Post(url, "application/json", buf)
@@ -40,10 +40,16 @@ func (self *EsDump) createMappingV2(){
 	resp.Body.Close()
 }
 
-func (self *EsDump) createMappingV1(){
-	url := "http://" + self.Host + "/monitor";
+func (self *EsDump) createMapping() {
+	mappingHardware := "{\"mappings\":{\"hardware\":{\"_timestamp\":{\"enabled\":true}, \"properties\":{\"Source\":{\"type\":\"string\",\"index\":\"not_analyzed\"},\"CpuLoad1Avg\":{\"type\":\"int\"},\"CpuLoad5Avg\":{\"type\":\"int\"},\"MemAvg\":{\"type\":\"int\"}}}}}"
+	self.createMappingV1(mappingHardware)
 
-	mapping := "{\"mappings\":{\"monitor\":{\"_timestamp\":{\"enabled\":true}, \"properties\":{\"Source\":{\"type\":\"string\",\"index\":\"not_analyzed\"},\"CpuLoad1Avg\":{\"type\":\"long\"},\"CpuLoad5Avg\":{\"type\":\"long\"},\"MemAvg\":{\"type\":\"long\"}}}}}"
+	mappingRestcomm := "{\"mappings\":{\"restcomm\":{\"_timestamp\":{\"enabled\":true}, \"properties\":{\"Source\":{\"type\":\"string\",\"index\":\"not_analyzed\"},\"LiveCallsAvg\":{\"type\":\"int\"}}}}}"
+	self.createMappingV1(mappingRestcomm)
+}
+
+func (self *EsDump) createMappingV1(mapping string){
+	url := "http://" + self.Host + "/monitor";
 
 	buf := bytes.NewBufferString(mapping)
 	resp, err := http.Post(url, "application/json", buf)
@@ -66,24 +72,25 @@ func (self *EsDump) sendData() {
 
 func (self *EsDump) sendStats(data map[string]interface{}, now int64) {
 	for k, v := range data {
-		self.sendData2Server(self.convert(k, v, now))
+		mapping, data := self.convert(k, v, now)
+		self.sendData2Server(mapping, data)
 	}
 }
 
-func (self *EsDump) convert(source string, data interface{}, now int64) interface{} {
+func (self *EsDump) convert(source string, data interface{}, now int64) (string, interface{}) {
 	switch v := data.(type) {
 		case *Stat:
-			return HardwareAvgData{Source: source, Timestamp: now, CpuLoad1Avg: v.CpuLoad1Avg, CpuLoad5Avg: v.CpuLoad5Avg}
+			return "hardware", HardwareAvgData{Source: source, Timestamp: now, CpuLoad1Avg: v.CpuLoad1Avg, CpuLoad5Avg: v.CpuLoad5Avg}
 		case *RestcommAvgMetrics:
-			return RestcommAvgData{Source: source, Timestamp: now, LiveCallsAvg: v.LiveCallsAvg}
+			return "restcomm", RestcommAvgData{Source: source, Timestamp: now, LiveCallsAvg: v.LiveCallsAvg}
 		default:
-			return v
+			return "common", v
 	}
 }
 
-func (self *EsDump) sendData2Server(data interface{}) {
+func (self *EsDump) sendData2Server(mapping string, data interface{}) {
 
-	url := "http://" + self.Host + "/monitor/monitor";
+	url := "http://" + self.Host + "/monitor/" + mapping;
 
 	jsonData, _ := json.Marshal(&data)
 
