@@ -53,12 +53,11 @@ func (c MonitorServerClient) sendData(appId string, taskId string, cpuLoad int, 
 			"appId":  {appId},
 			"taskId": {taskId}})
 
-	resp.Close = true
-
 	if err != nil {
 		Error.Println("Error: ", err)
 		return
 	}
+	resp.Close = true
 	Trace.Println("Send resp code:", resp.StatusCode)
 }
 

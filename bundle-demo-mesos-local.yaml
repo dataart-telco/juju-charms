@@ -55,8 +55,11 @@ demo:
       annotations:
         "gui-x": 1140
         "gui-y": 190
+    mysql:
+      charm: cs:trusty/mysql
+      expose: true
     juju-gui:
-      charm: cs:trusty/juju-gui-39
+      charm: cs:trusty/juju-gui
       expose: true
       annotations:
         "gui-x": 0
@@ -112,6 +115,8 @@ demo:
       - mesos-master
     - - restcomm
       - sip-loadbalancer
+    - - restcomm:mysql
+      - mysql:db
 # end
 # callc consumer
     - - calls-consumer:redis
