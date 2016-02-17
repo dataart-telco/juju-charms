@@ -2,7 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"flag"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -12,12 +14,10 @@ import (
 	"strconv"
 	"syscall"
 	"time"
-	"fmt"
-	"errors"
 )
 
 type MesosTask struct {
-	Id string `json:"id"`
+	Id   string `json:"id"`
 	Host string `json:"host"`
 }
 
@@ -25,19 +25,18 @@ type MesosResponse struct {
 	Tasks []MesosTask `json:"tasks"`
 }
 
-
 type RestcommMetrics struct {
-	LiveCalls int
-	LiveOutgoingCalls int
-	LiveIncomingCalls int
+	LiveCalls             int
+	LiveOutgoingCalls     int
+	LiveIncomingCalls     int
 	TotalCallsSinceUptime int
-	CompletedCalls int
-	FailedCalls int
+	CompletedCalls        int
+	FailedCalls           int
 }
 
 type RestcommResponse struct {
 	InstanceId string
-	Metrics RestcommMetrics
+	Metrics    RestcommMetrics
 }
 
 func WaitCtrlC() {
@@ -61,17 +60,17 @@ func schedule(step int, what func()) {
 
 func sendData(monitorHost string, appId string, taskId string, data *RestcommResponse) {
 
-	resp, err := http.PostForm("http://" + monitorHost,
+	resp, err := http.PostForm("http://"+monitorHost,
 		url.Values{"date": {strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)},
-			"maxLiveCalls":  {strconv.Itoa(restcommMaxCalls)},
-			"liveCalls":  {strconv.Itoa(data.Metrics.LiveCalls)},
-			"liveOutgoingCalls":  {strconv.Itoa(data.Metrics.LiveOutgoingCalls)},
-			"liveIncomingCalls":  {strconv.Itoa(data.Metrics.LiveIncomingCalls)},
-			"totalCallsSinceUptime":  {strconv.Itoa(data.Metrics.TotalCallsSinceUptime)},
-			"completedCalls":  {strconv.Itoa(data.Metrics.CompletedCalls)},
-			"failedCalls":  {strconv.Itoa(data.Metrics.FailedCalls)},
-			"appId":     {appId},
-			"taskId": {taskId}})
+			"maxLiveCalls":          {strconv.Itoa(restcommMaxCalls)},
+			"liveCalls":             {strconv.Itoa(data.Metrics.LiveCalls)},
+			"liveOutgoingCalls":     {strconv.Itoa(data.Metrics.LiveOutgoingCalls)},
+			"liveIncomingCalls":     {strconv.Itoa(data.Metrics.LiveIncomingCalls)},
+			"totalCallsSinceUptime": {strconv.Itoa(data.Metrics.TotalCallsSinceUptime)},
+			"completedCalls":        {strconv.Itoa(data.Metrics.CompletedCalls)},
+			"failedCalls":           {strconv.Itoa(data.Metrics.FailedCalls)},
+			"appId":                 {appId},
+			"taskId":                {taskId}})
 
 	if err != nil {
 		Error.Println("Error: ", err)
@@ -88,8 +87,8 @@ func collectMetrics(marathonHost string, appId string, monitorHost string) {
 		return
 	}
 	defer resp.Body.Close()
-	
-	if(resp.StatusCode != 200){
+
+	if resp.StatusCode != 200 {
 		Trace.Println("Response status is not OK. statusCode =", resp.StatusCode)
 	}
 
@@ -108,8 +107,8 @@ func collectMetrics(marathonHost string, appId string, monitorHost string) {
 	}
 
 	for _, e := range respData.Tasks {
-		data, err := getRestCommCallStat("192.168.122.59")//e.Host)
-		if(err != nil){
+		data, err := getRestCommCallStat(e.Host)
+		if err != nil {
 			Error.Println("Get restcomm metrics error:", err)
 			continue
 		}
@@ -117,9 +116,9 @@ func collectMetrics(marathonHost string, appId string, monitorHost string) {
 	}
 }
 
-func getRestCommCallStat(host string) (*RestcommResponse, error){
-	
-	url := fmt.Sprintf("http://%s:%s@%s:%d/restcomm/2012-04-24/Accounts/%s/Supervisor.json/metrics", 
+func getRestCommCallStat(host string) (*RestcommResponse, error) {
+
+	url := fmt.Sprintf("http://%s:%s@%s:%d/restcomm/2012-04-24/Accounts/%s/Supervisor.json/metrics",
 		restcommUser, restcommPswd, host, restcommPort, restcommUser)
 
 	Trace.Println("Try get data by url:", url)
@@ -130,8 +129,8 @@ func getRestCommCallStat(host string) (*RestcommResponse, error){
 	}
 
 	defer resp.Body.Close()
-	
-	if(resp.StatusCode != 200){
+
+	if resp.StatusCode != 200 {
 		return nil, errors.New(fmt.Sprintf("Response status is not OK. statusCode = %d", resp.StatusCode))
 	}
 
@@ -157,11 +156,11 @@ func main() {
 	restcommPort = 8090
 	restcommUser = "ACae6e420f425248d6a26948c17a9e2acf"
 	restcommPswd = "42d8aa7cde9c78c4757862d84620c335"
-	
+
 	monitorHost := flag.String("url", "127.0.0.1", "Monitor server")
 	appId := flag.String("appId", "restcomm", "App id")
 	marathonHost := flag.String("m", "127.0.0.1:8080", "Marathon host")
-	
+
 	rPort := flag.Int("rPort", 8090, "Restcomm Port")
 	rUser := flag.String("rUser", "ACae6e420f425248d6a26948c17a9e2acf", "Restcomm user")
 	rPswd := flag.String("rPswd", "42d8aa7cde9c78c4757862d84620c335", "Restcomm password")

@@ -10,6 +10,10 @@
       "network": "HOST",
       "image": "{{ DOCKER_IMAGE }}",
       "parameters": [
+        { "key": "env", "value": "MYSQL_USER={{ MYSQL_USER_VAR }}" },
+        { "key": "env", "value": "MYSQL_PASSWORD={{ MYSQL_PASSWORD_VAR }}" },
+        { "key": "env", "value": "MYSQL_HOST={{ MYSQL_HOST_VAR }}" },
+        { "key": "env", "value": "MYSQL_SCHEMA={{ MYSQL_SCHEMA_VAR }}" },
         { "key": "env", "value": "LOAD_BALANCERS={{ SIP_BALANCER_VAR }}" },
         { "key": "env", "value": "VOICERSS_KEY={{ VOICERSS_KEY_VAR }}" },
         { "key": "env", "value": "RESTCOMM_PORT={{ RESTCOMM_PORT_VAR }}" },
