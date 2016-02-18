@@ -2,7 +2,7 @@
   vars:
     APP_NAME: restcomm-loadbalancer
     WORK_DIR: "/var/lib/{{ APP_NAME }}"
-    DOCKER_IMAGE: "restcomm/load-balancer"
+    DOCKER_IMAGE: "hamsterksu/restcomm-loadbalancer"
     CPU: 1
     MEM: 768
     APP_MANAGER_API: "http://127.0.0.1:8080/v2/apps"
