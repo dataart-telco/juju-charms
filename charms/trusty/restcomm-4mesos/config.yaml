@@ -11,3 +11,7 @@ options:
         type: string
         description: Init admin password. this arg will affect install process only
         default: ""
+    sms_proxy:
+        type: string
+        description: proxy host for outbound sms
+        default: ""
