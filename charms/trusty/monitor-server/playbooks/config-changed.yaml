@@ -5,7 +5,7 @@
 #reload config vars to our vars
     CHECK_PERIOD_VAR: "{{ CHECK_PERIOD }}"
     PORT_VAR: "{{ PORT }}"
-    JUJU_API_HOST_VAR: "{{ JUJU_API_HOST|default('') }}"
+    JUJU_API_HOST_VAR: "{{ JUJU_API_HOST|default(JUJU_API_HOST_VAR) }}"
     JUJU_API_PASSWORD_VAR: "{{ JUJU_API_PASSWORD }}"
     JUJU_DEPLOY_DELAY_VAR: "{{ JUJU_DEPLOY_DELAY }}"
     MESOS_DEPLOY_DELAY_VAR: "{{ MESOS_DEPLOY_DELAY }}"
