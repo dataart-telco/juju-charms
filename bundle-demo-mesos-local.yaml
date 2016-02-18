@@ -49,6 +49,9 @@ demo:
       annotations:
         "gui-x": 1520
         "gui-y": 190
+      options:
+        voicerss_key: "29b2d893df9f454abbfae94df6cff95b"
+        init_password: "42d8aa7cde9c78c4757862d84620c335"
     sip-loadbalancer:
       charm: local:trusty/restcomm-loadbalancer-4mesos
       expose: true
