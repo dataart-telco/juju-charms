@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"strings"
 )
 
 type MesosAppMetrics struct {
@@ -23,11 +24,21 @@ type MesosAppsHandler struct {
 	Period     time.Duration
 	ScaleDelay int
 	marathonClient MarathonClient
+	ignoreList map[string]bool
 }
 
-func NewMesosAppsHandler(scaleUp int, scaleDown  int, period time.Duration, scaleDelay int, host string) *MesosAppsHandler {
+func NewMesosAppsHandler(scaleUp int, scaleDown  int, period time.Duration, scaleDelay int, host string, ignore string) *MesosAppsHandler {
+	var ignoreList map[string]bool
+	if ignore != "" {
+		ignoreList = make(map[string]bool)
+		for _, v :=  range strings.Split(ignore, ",") {
+			ignoreList[v] = true
+		}
+	}
+	Trace.Println("ignore list:", ignoreList)
 	return &MesosAppsHandler{ScaleUp: scaleUp, ScaleDown: scaleDown, Period: period, ScaleDelay: scaleDelay, 
-		marathonClient: MarathonClient{Host: host, ScaleDelay: scaleDelay}}
+		marathonClient: MarathonClient{Host: host, ScaleDelay: scaleDelay},
+		ignoreList: ignoreList}
 }
 
 func (h *MesosAppsHandler) handleMetrics(w http.ResponseWriter, r *http.Request) {
@@ -95,7 +106,12 @@ func (h *MesosAppsHandler) checkState() {
 	for k, e := range stats {
 		v := e.(*Stat)
 		cpuLoad := v.CpuLoad1Avg
-
+		if h.ignoreList != nil {
+			if _, ok := h.ignoreList[k]; ok {
+				Trace.Println("stateChecker: ignorelist app:", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
+				continue
+			}
+		}
 		Trace.Println("stateChecker: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)
 		if cpuLoad > h.ScaleUp {
 			Info.Println("\tscaleUp: ", k, " -> cpu =", cpuLoad, "; mem =", v.MemAvg)

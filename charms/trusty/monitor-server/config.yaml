@@ -42,3 +42,7 @@ options:
     type: int
     default: 10
     description: "Send data to essearch period (in seconds)"
+  IGNORE_LIST:
+    type: string
+    default: ""
+    description: "app ignore list(comma separated)"

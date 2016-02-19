@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"strings"
 )
 
 type RestcommMetrics struct {
@@ -29,6 +30,7 @@ type RestcommAppHandler struct {
 	Period     time.Duration
 	ScaleDelay int
 	marathonClient MarathonClient
+	ignoreList map[string]bool
 }
 
 type RestcommAvgMetrics struct {
@@ -37,9 +39,18 @@ type RestcommAvgMetrics struct {
 	LiveCallsAvg int
 }
 
-func NewRestcommAppHandler(scaleUp int, scaleDown  int, period time.Duration, scaleDelay int, host string) *RestcommAppHandler{
+func NewRestcommAppHandler(scaleUp int, scaleDown  int, period time.Duration, scaleDelay int, host string, ignore string) *RestcommAppHandler{
+	var ignoreList map[string]bool
+	if ignore != "" {
+		ignoreList = make(map[string]bool)
+		for _, v :=  range strings.Split(ignore, ",") {
+			ignoreList[v] = true
+		}
+	}
+	Trace.Println("ignore list:", ignoreList)
 	return &RestcommAppHandler{ScaleUp: scaleUp, ScaleDown: scaleDown, Period: period, ScaleDelay: scaleDelay, 
-		marathonClient: MarathonClient{Host: host, ScaleDelay: scaleDelay}}
+		marathonClient: MarathonClient{Host: host, ScaleDelay: scaleDelay},
+		ignoreList: ignoreList}
 }
 
 func (h *RestcommAppHandler) handleMetrics(w http.ResponseWriter, r *http.Request) {
@@ -110,7 +121,12 @@ func (h *RestcommAppHandler) checkState() {
 	for k, e := range stats {
 		v := e.(*RestcommAvgMetrics)
 		callsLoad := v.LiveCallsAvg
-
+		if h.ignoreList != nil {
+			if _, ok := h.ignoreList[k]; ok {
+				Trace.Println("stateChecker: ignorelist app:", k, " -> calls =", callsLoad)
+				continue
+			}
+		}
 		Trace.Println("stateChecker: ", k, " -> calls =", callsLoad)
 		if callsLoad > h.ScaleUp {
 			Info.Println("\tscaleUp: ", k, " -> calls =", callsLoad)

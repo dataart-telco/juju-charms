@@ -94,6 +94,7 @@ func main() {
 
 	esHost := flag.String("es-host", "", "ElasticSearch host")
 	esTiming := flag.Int("es-timing", 10, "ElasticSearch send data period")
+	ignore := flag.String("ignore", "", "Ignore apps list, devided by comma")
 
 	flag.Parse()
 
@@ -118,15 +119,16 @@ func main() {
 		"| mesos up limit =", *mesosUp,
 		"| mesos down limit =", *mesosDown,
 		"| esHost =", *esHost,
-		"| esTiming =", *esTiming)
+		"| esTiming =", *esTiming,
+		"| ignore=", *ignore)
 
 	ipRedis = *host
 
 	handlers = make([]MetricsHandler, 3)
 	period := time.Duration(*t) * time.Second
 	handlers[0] = &JujuCharmHandler{Period: period, CliDir: *cli, ScaleUp: *jujuUp, ScaleDown: *jujuDown, ScaleDelay: *jd}
-	handlers[1] = NewMesosAppsHandler(*mesosUp, *mesosDown, period, *md, *m)
-	handlers[2] = NewRestcommAppHandler(*mesosUp, *mesosDown, period, *md, *m)
+	handlers[1] = NewMesosAppsHandler(*mesosUp, *mesosDown, period, *md, *m, *ignore)
+	handlers[2] = NewRestcommAppHandler(*mesosUp, *mesosDown, period, *md, *m, *ignore)
 
 	statsDump = StatsDump{Handlers: handlers}
 	resetDb()
