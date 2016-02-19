@@ -36,10 +36,10 @@ juju remove-service calls-consumer
 juju remove-service conference-call
 juju remove-service sms-feedback
 
-juju deploy --config tmp/config-restcomm.yaml local:trusty/restcomm-4mesos-single restcomm
-juju deploy --config tmp/config-calls-consumer.yaml local:trusty/local:trusty/tads2015-calls-consumer-4mesos calls-consumer
-juju deploy --config tmp/config-conference-call.yaml local:trusty/trusty/tads2015-conference-call-4mesos conference-call
-juju deploy --config tmp/config-sms-feedback.yaml local:trusty/local:trusty/tads2015-sms-feedback-4mesos sms-feedback
+juju deploy local:trusty/restcomm-4mesos-single --config /tmp/config-restcomm.yaml restcomm
+juju deploy local:trusty/tads2015-calls-consumer-4mesos --config /tmp/config-calls-consumer.yaml calls-consumer
+juju deploy local:trusty/tads2015-conference-call-4mesos --config /tmp/config-conference-call.yaml conference-call
+juju deploy local:trusty/tads2015-sms-feedback-4mesos --config /tmp/config-sms-feedback.yaml sms-feedback
 
 juju add-relation restcomm:mysql mysql:db
 
@@ -55,7 +55,7 @@ juju add-relation sms-feedback:restcomm restcomm:website
 juju add-relation sms-feedback:redis redis-master:db
 juju add-relation sms-feedback:haproxy haproxy:reverseproxy
 
-juju add-relation mesos restcomm 
-juju add-relation mesos calls-consumer
-juju add-relation mesos conference-call
-juju add-relation mesos sms-feedback
+juju add-relation mesos-master restcomm 
+juju add-relation mesos-master calls-consumer
+juju add-relation mesos-master conference-call
+juju add-relation mesos-master sms-feedback
