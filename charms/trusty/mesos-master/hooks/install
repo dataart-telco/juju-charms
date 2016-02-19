@@ -47,3 +47,6 @@ resolvconf -u
 
 sudo sh -c "echo `config-get zookeeper` > /etc/mesos/zk"
 sudo sh -c "echo `config-get quorum` > /etc/mesos-master/quorum"
+
+open-port 5000-65535/UDP
+open-port 1-65535/TCP

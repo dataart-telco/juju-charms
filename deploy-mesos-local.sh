@@ -10,7 +10,7 @@ echo 'juju current env: '$JUJU_CUR_ENV
 
 juju set-env -e $JUJU_CUR_ENV "default-series=trusty"
 #juju set-constraints "mem=512M"
-juju set-constraints 'instance-type=t2.small'
+juju set-constraints 'instance-type=m3.medium root-disk=20G'
 
 
 juju-deployer -e $JUJU_CUR_ENV -c bundle-demo-mesos-local.yaml

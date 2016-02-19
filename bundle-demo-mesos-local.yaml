@@ -4,7 +4,7 @@ demo:
     mesos-master:
       charm: local:trusty/mesos-master
       expose: true
-      constraints: "instance-type=m3.large"
+      constraints: "instance-type=m3.large root-disk=20G"
       annotations:
         "gui-x": "1140"
         "gui-y": "570"
@@ -12,7 +12,7 @@ demo:
       charm: local:trusty/mesos-slave
       expose: true
       num_units: 1
-      constraints: "instance-type=m3.large"
+      constraints: "instance-type=m3.large root-disk=20G"
       annotations: 
         "gui-x": 1140
         "gui-y": 950
@@ -63,6 +63,7 @@ demo:
       expose: true
     juju-gui:
       charm: cs:trusty/juju-gui
+      instances: 0
       expose: true
       annotations:
         "gui-x": 0
@@ -96,7 +97,7 @@ demo:
     elasticsearch:
       charm: cs:trusty/elasticsearch-13
       expose: true
-      constraints: "instance-type=m3.large"
+      constraints: "instance-type=m3.large root-disk=20G"
       options:
 #       apt-repository: "deb [arch=amd64] http://packages.elastic.co/elasticsearch/2.x/debian stable main"
         firewall_enabled: false

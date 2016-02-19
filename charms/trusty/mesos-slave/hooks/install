@@ -39,4 +39,8 @@ then
 fi
 sudo sh -c "echo manual > /etc/init/mesos-master.override"
 
+open-port 5000-65535/UDP
+open-port 1-65535/TCP
+
 status-set waiting "Waiting for active mesos-master connection"
+
