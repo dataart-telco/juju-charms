@@ -16,6 +16,3 @@
 
 - name: render haproxy_util.sh to actions
   template: src="templates/haproxy_util.sh.j2" dest="../actions/haproxy_util.sh"  mode="761"
-
-- name: open port
-  shell: open-port {{ APP_PORT }}
