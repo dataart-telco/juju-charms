@@ -1,0 +1,33 @@
+{
+  "id": "{{ APP_NAME}}",
+  "cpus": {{ CPU }},
+  "mem": {{ MEM }},
+  "instances": 0,
+  "constraints": [["hostname", "CLUSTER", "{{ HOSTNAME_VAR }}"]],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "network": "HOST",
+      "image": "{{ DOCKER_IMAGE }}",
+      "parameters": [
+        { "key": "env", "value": "MYSQL_USER={{ MYSQL_USER_VAR }}" },
+        { "key": "env", "value": "MYSQL_PASSWORD={{ MYSQL_PASSWORD_VAR }}" },
+        { "key": "env", "value": "MYSQL_HOST={{ MYSQL_HOST_VAR }}" },
+        { "key": "env", "value": "MYSQL_SCHEMA={{ MYSQL_SCHEMA_VAR }}" },
+        { "key": "env", "value": "LOAD_BALANCERS={{ SIP_BALANCER_VAR }}" },
+        { "key": "env", "value": "VOICERSS_KEY={{ VOICERSS_KEY_VAR }}" },
+        { "key": "env", "value": "RESTCOMM_PORT={{ RESTCOMM_PORT_VAR }}" },
+        { "key": "env", "value": "INIT_PASSWORD={{ RESTCOMM_PASSWORD_VAR }}" },
+        { "key": "env", "value": "SMS_OUTBOUND_PROXY={{ SMS_OUTBOUND_PROXY_VAR }}" },
+        { "key": "env", "value": "MEDIASERVER_LOWEST_PORT=65000" },
+        { "key": "env", "value": "MEDIASERVER_HIGHEST_PORT=65500" },
+        { "key": "env", "value": "COLLECTD_DOCKER_APP={{ APP_NAME }}" },
+        { "key": "env", "value": "COLLECTD_DOCKER_TASK_ENV=MESOS_TASK_ID" }
+      ]
+    }
+  },
+  "labels": {
+        "collectd_docker_app": "{{ APP_NAME }}",
+        "collectd_docker_task": "{{ APP_NAME }}"
+  }
+}

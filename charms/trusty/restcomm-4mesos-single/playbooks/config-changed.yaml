@@ -1,0 +1,12 @@
+
+---
+- name: map config to var
+  set_fact:
+#reload config vars to our vars
+    VOICERSS_KEY_VAR: "{{ voicerss_key }}"
+    RESTCOMM_PASSWORD_VAR: "{{ init_password }}"
+    SMS_OUTBOUND_PROXY_VAR: "{{ sms_proxy }}"
+  changed_when: true
+  notify: 
+    - dump config
+    - restart

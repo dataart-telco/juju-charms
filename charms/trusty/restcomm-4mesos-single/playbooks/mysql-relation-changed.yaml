@@ -1,0 +1,28 @@
+
+---
+- name: get mysql host
+  shell: relation-get host
+  register: local_host
+
+- name: get mysql database
+  shell: relation-get database
+  register: local_database
+
+- name: get mysql user
+  shell: relation-get user
+  register: local_user
+
+- name: get mysql password
+  shell: relation-get password
+  register: local_password
+
+- set_fact:
+    MYSQL_HOST_VAR: "{{ local_host.stdout }}"
+    MYSQL_SCHEMA_VAR: "{{ local_database.stdout }}"
+    MYSQL_USER_VAR: "{{ local_user.stdout }}"
+    MYSQL_PASSWORD_VAR: "{{ local_password.stdout }}"
+  changed_when: true
+  when: local_host.stdout != MYSQL_HOST_VAR
+  notify: 
+    - dump config
+    - restart
