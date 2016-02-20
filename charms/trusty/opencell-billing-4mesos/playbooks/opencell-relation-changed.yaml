@@ -9,9 +9,9 @@
   register: local_port
 
 - set_fact:
-    RESTCOMM_SERVICE_VAR: "{{ local_host.stdout }}:{{ local_port.stdout }}"
+    OPENCELL_SERVICE_VAR: "{{ local_host.stdout }}:{{ local_port.stdout }}"
   changed_when: true
-  when: local_host.stdout != "" and (local_host.stdout + ":" + local_port.stdout) != RESTCOMM_SERVICE_VAR
+  when: local_host.stdout != "" and (local_host.stdout + ":" + local_port.stdout) != OPENCELL_SERVICE_VAR
   notify: 
     - dump config
     - restart
