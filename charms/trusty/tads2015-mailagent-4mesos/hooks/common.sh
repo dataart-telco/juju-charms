@@ -1,7 +1,7 @@
 #!/bin/bash
 
 WORK_DIR="/var/lib/tads2015-mailagent"
-APP_NAME="tads2015-mailagent"
+APP_NAME="mailagent"
 DOCKER_IMAGE=tads2015da/mailagent:0.0.9
 CPUS=0.5
 MEM=200
