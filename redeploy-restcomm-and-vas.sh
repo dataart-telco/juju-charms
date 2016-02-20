@@ -18,12 +18,12 @@ echo 'restcomm:
 echo 'calls-consumer:
   RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
   PHONE_NUMBER: "5555"
-  DID_DOMAIN: "80.250.109.132"
+  DID_DOMAIN: "81.91.100.135"
 ' > /tmp/config-calls-consumer.yaml
 
 echo 'conference-call:
   RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
-  DID_DOMAIN: "80.250.109.132"
+  DID_DOMAIN: "81.91.100.135"
 ' > /tmp/config-conference-call.yaml
 
 echo 'sms-feedback:
