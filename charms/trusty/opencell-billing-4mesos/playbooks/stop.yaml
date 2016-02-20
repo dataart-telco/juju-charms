@@ -1,0 +1,7 @@
+
+---
+- name: stop mesos app
+  command: /bin/true
+  notify:
+    - stop mesos app
+    - delete mesos app

@@ -1,0 +1,17 @@
+options:
+  RESTCOMM_USER:
+    type: string
+    description: "Restcomm user"
+    default: "ACae6e420f425248d6a26948c17a9e2acf"
+  RESTCOMM_PASSWORD:
+    type: string
+    description: "Restcomm password"
+    default: "42d8aa7cde9c78c4757862d84620c335"
+  OPENCELL_USER:
+    type: string
+    description: "Opencell user"
+    default: "meveo.admin"
+  OPENCELL_PASSWORD:
+    type: string
+    description: "Opencell password"
+    default: "meveo.admin"

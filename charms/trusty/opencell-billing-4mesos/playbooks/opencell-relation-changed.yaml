@@ -1,0 +1,17 @@
+
+---
+- name: get restcomm host
+  shell: relation-get hostname
+  register: local_host
+
+- name: get restcomm port
+  shell: relation-get port
+  register: local_port
+
+- set_fact:
+    RESTCOMM_SERVICE_VAR: "{{ local_host.stdout }}:{{ local_port.stdout }}"
+  changed_when: true
+  when: local_host.stdout != "" and (local_host.stdout + ":" + local_port.stdout) != RESTCOMM_SERVICE_VAR
+  notify: 
+    - dump config
+    - restart
