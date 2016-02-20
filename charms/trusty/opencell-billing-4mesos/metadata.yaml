@@ -13,6 +13,8 @@ requires:
     interface: redis
   opencell:
     interface: http-alt
+  restcomm:
+    interface: http
   mesos:
     interface: juju-info
     scope: container
