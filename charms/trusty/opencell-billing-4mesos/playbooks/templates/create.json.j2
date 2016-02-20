@@ -18,6 +18,9 @@
         { "key": "env", "value": "RESTCOMM_SERVICE={{ RESTCOMM_SERVICE_VAR }}" },
         { "key": "env", "value": "RESTCOMM_USER={{ RESTCOMM_USER_VAR }}" },
         { "key": "env", "value": "RESTCOMM_PASSWORD={{ RESTCOMM_PASSWORD_VAR }}" }
+      ],
+      "portMappings": [
+        { "containerPort": {{ APP_PORT }}, "hostPort": 31080, "servicePort": 31080, "protocol": "tcp" }
       ]
     }
   }
