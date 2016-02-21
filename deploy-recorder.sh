@@ -7,9 +7,9 @@ juju set-env -e $JUJU_ENV "default-series=trusty"
 #juju set-constraints 'instance-type=m1.small'
 
 echo 'conference-recorder:
-  user: "bob"
+  user: "recorder"
   password: "1234"
-  proxy: "52.28.141.175:5080"
+  proxy: "54.235.143.142:5080"
   number: "+5555"
 ' > /tmp/conference-recorder.yaml
 

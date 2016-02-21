@@ -8,12 +8,14 @@ juju set-env -e $JUJU_ENV "default-series=trusty"
 
 echo 'sms-feedback:
   RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
-' > /tmp/sms-feedback.yaml
+  DID_DOMAIN: ""
+' > /tmp/config-sms-feedback.yaml
 
-juju deploy -e $JUJU_ENV local:trusty/tads2015-sms-feedback-4mesos sms-feedback --config /tmp/sms-feedback.yaml
+
+juju deploy -e $JUJU_ENV local:trusty/tads2015-sms-feedback-4mesos sms-feedback --config /tmp/config-sms-feedback.yaml
 
 juju add-relation -e $JUJU_ENV sms-feedback:redis redis-master:db
-juju add-relation -e $JUJU_ENV sms-feedback:restcomm telscale-restcomm:website
+juju add-relation -e $JUJU_ENV sms-feedback:restcomm restcomm:website
 juju add-relation -e $JUJU_ENV haproxy:reverseproxy sms-feedback:haproxy
 juju add-relation -e $JUJU_ENV sms-feedback mesos-master
 juju add-relation -e $JUJU_ENV sms-feedback:recorder conference-recorder:api
