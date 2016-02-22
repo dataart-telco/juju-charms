@@ -4,7 +4,7 @@
     APP_PORT: 30790
     WORK_DIR: "/var/lib/{{ APP_NAME }}"
     DOCKER_IMAGE: "tads2015da/calls-consumer:0.0.11"
-    CPU: 0.5
+    CPU: 1.0
     MEM: 200
     APP_MANAGER_API: "http://127.0.0.1:8080/v2/apps"
 #for script only

@@ -3,7 +3,7 @@
 WORK_DIR="/var/lib/tads2015-mailagent"
 APP_NAME="mailagent"
 DOCKER_IMAGE=tads2015da/mailagent:0.0.9
-CPUS=0.5
+CPUS=0.2
 MEM=200
 
 CONFIG_PATH=${WORK_DIR}/${APP_NAME}.conf
