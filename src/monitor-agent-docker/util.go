@@ -8,7 +8,7 @@ import(
     "strconv"
 )
 
-func Post(url string, params url.Values) (int, error) {
+func Post(url string, params *url.Values) (int, error) {
     Trace.Println("Make POST req: url =", url)
 
     data := params.Encode()

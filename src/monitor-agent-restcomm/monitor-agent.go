@@ -58,7 +58,7 @@ func schedule(step int, what func()) {
 
 func sendData(monitorHost string, appId string, taskId string, data *RestcommResponse) {
 	code, err := Post("http://" + monitorHost, 
-		url.Values{"date": {strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)},
+		&url.Values{"date": {strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)},
 			"maxLiveCalls":          {strconv.Itoa(restcommMaxCalls)},
 			"liveCalls":             {strconv.Itoa(data.Metrics.LiveCalls)},
 			"liveOutgoingCalls":     {strconv.Itoa(data.Metrics.LiveOutgoingCalls)},
