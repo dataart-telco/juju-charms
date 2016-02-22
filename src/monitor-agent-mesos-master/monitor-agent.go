@@ -35,12 +35,12 @@ func schedule(step int, what func()) {
 func sendData(host string, appId string, cpuLoad1 int, cpuLoad5 int, mem int) {
 	pcName, _ := os.Hostname()
 	code, err := Post("http://" + host, 
-		&url.Values{"date": {strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)},
+		url.Values{"date": {strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)},
 			"cpuLoad1":  {strconv.Itoa(cpuLoad1)},
 			"cpuLoad5":  {strconv.Itoa(cpuLoad5)},
 			"mem":       {strconv.Itoa(mem)},
 			"appId":     {appId},
-			"machineId": {pcName}})
+			"machineId": {pcName}}.Encode())
 	if err != nil {
 		Error.Println("Error: ", err)
 		return

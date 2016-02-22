@@ -44,12 +44,12 @@ func (c MonitorServerClient) Write(s collector.Stats) error {
 
 func (c MonitorServerClient) sendData(appId string, taskId string, cpuLoad int, mem int) {
 	code, err := Post("http://" + c.host, 
-		&url.Values{
+		url.Values{
 			"date":   {strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)},
 			"cpu":    {strconv.Itoa(cpuLoad)},
 			"mem":    {strconv.Itoa(mem)},
 			"appId":  {appId},
-			"taskId": {taskId}})
+			"taskId": {taskId}}.Encode())
 	if err != nil {
 		Error.Println("Error: ", err)
 		return

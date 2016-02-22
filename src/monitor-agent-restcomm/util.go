@@ -3,16 +3,13 @@ package main
 import(
     "bytes"
     "net/http"
-    "net/url"
     "errors"
     "strconv"
     "io/ioutil"
 )
 
-func Post(url string, params *url.Values) (int, error) {
-    Trace.Println("Make POST req: url =", url)
-
-    data := params.Encode()
+func Post(url string, data string) (int, error) {
+    Trace.Println("Make POST req: url =", url, "with body ", data)
 
     client := &http.Client{}
     r, _ := http.NewRequest(
@@ -20,6 +17,7 @@ func Post(url string, params *url.Values) (int, error) {
         url,
         bytes.NewBufferString(data))
 
+    r.Header.Set("Content-Type", "application/x-www-form-urlencoded")
     r.Header.Add("Content-Length", strconv.Itoa(len(data)))
     r.Close = true
     resp, err := client.Do(r)
