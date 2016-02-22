@@ -2,6 +2,7 @@
 
 import os
 import sys
+import time
 
 sys.path.insert(0, os.path.join(os.environ['CHARM_DIR'], 'lib'))
 
@@ -30,7 +31,11 @@ def install():
     function finishes, any tasks in the playbook tagged with install or
     upgrade-charm are executed.
     """
-    charmhelpers.contrib.ansible.install_ansible_support(from_ppa=True)
+    try:
+        charmhelpers.contrib.ansible.install_ansible_support(from_ppa=True)
+    except:
+        time.sleep(15)
+        charmhelpers.contrib.ansible.install_ansible_support(from_ppa=True)
 
 
 if __name__ == "__main__":

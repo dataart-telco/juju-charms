@@ -33,7 +33,7 @@ if args.choice=='add-unit':
     service = env.get_stat()['services'][args.charm]['units']
     isPending = False
     for s in service.itervalues():
-        if s['agent-state'] == 'pending':
+        if s['agent-state'] == 'pending' or (s['agentstatus'] is not None and s['agentstatus']['Current'] != 'idle'):
             isPending = True
             break
 
