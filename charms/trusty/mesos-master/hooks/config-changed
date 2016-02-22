@@ -184,8 +184,8 @@ else
 	sudo rm -f /etc/mesos-master/zk_session_timeout
 fi
 
-#open-port `config-get port`
-#open-port `config-get marathon_port`
+open-port `config-get port`
+open-port `config-get marathon_port`
 
 # Config mesos-slave
 if [ `config-get mesos-slave` = "True" ]
