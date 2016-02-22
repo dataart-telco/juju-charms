@@ -11,7 +11,7 @@ import (
 
 func main() {
 	host := flag.String("url", "127.0.0.1", "Monitor server")
-	period := flag.Int("t", 1, "Update period in seconds")
+	period := flag.Int("t", 5, "Update period in seconds")
 	l := flag.String("l", "INFO", "Log level: TRACE, INFO")
 
 	flag.Parse()
@@ -24,7 +24,7 @@ func main() {
 	}
 	InitLog(traceHandle, os.Stdout, os.Stdout, os.Stderr)
 
-	Info.Println("Start agent with host =", *host)
+	Info.Println("Start agent with host =", *host, "period = ", *period)
 
 	client, _ := docker.NewClient("unix:///var/run/docker.sock")
 	writer := NewMonitorServerClient(*host)

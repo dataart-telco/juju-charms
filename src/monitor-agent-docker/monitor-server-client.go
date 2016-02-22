@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/fsouza/go-dockerclient"
 	"monitor-agent-docker/collector"
-	"net/http"
 	"net/url"
 	"strconv"
 	"time"
@@ -44,21 +43,17 @@ func (c MonitorServerClient) Write(s collector.Stats) error {
 }
 
 func (c MonitorServerClient) sendData(appId string, taskId string, cpuLoad int, mem int) {
-
-	resp, err := http.PostForm("http://"+c.host,
-		url.Values{
+	code, err := Post("http://" + c.host, url.Values{
 			"date":   {strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)},
 			"cpu":    {strconv.Itoa(cpuLoad)},
 			"mem":    {strconv.Itoa(mem)},
 			"appId":  {appId},
 			"taskId": {taskId}})
-
 	if err != nil {
 		Error.Println("Error: ", err)
 		return
 	}
-	resp.Close = true
-	Trace.Println("Send resp code:", resp.StatusCode)
+	Trace.Println("Send resp code:", code)
 }
 
 func getCPUPercent(s *docker.Stats) float64 {

@@ -2,12 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
-	"net/http"
 	"net/url"
 	"os"
 	"os/signal"
@@ -59,8 +57,7 @@ func schedule(step int, what func()) {
 }
 
 func sendData(monitorHost string, appId string, taskId string, data *RestcommResponse) {
-
-	resp, err := http.PostForm("http://"+monitorHost,
+	code, err := Post("http://" + monitorHost, 
 		url.Values{"date": {strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)},
 			"maxLiveCalls":          {strconv.Itoa(restcommMaxCalls)},
 			"liveCalls":             {strconv.Itoa(data.Metrics.LiveCalls)},
@@ -71,30 +68,17 @@ func sendData(monitorHost string, appId string, taskId string, data *RestcommRes
 			"failedCalls":           {strconv.Itoa(data.Metrics.FailedCalls)},
 			"appId":                 {appId},
 			"taskId":                {taskId}})
-
 	if err != nil {
 		Error.Println("Error: ", err)
 		return
 	}
-	resp.Close = true
-	Trace.Println("Send resp code:", resp.StatusCode)
+	Trace.Println("Send resp code:", code)
 }
 
 func collectMetrics(marathonHost string, appId string, monitorHost string) {
-	resp, err := http.Get("http://" + marathonHost + "/v2/apps/" + appId + "/tasks")
+	_, body, err := Get("http://" + marathonHost + "/v2/apps/" + appId + "/tasks")
 	if err != nil {
 		Error.Println("Get tasks error:", err)
-		return
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != 200 {
-		Trace.Println("Response status is not OK. statusCode =", resp.StatusCode)
-	}
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		Error.Println("Read body error:", err)
 		return
 	}
 	Trace.Println("Get tasks for", appId, ": ", string(body))
@@ -123,19 +107,7 @@ func getRestCommCallStat(host string) (*RestcommResponse, error) {
 
 	Trace.Println("Try get data by url:", url)
 
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-
-	defer resp.Body.Close()
-
-	if resp.StatusCode != 200 {
-		return nil, errors.New(fmt.Sprintf("Response status is not OK. statusCode = %d", resp.StatusCode))
-	}
-
-	body, err := ioutil.ReadAll(resp.Body)
-
+	_, body, err := Get(url)
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +155,7 @@ func main() {
 	}
 	InitLog(traceHandle, os.Stdout, os.Stdout, os.Stderr)
 
-	Info.Println("Start agent with host =", *monitorHost, " and appId =", *appId)
+	Info.Println("Start agent with host =", *monitorHost, " and appId =", *appId, "| period 5 sec")
 
 	do := func() {
 		collectMetrics(*marathonHost, *appId, *monitorHost)

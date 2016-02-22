@@ -5,7 +5,6 @@ import (
 	"flag"
 	"io"
 	"io/ioutil"
-	"net/http"
 	"net/url"
 	"os"
 	"os/signal"
@@ -35,36 +34,26 @@ func schedule(step int, what func()) {
 
 func sendData(host string, appId string, cpuLoad1 int, cpuLoad5 int, mem int) {
 	pcName, _ := os.Hostname()
-
-	resp, err := http.PostForm("http://"+host,
-		url.Values{"date": {strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)},
+	code, err := Post("http://" + host, url.Values{"date": {strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)},
 			"cpuLoad1":  {strconv.Itoa(cpuLoad1)},
 			"cpuLoad5":  {strconv.Itoa(cpuLoad5)},
 			"mem":       {strconv.Itoa(mem)},
 			"appId":     {appId},
 			"machineId": {pcName}})
-
-	resp.Close = true
-
 	if err != nil {
 		Error.Println("Error: ", err)
 		return
 	}
-	Trace.Println("Send resp code:", resp.StatusCode)
+	Trace.Println("Send resp code:", code)
 }
 
 func getMesosMetrics() (int, int, error) {
-	resp, err := http.Get("http://127.0.0.1:5050/metrics/snapshot")
-	if err != nil {
-		return 0, 0, err
-	}
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	_, body, err := Get("http://127.0.0.1:5050/metrics/snapshot")
 	if err != nil {
 		return 0, 0, err
 	}
 	metrics := make(map[string]interface{})
-	json.Unmarshal(body, &metrics)
+	json.Unmarshal([]byte(body), &metrics)
 	return int(metrics["master/cpus_percent"].(float64) * 100), int(metrics["master/mem_percent"].(float64) * 100), nil
 }
 
@@ -83,7 +72,7 @@ func main() {
 	}
 	InitLog(traceHandle, os.Stdout, os.Stdout, os.Stderr)
 
-	Info.Println("Start agent with host =", *host, " and appId =", *appId)
+	Info.Println("Start agent with host =", *host, " and appId =", *appId, " and period 5 sec")
 
 	do := func() {
 		cpu, mem, err := getMesosMetrics()
