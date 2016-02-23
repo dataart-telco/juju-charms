@@ -1,5 +1,5 @@
-name: restcomm-loadbalancer-4mesos
-summary: RestComm load-balancer 
+name: restcomm-single
+summary: Restcomm 
 maintainer: gdubina <gdubina@dataart.com>
 description: |
   Restcomm
@@ -9,9 +9,13 @@ tags:
   - voip
 subordinate: true
 provides:
+  website:
+    interface: http
+requires:
+  mysql:
+    interface: mysql
   loadbalancer:
     interface: sip-balancer
-requires:
   mesos:
     interface: juju-info
     scope: container
