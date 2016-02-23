@@ -1,0 +1,12 @@
+
+---
+- name: get essearch host
+  shell: relation-get host
+  register: local_host
+
+- set_fact:
+    ESSEARCH_HOST_VAR: "{{ local_host.stdout }}:9200"
+  changed_when: true
+  notify: 
+    - dump config
+    - restart

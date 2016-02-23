@@ -1,0 +1,28 @@
+
+---
+- name: install python-jujuclient
+  apt: name=python-jujuclient
+
+- name: install redis
+  apt: name=redis-server
+
+- name: init vars
+  set_fact:
+    REDIS_HOST_VAR: "127.0.0.1:6379"
+
+- name: create work dir
+  file: path={{ WORK_DIR }} state=directory
+
+- name: copy juju api cli script
+  copy: src=../lib/jujuapicli dest={{ WORK_DIR }} mode="761"
+
+- name: copy server bin
+  copy: src=../lib/monitor-server dest={{ WORK_DIR }} mode="761"
+
+- name: create init conf
+  template: src=./templates/init.conf dest=/etc/init/{{ APP_NAME }}.conf
+  notify: 
+    - dump config
+
+- name: open port
+  shell: open-port 8090

@@ -1,0 +1,14 @@
+
+---
+- name: get redis host
+  shell: relation-get private-address
+  register: local_host
+
+#no need port for wss
+
+- set_fact:
+    MARATHON_API_HOST_VAR: "{{ local_host.stdout }}:8080"
+  changed_when: true
+  notify: 
+    - dump config
+    - restart

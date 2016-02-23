@@ -1,0 +1,12 @@
+
+---
+- name: get juju api host
+  shell: relation-get private-address
+  register: relation_host
+
+- set_fact:
+    JUJU_API_HOST_VAR: "{{ relation_host.stdout }}"
+  changed_when: true
+  notify: 
+    - dump config
+    - restart

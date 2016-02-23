@@ -1,0 +1,12 @@
+
+---
+STATIC_ADDRESS_VAR: "{{ STATIC_ADDRESS_VAR | default("") }}"
+MYSQL_HOST_VAR: "{{ MYSQL_HOST_VAR | default("") }}"
+MYSQL_USER_VAR: "{{ MYSQL_USER_VAR | default("") }}"
+MYSQL_PASSWORD_VAR: "{{ MYSQL_PASSWORD_VAR | default("") }}"
+MYSQL_SCHEMA_VAR: "{{ MYSQL_SCHEMA_VAR | default("") }}"
+SIP_BALANCER_VAR: "{{ SIP_BALANCER_VAR | default("") }}"
+VOICERSS_KEY_VAR: "{{ VOICERSS_KEY_VAR | default("") }}"
+UNIT_NAME_VAR: "{{ UNIT_NAME_VAR | default("") }}"
+RESTCOMM_PASSWORD_VAR: "{{ RESTCOMM_PASSWORD_VAR | default("") }}"
+SMS_OUTBOUND_PROXY_VAR: "{{ SMS_OUTBOUND_PROXY_VAR | default("") }}"

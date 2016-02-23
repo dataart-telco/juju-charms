@@ -22,45 +22,10 @@ sudo usermod -aG docker ubuntu
 
 # Install mesos-dns
 juju-log "Installing mesos-dns on $JUJU_UNIT_NAME"
-
-wget https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz
-tar xzf go*
-sudo mv go /usr/local/.
-export PATH=$PATH:/usr/local/go/bin
-export GOROOT=/usr/local/go
-export PATH=$PATH:$GOROOT/bin
-export GOPATH=/home/ubuntu/go
-go get github.com/tools/godep
-export PATH=$PATH:$GOPATH/bin
-
-go get github.com/gogo/protobuf/proto
-
-mkdir -p $GOPATH/src/github.com/mesos
-cd $GOPATH/src/github.com/mesos
-rm -rf $GOPATH/src/github.com/mesos/mesos-go
-
-git clone https://github.com/mesos/mesos-go
-cd $GOPATH/src/github.com/mesos/mesos-go
-#stable version
-git checkout  b164c06f346af1e93aecb6502f83d31dbacdbb91
-go build github.com/mesos/mesos-go/mesosproto
-
-mkdir -p $GOPATH/src/github.com/mesosphere
-cd $GOPATH/src/github.com/mesosphere
-git clone https://github.com/mesosphere/mesos-dns
-cd $GOPATH/src/github.com/mesosphere/mesos-dns
-git checkout tags/v0.3.0
-
-go get github.com/mesosphere/mesos-dns
-cd $GOPATH/src/github.com/mesosphere/mesos-dns
-
-#make all
-
-godep go build ./...
-godep go install
-
-sudo mkdir /usr/local/mesos-dns
-sudo mv $GOPATH/bin/mesos-dns /usr/local/mesos-dns
+wget -O mesos-dns https://github.com/mesosphere/mesos-dns/releases/download/v0.5.1/mesos-dns-v0.5.1-linux-amd64
+chmod +x mesos-dns
+sudo mkdir -p /usr/local/mesos-dns
+sudo mv mesos-dns /usr/local/mesos-dns
 
 cat > /etc/init/mesos-dns.conf <<EOL
 description "mesos dns"
@@ -71,7 +36,14 @@ respawn
 exec /usr/local/mesos-dns/mesos-dns -config=/usr/local/mesos-dns/config.json
 EOL
 
-sudo cp /etc/resolv.conf /etc/resolv.conf.backup
+sudo cp /etc/resolvconf/resolv.conf.d/head /etc/resolvconf/resolv.conf.d/head.backup
+
+UNIT_PRIVATE_ADDRESS=`unit-get private-address`
+HOSTNAME=`hostname`
+echo "nameserver $UNIT_PRIVATE_ADDRESS" >> /etc/resolvconf/resolv.conf.d/head
+echo "$UNIT_PRIVATE_ADDRESS $HOSTNAME" >> /etc/hosts
+
+resolvconf -u
 
 sudo sh -c "echo `config-get zookeeper` > /etc/mesos/zk"
 sudo sh -c "echo `config-get quorum` > /etc/mesos-master/quorum"

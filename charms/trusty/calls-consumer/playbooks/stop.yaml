@@ -1,0 +1,12 @@
+
+---
+- name: remove cron job
+  cron:
+    name: "haproxy_{{ APP_NAME }}"
+    state: absent
+
+- name: stop mesos app
+  command: /bin/true
+  notify:
+    - stop mesos app
+    - delete mesos app

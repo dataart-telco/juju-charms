@@ -1,0 +1,21 @@
+name: conference-call
+summary: Collects incoming numbers from database and add them to conference 
+maintainer: gedubina <gdubina@dataart.com>
+description: |
+  Collects incoming numbers from database and add them to conference
+tags:
+  # Replace "misc" with one or more whitelisted tags from this list:
+  # https://juju.ubuntu.com/docs/authors-charm-metadata.html#charm-metadata
+  - misc
+subordinate: true
+provides:
+  haproxy:
+    interface: http
+requires:
+  redis:
+    interface: redis
+  restcomm:
+    interface: http
+  mesos:
+    interface: juju-info
+    scope: container

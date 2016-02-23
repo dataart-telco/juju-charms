@@ -1,0 +1,23 @@
+name: sms-feedback
+summary: Send sms when call is completed 
+maintainer: gedubina <gdubina@dataart.com>
+description: |
+  Send sms when call is completed
+tags:
+  # Replace "misc" with one or more whitelisted tags from this list:
+  # https://juju.ubuntu.com/docs/authors-charm-metadata.html#charm-metadata
+  - misc
+subordinate: true
+provides:
+  haproxy:
+    interface: http
+requires:
+  redis:
+    interface: redis
+  restcomm:
+    interface: http
+  recorder:
+    interface: http
+  mesos:
+    interface: juju-info
+    scope: container

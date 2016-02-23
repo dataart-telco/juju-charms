@@ -1,0 +1,7 @@
+
+---
+- name: get hostname
+  shell: relation-set hostname=restcomm-loadbalancer.marathon.mesos
+
+- name: put port
+  shell: relation-set port={{ INTERNAL_PORT_VAR }}

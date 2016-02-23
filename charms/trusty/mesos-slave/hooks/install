@@ -23,7 +23,7 @@ then
 	sudo usermod -aG docker ubuntu
 fi
 
-sudo cp /etc/resolv.conf /etc/resolv.conf.backup
+sudo cp /etc/resolvconf/resolv.conf.d/head /etc/resolvconf/resolv.conf.d/head.backup
 
 # Stop zookeeper and mesos-master
 
@@ -40,3 +40,4 @@ fi
 sudo sh -c "echo manual > /etc/init/mesos-master.override"
 
 status-set waiting "Waiting for active mesos-master connection"
+

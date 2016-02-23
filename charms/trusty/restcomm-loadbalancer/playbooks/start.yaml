@@ -1,0 +1,6 @@
+
+---
+- name: start app
+  command: /bin/true
+  notify:
+    - restart

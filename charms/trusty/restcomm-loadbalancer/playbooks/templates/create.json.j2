@@ -1,0 +1,26 @@
+{
+  "id": "{{ APP_NAME}}",
+  "cpus": {{ CPU }},
+  "mem": {{ MEM }},
+  "instances": 0,
+  "constraints": [["hostname", "CLUSTER", "{{ HOSTNAME_VAR }}"]],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "network": "HOST",
+      "image": "{{ DOCKER_IMAGE }}",
+      "parameters": [
+        { "key": "env", "value": "LOG_LEVEL={{ LOG_LEVEL_VAR }}" },
+        { "key": "env", "value": "INTERNAL_PORT={{ INTERNAL_PORT_VAR }}" },
+        { "key": "env", "value": "EXTERNAL_PORT={{ EXTERNAL_PORT_VAR }}" },
+        { "key": "env", "value": "CONFIG_URL={{ CONFIG_URL_VAR }}" },
+        { "key": "env", "value": "COLLECTD_DOCKER_APP={{ APP_NAME }}" },
+        { "key": "env", "value": "COLLECTD_DOCKER_TASK_ENV=MESOS_TASK_ID" }
+      ]
+    }
+  },
+  "labels": {
+        "collectd_docker_app": "{{ APP_NAME }}",
+        "collectd_docker_task": "{{ APP_NAME }}"
+  }
+}

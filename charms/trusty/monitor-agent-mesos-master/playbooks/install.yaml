@@ -1,0 +1,12 @@
+
+---
+- name: create work dir
+  file: path={{ WORK_DIR }} state=directory
+
+- name: copy server bin
+  copy: src=../lib/monitor-agent-mesos-master dest={{ WORK_DIR }} mode="761"
+
+- name: create init conf
+  template: src=./templates/init.conf dest=/etc/init/{{ APP_NAME }}.conf
+  notify: 
+    - dump config

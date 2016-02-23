@@ -1,0 +1,6 @@
+
+---
+SERVER_HOST_VAR: {{ SERVER_HOST_VAR | default("") }}
+JUJU_SERVICE_ID_VAR: {{ JUJU_SERVICE_ID_VAR | default("") }}
+UPDATE_PERIOD_VAR: {{ UPDATE_PERIOD_VAR | default(5) }}
+MAX_CALLS_VAR: {{ MAX_CALLS_VAR | default(25) }}

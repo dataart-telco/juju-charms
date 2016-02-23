@@ -1,0 +1,19 @@
+
+---
+- name: create work dir
+  file: path={{ WORK_DIR }} state=directory
+
+- name: get hostname
+  shell: hostname
+  register: local_host
+
+- name: init charm state
+  set_fact:
+    REDIS_SERVICE_HOST_VAR: "127.0.0.1"
+    REDIS_SERVICE_PORT_VAR: "6379"
+    RESTCOMM_SERVICE_VAR: "127.0.0.1"
+    UNIT_NAME_VAR: "{{ local_unit }}"
+    HOSTNAME_VAR: "{{ local_host.stdout }}"
+  changed_when: true
+  notify: 
+    - dump config

@@ -1,0 +1,13 @@
+
+---
+- name: map config to var
+  set_fact:
+#reload config vars to our vars
+    RESTCOMM_USER_VAR: "{{ RESTCOMM_USER }}"
+    RESTCOMM_PASSWORD_VAR: "{{ RESTCOMM_PASSWORD }}"
+    OPENCELL_USER_VAR: "{{ OPENCELL_USER }}"
+    OPENCELL_PASSWORD_VAR: "{{ OPENCELL_PASSWORD }}"
+  changed_when: true
+  notify: 
+    - dump config
+    - restart

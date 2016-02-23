@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -30,7 +29,7 @@ type HttpHandler func(http.ResponseWriter, *http.Request)
 type MetricsHandler interface {
 	handleMetrics(w http.ResponseWriter, r *http.Request)
 	checkState()
-	avgStat() (map[string]*Stat, []interface{})
+	avgStat() (map[string]interface{}, []interface{})
 }
 
 var pages map[string]HttpHandler
@@ -38,28 +37,14 @@ var pages map[string]HttpHandler
 var ipRedis string
 
 var handlers []MetricsHandler
+var statsDump StatsDump
 
 func handleGet(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	Trace.Println("\thandleGet")
 
-	h := handlers[0]
-	stats, metrics := h.avgStat()
-
-	jm1, _ := json.Marshal(metrics)
-	jm2, _ := json.Marshal(stats)
-
-	juju := fmt.Sprintf("{\"avg\": %s, \"data\": %s}", jm2, jm1)
-
-	h2 := handlers[1]
-	stats2, metrics2 := h2.avgStat()
-	jm21, _ := json.Marshal(metrics2)
-	jm22, _ := json.Marshal(stats2)
-
-	mesos := fmt.Sprintf("{\"avg\": %s, \"data\": %s}", jm22, jm21)
-
-	fmt.Fprintf(w, "{\"charm\": %s, \"mesos:\": %s}", juju, mesos)
+	io.WriteString(w, statsDump.getJsonString())
 }
 
 func initHandlers() {
@@ -67,6 +52,7 @@ func initHandlers() {
 	pages["/"] = handleGet
 	pages["/metrics"] = handlers[0].handleMetrics
 	pages["/mesos/apps"] = handlers[1].handleMetrics
+	pages["/restcomm"] = handlers[2].handleMetrics
 }
 
 func httpHandlerPlay(w http.ResponseWriter, r *http.Request) {
@@ -106,6 +92,10 @@ func main() {
 	jujuUp := flag.Int("j-up", 70, "Scale up limit fir juju")
 	jujuDown := flag.Int("j-down", 30, "Scale down limit for juju")
 
+	esHost := flag.String("es-host", "", "ElasticSearch host")
+	esTiming := flag.Int("es-timing", 10, "ElasticSearch send data period")
+	ignore := flag.String("ignore", "", "Ignore apps list, devided by comma")
+
 	flag.Parse()
 
 	var traceHandle io.Writer
@@ -127,20 +117,31 @@ func main() {
 		"| juju up limit =", *jujuUp,
 		"| juju down limit =", *jujuDown,
 		"| mesos up limit =", *mesosUp,
-		"| mesos down limit =", *mesosDown)
+		"| mesos down limit =", *mesosDown,
+		"| esHost =", *esHost,
+		"| esTiming =", *esTiming,
+		"| ignore=", *ignore)
 
 	ipRedis = *host
 
-	handlers = make([]MetricsHandler, 2)
+	handlers = make([]MetricsHandler, 3)
 	period := time.Duration(*t) * time.Second
 	handlers[0] = &JujuCharmHandler{Period: period, CliDir: *cli, ScaleUp: *jujuUp, ScaleDown: *jujuDown, ScaleDelay: *jd}
-	handlers[1] = &MesosAppsHandler{Period: period, Host: *m, ScaleUp: *mesosUp, ScaleDown: *mesosDown, ScaleDelay: *md}
+	handlers[1] = NewMesosAppsHandler(*mesosUp, *mesosDown, period, *md, *m, *ignore)
+	handlers[2] = NewRestcommAppHandler(*mesosUp, *mesosDown, period, *md, *m, *ignore)
 
+	statsDump = StatsDump{Handlers: handlers}
 	resetDb()
 
 	//timeout in seconds
 	for _, h := range handlers {
 		schedule(*t, h.checkState)
+	}
+	if *esHost != "" && *esTiming > 0 {
+		Info.Println("Schedule send data to elasticsearch")
+		esDump := &EsDump{Dumper: &statsDump, Host: *esHost}
+		esDump.createMapping()
+		schedule(*esTiming, esDump.sendData)
 	}
 
 	start(*port)

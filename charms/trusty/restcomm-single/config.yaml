@@ -1,0 +1,17 @@
+options:
+    voicerss_key:
+        type: string
+        description: Voice RSS TTS Engine Key. http://www.voicerss.org/
+        default: ""
+    license_key:
+        type: string
+        description: TelScale Lincese Key. http://www.telestax.com/contactus/
+        default: ""
+    init_password:
+        type: string
+        description: Init admin password. this arg will affect install process only
+        default: ""
+    sms_proxy:
+        type: string
+        description: proxy host for outbound sms
+        default: ""

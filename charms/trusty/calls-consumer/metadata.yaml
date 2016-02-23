@@ -1,0 +1,21 @@
+name: calls-consumer
+summary: Store incomming numbers to database 
+maintainer: gedubina <gdubina@dataart.com>
+description: |
+  Store incomming numbers to database
+tags:
+  # Replace "misc" with one or more whitelisted tags from this list:
+  # https://juju.ubuntu.com/docs/authors-charm-metadata.html#charm-metadata
+  - misc
+subordinate: true
+provides:
+  haproxy:
+    interface: http
+requires:
+  redis:
+    interface: redis
+  restcomm:
+    interface: http
+  mesos:
+    interface: juju-info
+    scope: container

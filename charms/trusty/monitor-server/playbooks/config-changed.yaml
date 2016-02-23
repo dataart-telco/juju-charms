@@ -1,0 +1,21 @@
+
+---
+- name: map config to var
+  set_fact:
+#reload config vars to our vars
+    CHECK_PERIOD_VAR: "{{ CHECK_PERIOD }}"
+    PORT_VAR: "{{ PORT }}"
+    JUJU_API_HOST_VAR: "{{ JUJU_API_HOST|default(JUJU_API_HOST_VAR) }}"
+    JUJU_API_PASSWORD_VAR: "{{ JUJU_API_PASSWORD }}"
+    JUJU_DEPLOY_DELAY_VAR: "{{ JUJU_DEPLOY_DELAY }}"
+    MESOS_DEPLOY_DELAY_VAR: "{{ MESOS_DEPLOY_DELAY }}"
+    JUJU_SCALE_UP_VAR: "{{ JUJU_SCALE_UP }}"
+    JUJU_SCALE_DOWN_VAR: "{{ JUJU_SCALE_DOWN }}"
+    MESOS_SCALE_UP_VAR: "{{ MESOS_SCALE_UP }}"
+    MESOS_SCALE_DOWN_VAR: "{{ MESOS_SCALE_DOWN }}"
+    ESSEARCH_TIMING_VAR: "{{ ESSEARCH_TIMING }}"
+    IGNORE_LIST_VAR: "{{ IGNORE_LIST }}"
+  changed_when: true
+  notify: 
+    - dump config
+    - restart

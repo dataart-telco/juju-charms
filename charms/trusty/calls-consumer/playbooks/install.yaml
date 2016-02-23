@@ -1,0 +1,18 @@
+
+---
+- name: create work dir
+  file: path={{ WORK_DIR }} state=directory
+
+- name: init charm state
+  set_fact:
+    EXTERNAL_IP_VAR: "{{ unit_private_address }}"
+    REDIS_SERVICE_HOST_VAR: "127.0.0.1"
+    REDIS_SERVICE_PORT_VAR: "6379"
+    RESTCOMM_SERVICE_VAR: "127.0.0.1"
+    UNIT_NAME_VAR: "{{ local_unit }}"
+  changed_when: true
+  notify: 
+    - dump config
+
+- name: render haproxy_util.sh to actions
+  template: src="templates/haproxy_util.sh.j2" dest="../actions/haproxy_util.sh"  mode="761"

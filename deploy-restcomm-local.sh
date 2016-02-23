@@ -4,7 +4,7 @@ juju set-env "default-series=trusty"
 juju set-constraints "mem=512M"
 #juju set-constraints 'instance-type=m1.small'
 
-juju deploy local:trusty/telscale-restcomm --config config-restcomm.yaml
+juju deploy --constraints="mem=1.5G" local:trusty/telscale-restcomm --config config-restcomm.yaml
 
 juju add-relation calls-consumer:restcomm telscale-restcomm:website
 juju add-relation conference-call:restcomm telscale-restcomm:website

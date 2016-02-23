@@ -1,0 +1,16 @@
+
+---
+- name: get redis host
+  shell: relation-get private-address
+  register: local_host
+
+- name: get redis port
+  shell: relation-get port
+  register: local_port
+
+- set_fact:
+    SERVER_HOST_VAR: "{{ local_host.stdout }}:{{ local_port.stdout }}/metrics"
+  changed_when: true
+  notify: 
+    - dump config
+    - restart

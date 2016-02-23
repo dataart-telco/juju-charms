@@ -1,0 +1,44 @@
+- hosts: all
+  vars:
+    APP_NAME: calls-consumer
+    APP_PORT: 30790
+    WORK_DIR: "/var/lib/{{ APP_NAME }}"
+    DOCKER_IMAGE: "tads2015da/calls-consumer:0.0.11"
+    CPU: 1.0
+    MEM: 200
+    APP_MANAGER_API: "http://127.0.0.1:8080/v2/apps"
+#for script only
+    APP_SCRIPT_CONFIG: vars/app_vars.yaml
+  vars_files:
+    - "{{ APP_SCRIPT_CONFIG }}"
+  handlers:
+    - include: handlers.yaml
+
+  tasks:
+    - name: install monitor server
+      include: install.yaml
+      tags: install 
+
+    - name: config changed
+      include: config-changed.yaml
+      tags: config-changed
+
+    - name: restcomm relation changed
+      include: restcomm-relation-changed.yaml
+      tags: restcomm-relation-changed
+
+    - name: redis relation changed
+      include: redis-relation-changed.yaml
+      tags: redis-relation-changed
+
+    - name: haproxy relation changed
+      include: haproxy-relation-changed.yaml
+      tags: haproxy-relation-changed
+
+    - name: start app
+      include: start.yaml
+      tags: start
+
+    - name: stop app
+      include: stop.yaml
+      tags: stop

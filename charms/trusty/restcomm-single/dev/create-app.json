@@ -1,0 +1,26 @@
+{
+  "id": "restcomm",
+  "cpus": 1,
+  "mem": 1152,
+  "instances": 0,
+  "constraints": [["hostname", "UNIQUE"]],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "network": "HOST",
+      "image": "hamsterksu/restcomm",
+      "parameters": [
+        { "key": "env", "value": "LOAD_BALANCERS=10.0.0.102:5065" },
+        { "key": "env", "value": "MEDIASERVER_LOWEST_PORT=65000" },
+        { "key": "env", "value": "MEDIASERVER_HIGHEST_PORT=65500" },
+        { "key": "env", "value": "VOICERSS_KEY=29b2d893df9f454abbfae94df6cff95b" },
+        { "key": "env", "value": "COLLECTD_DOCKER_APP=restcomm" },
+        { "key": "env", "value": "COLLECTD_DOCKER_TASK_ENV=MESOS_TASK_ID" }
+      ]
+    }
+  },
+  "labels": {
+        "collectd_docker_app": "restcomm",
+        "collectd_docker_task": "restcomm"
+  }
+}

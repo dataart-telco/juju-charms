@@ -1,0 +1,17 @@
+name: restcomm-loadbalancer
+summary: RestComm load-balancer 
+maintainer: gdubina <gdubina@dataart.com>
+description: |
+  Restcomm
+tags:
+  - misc
+  - sip
+  - voip
+subordinate: true
+provides:
+  loadbalancer:
+    interface: sip-balancer
+requires:
+  mesos:
+    interface: juju-info
+    scope: container

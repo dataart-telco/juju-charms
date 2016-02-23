@@ -1,0 +1,44 @@
+- hosts: all
+  vars:
+    APP_NAME: opencell-billing
+    APP_PORT: 8080
+    WORK_DIR: "/opt/{{ APP_NAME }}"
+    DOCKER_IMAGE: "tads2015da/opencell-billing:0.0.11"
+    CPU: 0.5
+    MEM: 200
+    APP_MANAGER_API: "http://127.0.0.1:8080/v2/apps"
+#for script only
+    APP_SCRIPT_CONFIG: vars/app_vars.yaml
+  vars_files:
+    - "{{ APP_SCRIPT_CONFIG }}"
+  handlers:
+    - include: handlers.yaml
+
+  tasks:
+    - name: install opencell billing
+      include: install.yaml
+      tags: install 
+
+    - name: config changed
+      include: config-changed.yaml
+      tags: config-changed
+
+    - name: opencell relation changed
+      include: opencell-relation-changed.yaml
+      tags: opencell-relation-changed
+
+    - name: restcomm relation changed
+      include: restcomm-relation-changed.yaml
+      tags: restcomm-relation-changed
+
+    - name: redis relation changed
+      include: redis-relation-changed.yaml
+      tags: redis-relation-changed
+
+    - name: start app
+      include: start.yaml
+      tags: start
+
+    - name: stop app
+      include: stop.yaml
+      tags: stop

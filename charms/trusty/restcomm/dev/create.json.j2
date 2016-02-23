@@ -1,0 +1,47 @@
+{
+  "id": "{{ APP_NAME}}",
+  "cpus": {{ CPU }},
+  "mem": {{ MEM }},
+  "instances": 0,
+  "constraints": [["hostname", "UNIQUE"]],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "network": "BRIDGE",
+      "image": "{{ DOCKER_IMAGE }}",
+      "parameters": [
+        { "key": "env", "value": "STATIC_ADDRESS={{ STATIC_ADDRESS_VAR }}" },
+        { "key": "env", "value": "MYSQL_HOST={{ MYSQL_HOST_VAR }}" },
+        { "key": "env", "value": "MYSQL_USER={{ MYSQL_USER_VAR }}" },
+        { "key": "env", "value": "MYSQL_PASSWORD={{ MYSQL_PASSWORD_VAR }}" },
+        { "key": "env", "value": "MYSQL_SCHEMA={{ MYSQL_SCHEMA_VAR }}" },
+        { "key": "env", "value": "SIP_BALANCER={{ SIP_BALANCER_VAR }}" },
+        { "key": "env", "value": "VOICERSS_KEY={{ VOICERSS_KEY_VAR }}" },
+        { "key": "env", "value": "COLLECTD_DOCKER_APP={{ APP_NAME }}" },
+        { "key": "env", "value": "COLLECTD_DOCKER_TASK_ENV=MESOS_TASK_ID" }
+      ],
+      "portMappings": [
+        { "containerPort": 5080, "hostPort": 5080, "servicePort": 5080, "protocol": "tcp" },
+        { "containerPort": 5080, "hostPort": 5080, "servicePort": 5080, "protocol": "udp" },
+        { "containerPort": 5081, "hostPort": 5081, "servicePort": 5081, "protocol": "tcp" },
+        { "containerPort": 5082, "hostPort": 5082, "servicePort": 5082, "protocol": "tcp" },
+        { "containerPort": 5083, "hostPort": 5083, "servicePort": 5083, "protocol": "tcp" },
+        { "containerPort": 8080, "hostPort": 8080, "servicePort": 8080, "protocol": "tcp" },
+        { "containerPort": 8443, "hostPort": 8443, "servicePort": 8443, "protocol": "tcp" },
+        { "containerPort": 5060, "hostPort": 5060, "servicePort": 5060, "protocol": "tcp" },
+        { "containerPort": 5060, "hostPort": 5060, "servicePort": 5060, "protocol": "udp" },
+        { "containerPort": 5061, "hostPort": 5061, "servicePort": 5061, "protocol": "tcp" },
+        { "containerPort": 5062, "hostPort": 5062, "servicePort": 5062, "protocol": "tcp" },
+        { "containerPort": 5063, "hostPort": 5063, "servicePort": 5063, "protocol": "tcp" },
+        { "containerPort": 80, "hostPort": 80, "servicePort": 80, "protocol": "tcp" },
+        { "containerPort": 443, "hostPort": 443, "servicePort": 443, "protocol": "tcp" },
+        { "containerPort": 9990, "hostPort": 9990, "servicePort": 9990, "protocol": "tcp" },
+        { "containerPort": [65000, 65535], "hostPort": [65000, 65535], "servicePort": [65000, 65535], "protocol": "udp" }
+      ]
+    }
+  },
+  "labels": {
+        "collectd_docker_app": "{{ APP_NAME }}",
+        "collectd_docker_task": "{{ APP_NAME }}"
+  }
+}

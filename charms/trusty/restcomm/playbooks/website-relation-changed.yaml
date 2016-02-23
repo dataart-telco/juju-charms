@@ -1,0 +1,7 @@
+
+---
+- name: put private-address
+  shell: relation-set hostname=restcomm.marathon.mesos
+
+- name: put port
+  shell: relation-set port={{ RESTCOMM_PORT_VAR }}

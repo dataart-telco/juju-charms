@@ -1,0 +1,43 @@
+- hosts: all
+  vars:
+    APP_NAME: monitor-agent-mesos-master
+    WORK_DIR: "/opt/{{ APP_NAME }}"
+    CONFIG_PATH: "{{ WORK_DIR }}/{{ APP_NAME }}.conf"
+    APP_BIN: "{{ WORK_DIR }}/monitor-agent-mesos-master"
+    APP_SCRIPT_CONFIG: vars/app_vars.yaml
+  vars_files:
+    - "{{ APP_SCRIPT_CONFIG }}"
+  handlers:
+    - name: dump config
+      template: src={{ item.src }} dest={{ item.dest }}
+      with_items:
+        - { src: './templates/app.conf', dest: "{{ CONFIG_PATH }}" }
+        - { src: './templates/app_vars.yaml', dest: "{{ APP_SCRIPT_CONFIG }}" }
+
+    - name: restart
+      service: name={{ APP_NAME }} state=restarted
+
+  tasks:
+    - name: install monitor server
+      include: install.yaml
+      tags: install 
+
+    - name: config changed
+      include: config-changed.yaml
+      tags: config-changed
+
+    - name: juju info relation changed
+      include: juju-info-relation-changed.yaml
+      tags: juju-info-relation-changed
+
+    - name: monitor server relation changed
+      include: monitor-server-relation-changed.yaml
+      tags: monitor-server-relation-changed
+
+    - name: start app
+      service: name={{ APP_NAME }} state=started
+      tags: start
+
+    - name: stop app
+      service: name={{ APP_NAME }} state=stopped
+      tags: stop

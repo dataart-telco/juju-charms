@@ -1,23 +1,23 @@
 series: trusty
 services:
   mesos-master:
-    charm: cs:~tads2015dataart/trusty/mesos-master-0
+    charm: cs:~tads2015dataart/trusty/mesos-master-1
     num_units: 1
     expose: true
-    constraints: "mem=1G"
+    constraints: "mem=4G cpu-cores=2"
     annotations:
       gui-x: "1140"
       gui-y: "570"
   mesos-slave: 
-    charm: cs:~tads2015dataart/trusty/mesos-slave-0
+    charm: cs:~tads2015dataart/trusty/mesos-slave-1
     num_units: 2
     expose: true
-    constraints: "mem=1G"
+    constraints: "mem=4G cpu-cores=2"
     annotations: 
       gui-x: "1140"
       gui-y: "950"
   calls-consumer:
-    charm: cs:~tads2015dataart/trusty/tads2015-calls-consumer-4mesos-4      
+    charm: cs:~tads2015dataart/trusty/tads2015-calls-consumer-4mesos-7
     options:
       RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
       PHONE_NUMBER: "5555"
@@ -26,7 +26,7 @@ services:
       gui-x: "1710"
       gui-y: "190"
   conference-call:
-    charm: cs:~tads2015dataart/trusty/tads2015-conference-call-4mesos-4
+    charm: cs:~tads2015dataart/trusty/tads2015-conference-call-4mesos-6
     options:
       RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
       DID_DOMAIN: "80.250.109.132"
@@ -34,7 +34,7 @@ services:
       gui-x: "1710"
       gui-y: "570"
   sms-feedback:
-    charm: cs:~tads2015dataart/trusty/tads2015-sms-feedback-4mesos-4
+    charm: cs:~tads2015dataart/trusty/tads2015-sms-feedback-4mesos-5
     options:
       RESTCOMM_PASSWORD: "42d8aa7cde9c78c4757862d84620c335"
       DID_DOMAIN: ""
@@ -46,20 +46,31 @@ services:
     num_units: 1
     expose: true
     annotations:
-      gui-x: "2280"
-      gui-y: "760"
-  telscale-restcomm:
-    charm: cs:~tads2015dataart/trusty/telscale-restcomm-3
-    num_units: 1
+      gui-x: "2470"
+      gui-y: "190"
+  restcomm:
+    charm: cs:~tads2015dataart/trusty/restcomm-4mesos-1
     expose: true
-    constraints: "mem=1536M"
+    annotations:
+      "gui-x": 1520
+      "gui-y": 190
     options:
       sms_proxy: "54.174.171.104"
       init_password: "42d8aa7cde9c78c4757862d84620c335"
       voicerss_key: "29b2d893df9f454abbfae94df6cff95b"
+  mysql:
+    charm: cs:trusty/mysql-34
+    expose: true
+    constraints: "mem=2G"
     annotations:
-      gui-x: "2280"
-      gui-y: "0"
+      "gui-x": 1520
+      "gui-y": 570
+  sip-loadbalancer:
+    charm: cs:~tads2015dataart/trusty/restcomm-loadbalancer-4mesos-2
+    expose: true
+    annotations:
+      "gui-x": 1140
+      "gui-y": 190
   haproxy:
     charm: cs:trusty/haproxy-11
     num_units: 1
@@ -67,8 +78,8 @@ services:
     options:
       services: "[]"
     annotations:
-      gui-x: "2280"
-      gui-y: "380"
+      gui-x: "2470"
+      gui-y: "950"
 #    juju-gui:
 #      charm: cs:trusty/juju-gui-39
 #      expose: true
@@ -76,10 +87,9 @@ services:
 #        "gui-x": 0
 #        "gui-y": 570
   monitor-server:
-    charm: cs:~tads2015dataart/trusty/monitor-server-7
+    charm: cs:~tads2015dataart/trusty/monitor-server-10
     num_units: 1
     expose: true
-    constraints: "mem=512M"
     annotations:
       gui-x: "380"
       gui-y: "570"
@@ -87,29 +97,56 @@ services:
       CHECK_PERIOD: 60
       JUJU_SCALE_DOWN: 37
       MESOS_SCALE_DOWN: 10
-  monitor-db:
-    charm: cs:~mbruzek/trusty/redis-master-0
-    num_units: 1
-    expose: true
-    annotations:
-      gui-x: "380"
-      gui-y: "190"             
   monitor-agent-mesos:
-    charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-2
+    charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-5
     annotations:
       gui-x: "760"
       gui-y: "950"
   monitor-agent-mesos-master:
-    charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-master-2
+    charm: cs:~tads2015dataart/trusty/monitor-agent-mesos-master-5
     annotations:
       gui-x: "760"
-      gui-y: "190"
+      gui-y: "0"
+  monitor-agent-restcomm:
+    charm: cs:~tads2015dataart/trusty/monitor-agent-restcomm-1
+    annotations:
+      "gui-x": 760
+      "gui-y": 190
+  # elasticsearch v.1.7.2
+  elasticsearch: 
+    charm: cs:trusty/elasticsearch-13
+    expose: true
+    constraints: "mem=2G"
+    options:
+      firewall_enabled: false
+    annotations:
+      gui-x: "380"
+      gui-y: "950"
+# kibana 4.1.4 for es v.1.7.2
+  kibana:
+    charm: cs:trusty/kibana-10
+    expose: true
+    options:
+      kibana_source: "https://download.elastic.co/kibana/kibana/kibana-4.1.4-linux-x64.tar.gz"
+      kibana_source_checksum: "f88a7ad612b4e7129a951cf0e64429e63d847ed9"
+    annotations:
+      gui-x: "0"
+      gui-y: "950"
 relations:
+# restcomm to mesos
+  - - restcomm
+    - mesos-master
+  - - sip-loadbalancer
+    - mesos-master
+  - - restcomm
+    - sip-loadbalancer
+  - - restcomm:mysql
+    - mysql:db
 # callc consumer
   - - calls-consumer:redis
     - redis-master:db
   - - calls-consumer:restcomm
-    - telscale-restcomm:website
+    - restcomm:website
   - - haproxy:reverseproxy
     - calls-consumer:haproxy
   - - calls-consumer
@@ -119,7 +156,7 @@ relations:
   - - conference-call:redis
     - redis-master:db
   - - conference-call:restcomm
-    - telscale-restcomm:website
+    - restcomm:website
   - - haproxy:reverseproxy
     - conference-call:haproxy
   - - conference-call
@@ -129,31 +166,36 @@ relations:
   - - sms-feedback:redis
     - redis-master:db
   - - sms-feedback:restcomm
-    - telscale-restcomm:website
+    - restcomm:website
   - - haproxy:reverseproxy
     - sms-feedback:haproxy
   - - sms-feedback
     - mesos-master
 # end
-# monitor server
-  - - monitor-server:redis
-    - monitor-db:redis-master
-#    - - monitor-server:api-server
-#      - juju-gui:web
-# end
 # mesos cluster
   - - mesos-master
     - mesos-slave
+# end
+# monitoring
   - - monitor-agent-mesos:monitor-server
     - monitor-server:monitor-server
-  - - monitor-agent-mesos
-    - mesos-master
-  - - monitor-agent-mesos
-    - mesos-slave  
   - - monitor-agent-mesos-master:monitor-server
     - monitor-server:monitor-server
-  - - monitor-agent-mesos-master
-    - mesos-master  
+  - - monitor-agent-restcomm:monitor-server
+    - monitor-server:monitor-server
+# monitoring deploy
   - - monitor-server
     - mesos-master
-# end
+  - - monitor-agent-mesos
+    - mesos-master
+  - - monitor-agent-mesos
+    - mesos-slave
+  - - monitor-agent-mesos-master
+    - mesos-master
+  - - monitor-agent-restcomm
+    - mesos-master
+# elasticsearch 
+  - - elasticsearch
+    - kibana
+  - - monitor-server
+    - elasticsearch

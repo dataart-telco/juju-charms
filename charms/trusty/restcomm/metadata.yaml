@@ -1,0 +1,21 @@
+name: restcomm
+summary: Restcomm 
+maintainer: gdubina <gdubina@dataart.com>
+description: |
+  Restcomm
+tags:
+  - misc
+  - sip
+  - voip
+subordinate: true
+provides:
+  website:
+    interface: http
+requires:
+  mysql:
+    interface: mysql
+  loadbalancer:
+    interface: sip-balancer
+  mesos:
+    interface: juju-info
+    scope: container

@@ -1,0 +1,14 @@
+
+---
+- name: map config to var
+  set_fact:
+#reload config vars to our vars
+    RESTCOMM_USER_VAR: "{{ RESTCOMM_USER }}"
+    RESTCOMM_PASSWORD_VAR: "{{ RESTCOMM_PASSWORD }}"
+    PHONE_NUMBER_VAR: "{{ PHONE_NUMBER}}"
+    DID_DOMAIN_VAR: "{{ DID_DOMAIN}}"
+
+  changed_when: true
+  notify: 
+    - dump config
+    - restart

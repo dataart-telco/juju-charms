@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# actions/haproxy_util.sh will be created by install script
+
+RELATION_ID=`relation-ids haproxy`
+SERVICES=`actions/haproxy_util.sh`
+
+relation-set -r $RELATION_ID "$SERVICES"

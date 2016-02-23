@@ -1,9 +1,12 @@
 export JUJU_REPOSITORY=$PWD/charms/
 
-juju set-env "default-series=trusty"
-juju set-constraints "mem=512M"
-#juju set-constraints 'instance-type=m1.small'
+echo 'mailagent:
+  GMAIL_USER: "tads2015dataart@gmail.com" 
+  GMAIL_PASS: "hlrcfhoswjjulqco"
+  DUMP_TIMER: 5
+' > /tmp/config-mailagent.yaml
 
-juju deploy local:trusty/tads2015-mailagent-4mesos mailagent --config config-mailagent.yaml
+
+juju deploy local:trusty/tads2015-mailagent-4mesos --config /tmp/config-mailagent.yaml mailagent
 juju add-relation mailagent:redis redis-master:db
 juju add-relation mailagent mesos-master

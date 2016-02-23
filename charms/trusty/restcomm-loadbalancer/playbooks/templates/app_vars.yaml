@@ -1,0 +1,8 @@
+
+---
+LOG_LEVEL_VAR: "{{ LOG_LEVEL_VAR | default("") }}"
+CONFIG_URL_VAR: "{{ CONFIG_URL_VAR | default("") }}"
+EXTERNAL_PORT_VAR: "{{ EXTERNAL_PORT_VAR | default(0) }}"
+INTERNAL_PORT_VAR: "{{ INTERNAL_PORT_VAR | default(0) }}"
+UNIT_NAME_VAR: "{{ UNIT_NAME_VAR | default("") }}"
+HOSTNAME_VAR: "{{ HOSTNAME_VAR | default("") }}"

@@ -1,0 +1,66 @@
+
+---
+- name: dump config
+  template: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: './templates/app_vars.yaml', dest: "{{ APP_SCRIPT_CONFIG }}" }
+    - { src: './templates/create.json.j2', dest: "vars/create.json" }
+
+- name: restart
+  command: /bin/true
+  changed_when: true
+  notify:
+    - delete mesos app
+    - create mesos app
+    - create app instance
+    - update haproxy
+
+- name: stop mesos app
+  uri:
+    url: "{{ APP_MANAGER_API }}/{{ APP_NAME }}?force=true"
+    method: PUT
+    HEADER_Content-Type: "application/json"
+    body: '{"instances": 0}'
+
+- name: delete mesos app
+  uri:
+    url: "{{ APP_MANAGER_API }}/{{ APP_NAME }}?force=true"
+    method: DELETE
+    status_code: 200,404
+    HEADER_Content-Type: "application/json"
+
+#uri module can't send formatted json :(
+- name: create mesos app
+  command: >
+    curl -H "Content-Type: application/json" -X POST -d @vars/create.json {{ APP_MANAGER_API }}?force=true
+
+- name: create app instance
+  uri:
+    url: "{{ APP_MANAGER_API }}/{{ APP_NAME }}?force=true"
+    method: PUT
+    HEADER_Content-Type: "application/json"
+    body: '{"instances": 1}'
+  register: resp
+  until: resp.status == 200
+  retries: 3
+  delay: 5
+
+- name: update haproxy
+  command: /bin/true
+  notify:
+    - get haproxy relId
+    - get service info for haproxy
+    - send services to haproxy
+
+- name: get haproxy relId
+  command: relation-ids haproxy
+  register: relationId
+
+- name: get service info for haproxy
+  command: "../actions/haproxy_util.sh"
+  when: relationId.stdout != ""
+  register: ha_services
+
+- name: send services to haproxy
+  command: "relation-set -r {{ relationId.stdout}} \"{{ ha_services.stdout }}\""
+  when: relationId.stdout != ""

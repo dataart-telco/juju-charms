@@ -1,0 +1,17 @@
+options:
+    log_level:
+        type: string
+        description: Log level
+        default: "INFO"
+    config_url:
+        type: string
+        description: remote config 
+        default: ""
+    external_port:
+        type: int
+        description: external port
+        default: 5060
+    internal_port:
+        type: int
+        description: internal port
+        default: 5065

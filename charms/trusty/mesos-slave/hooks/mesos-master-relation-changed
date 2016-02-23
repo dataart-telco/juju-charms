@@ -20,13 +20,13 @@ fi
 zookeeper="zk://"
 i=1
 
-sudo rm -f /etc/resolv.conf
-sudo cp /etc/resolv.conf.backup /etc/resolv.conf
+sudo rm -f /etc/resolvconf/resolv.conf.d/head
+sudo cp /etc/resolvconf/resolv.conf.d/head.backup /etc/resolvconf/resolv.conf.d/head
 
 for member in `relation-list`
 do  
     juju-log "Adding $member to mesos-master quorum"
-    if [$i == 1]
+    if [ $i == 1 ]
     then
 		zookeeper="$zookeeper`relation-get private-address ${member}`:`relation-get zookeeper_port ${member}`"
 	else
@@ -34,11 +34,14 @@ do
 	fi
 	((i++))
 
-	if ![ -z `relation-get mesos-dns ${member}` ]
+	if [ -n `relation-get mesos-dns ${member}` ]
 	then
-		sudo sed -i "1s/^/nameserver `relation-get private-address ${member}`\n /" /etc/resolv.conf
+        echo  "nameserver `relation-get private-address ${member}`" >> /etc/resolvconf/resolv.conf.d/head
 	fi
 done
+
+#reload dns
+resolvconf -u
 
 zookeeper="$zookeeper/mesos"
 sudo sh -c "echo $zookeeper > /etc/mesos/zk"
